@@ -18,7 +18,7 @@ export default function MiReservaDashboardPage() {
   if (!id) {
     return (
       <main className="mx-auto max-w-lg px-4 py-16 text-center">
-        <p className="font-[var(--font-inter)] text-sm" style={{ color: 'var(--color-text-muted)' }}>
+        <p className="font-(--font-inter) text-sm" style={{ color: 'var(--color-text-muted)' }}>
           Credencial no válida.
         </p>
       </main>

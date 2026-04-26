@@ -8,6 +8,7 @@ import { CITIES, EXPERIENCES_TEMPLATE } from '@/lib/constants'
 import { cn, formatCurrency } from '@/lib/utils'
 import { useBookingFlow } from '@/hooks/useBookingFlow'
 import { StepHeader } from '@/components/booking/StepHeader'
+import { CityMap } from '@/components/ui/CityMap'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
@@ -110,8 +111,20 @@ export function Step1Selection() {
     <div className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
       <StepHeader actLabel="I" title="¿DÓNDE QUIERES QUE OCURRA?" />
 
+      {/* City map (same interaction as home selector) */}
+      <div className="mt-8">
+        <div className="flex w-full justify-center">
+          <CityMap
+            className="w-full"
+            cities={CITIES}
+            activeCitySlug={selectedCity}
+            onSelectCity={(slug) => handleSelectCity(slug as CitySlug)}
+          />
+        </div>
+      </div>
+
       {/* City pills */}
-      <div className="flex gap-3 overflow-x-auto pb-2 md:justify-center">
+      <div className="mt-8 flex gap-3 overflow-x-auto pb-2 md:justify-center">
         {CITIES.map((c) => {
           const isActive = c.slug === selectedCity
           return (
@@ -178,11 +191,11 @@ export function Step1Selection() {
 
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <div className="mt-3 font-[var(--font-playfair)] text-base text-white">{exp.title}</div>
+                        <div className="mt-3 font-(--font-playfair) text-base text-white">{exp.title}</div>
                       </div>
 
                       <div
-                        className="shrink-0 rounded-full px-3 py-1 font-[var(--font-jetbrains)] text-[10px] tracking-[0.16em]"
+                        className="shrink-0 rounded-full px-3 py-1 font-(--font-jetbrains) text-[10px] tracking-[0.16em]"
                         style={{
                           color: exp.missionLevel === 'OMEGA' ? '#FDA4AF' : 'var(--color-text-secondary)',
                           background:
@@ -202,11 +215,11 @@ export function Step1Selection() {
                     </div>
 
                     <div className="mt-4 flex items-end justify-between gap-3">
-                      <div className="font-[var(--font-playfair)] text-lg" style={{ color: 'var(--color-gold)' }}>
+                      <div className="font-(--font-playfair) text-lg" style={{ color: 'var(--color-gold)' }}>
                         Desde {formatCurrency(exp.basePrice)}
                       </div>
                       <div
-                        className="rounded-full px-4 py-2 text-xs font-[var(--font-jetbrains)] tracking-[0.18em]"
+                        className="rounded-full px-4 py-2 text-xs font-(--font-jetbrains) tracking-[0.18em]"
                         style={{
                           border: isSelected ? '1px solid rgba(185,48,158,0.7)' : '1px solid rgba(185,48,158,0.35)',
                           color: 'white',
@@ -225,7 +238,7 @@ export function Step1Selection() {
 
       {/* Calendar */}
       <div className="mt-12">
-        <div className="font-[var(--font-jetbrains)] text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
+        <div className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
           ELIGE TU NOCHE
         </div>
 
@@ -240,7 +253,7 @@ export function Step1Selection() {
             >
               <ChevronLeft className="h-4 w-4" style={{ color: 'var(--color-text-secondary)' }} />
             </button>
-            <div className="font-[var(--font-jetbrains)] text-xs tracking-[0.18em]" style={{ color: 'var(--color-text-secondary)' }}>
+            <div className="font-(--font-jetbrains) text-xs tracking-[0.18em]" style={{ color: 'var(--color-text-secondary)' }}>
               {new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(monthCursor).toUpperCase()}
             </div>
             <button
@@ -297,7 +310,7 @@ export function Step1Selection() {
 
       {/* Time slots */}
       <div className="mt-10">
-        <div className="font-[var(--font-jetbrains)] text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
+        <div className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
           ¿A QUÉ HORA EMPIEZA TODO?
         </div>
 
@@ -312,7 +325,7 @@ export function Step1Selection() {
                 type="button"
                 disabled={!available}
                 onClick={() => handlePickTime(slot)}
-                className="rounded-full px-4 py-3 text-center font-[var(--font-jetbrains)] text-xs tracking-[0.18em]"
+                className="rounded-full px-4 py-3 text-center font-(--font-jetbrains) text-xs tracking-[0.18em]"
                 style={{
                   background: isSelected ? 'var(--color-magenta)' : 'transparent',
                   color: available ? (isSelected ? 'white' : 'var(--color-text-secondary)') : 'var(--color-text-muted)',
@@ -330,12 +343,12 @@ export function Step1Selection() {
 
       {/* Bottom bar */}
       <div
-        className="fixed inset-x-0 bottom-0 z-[120] border-t"
+        className="fixed inset-x-0 bottom-0 z-120 border-t"
         style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(8,0,8,0.92)', backdropFilter: 'blur(10px)' }}
       >
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-4 sm:px-6">
           <div className="min-w-0">
-            <div className="font-[var(--font-jetbrains)] text-[10px] tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
+            <div className="font-(--font-jetbrains) text-[10px] tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
               SELECCIÓN ACTIVA
             </div>
             <div className="mt-1 truncate text-sm" style={{ color: 'var(--color-text-secondary)' }}>

@@ -229,7 +229,7 @@ function StripePaymentForm({ clientSecret, totalEur, onSuccess, onError, loading
       {canPr ? (
         <div className="flex items-center gap-3">
           <div className="h-px flex-1 bg-[rgba(185,48,158,0.2)]" />
-          <span className="font-[var(--font-jetbrains)] text-[10px] tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
+          <span className="font-(--font-jetbrains) text-[10px] tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
             o paga con tarjeta
           </span>
           <div className="h-px flex-1 bg-[rgba(185,48,158,0.2)]" />
@@ -244,7 +244,7 @@ function StripePaymentForm({ clientSecret, totalEur, onSuccess, onError, loading
         type="button"
         disabled={loading || !cardComplete || !stripe}
         onClick={() => void handleCardPay()}
-        className="relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-4 font-[var(--font-playfair)] tracking-[0.14em] text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-magenta)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-base)] disabled:cursor-not-allowed disabled:opacity-50"
+        className="relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-4 font-(--font-playfair) tracking-[0.14em] text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) disabled:cursor-not-allowed disabled:opacity-50"
         style={{ background: 'var(--gradient-cta)' }}
         whileHover={loading ? undefined : { scale: 1.01 }}
         whileTap={loading ? undefined : { scale: 0.98 }}
@@ -258,7 +258,7 @@ function StripePaymentForm({ clientSecret, totalEur, onSuccess, onError, loading
               transition={{ repeat: Infinity, duration: 0.85, ease: 'linear' }}
               aria-hidden="true"
             />
-            <span className="font-[var(--font-jetbrains)] text-xs tracking-[0.15em]">PROCESANDO PROTOCOLO...</span>
+            <span className="font-(--font-jetbrains) text-xs tracking-[0.15em]">PROCESANDO PROTOCOLO...</span>
           </>
         ) : (
           <span className="flex items-center gap-2">
@@ -333,13 +333,13 @@ function PaymentShell({ bookingId, totalEur, onPaid }: PaymentShellProps) {
   if (!stripePromise) {
     return (
       <div className="rounded-xl border border-[rgba(185,48,158,0.2)] p-4" style={{ background: 'var(--color-bg-elevated)' }}>
-        <p className="font-[var(--font-inter)] text-sm" style={{ color: 'var(--color-text-muted)' }}>
-          Configura <span className="font-[var(--font-jetbrains)]">NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY</span> para pagos con tarjeta.
+        <p className="font-(--font-inter) text-sm" style={{ color: 'var(--color-text-muted)' }}>
+          Configura <span className="font-(--font-jetbrains)">NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY</span> para pagos con tarjeta.
         </p>
         <motion.button
           type="button"
           onClick={onPaid}
-          className="mt-4 flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 font-[var(--font-playfair)] tracking-[0.14em] text-white"
+          className="mt-4 flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 font-(--font-playfair) tracking-[0.14em] text-white"
           style={{ background: 'var(--gradient-cta)' }}
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
@@ -354,7 +354,7 @@ function PaymentShell({ bookingId, totalEur, onPaid }: PaymentShellProps) {
 
   if (!intentReady) {
     return (
-      <div className="flex items-center justify-center gap-3 py-8 font-[var(--font-jetbrains)] text-xs" style={{ color: 'var(--color-text-muted)' }}>
+      <div className="flex items-center justify-center gap-3 py-8 font-(--font-jetbrains) text-xs" style={{ color: 'var(--color-text-muted)' }}>
         <motion.span
           className="inline-block h-5 w-5 rounded-full border-2 border-white/20"
           style={{ borderTopColor: 'var(--color-magenta)' }}
@@ -369,7 +369,7 @@ function PaymentShell({ bookingId, totalEur, onPaid }: PaymentShellProps) {
   if (demo || !clientSecret) {
     return (
       <div className="space-y-4">
-        <p className="font-[var(--font-inter)] text-sm" style={{ color: 'var(--color-text-muted)' }}>
+        <p className="font-(--font-inter) text-sm" style={{ color: 'var(--color-text-muted)' }}>
           Cobro en modo demo (sin PaymentIntent en servidor). Puedes confirmar tu noche y continuar al panel.
         </p>
         <motion.button
@@ -382,7 +382,7 @@ function PaymentShell({ bookingId, totalEur, onPaid }: PaymentShellProps) {
             }, 450)
           }}
           disabled={loading}
-          className="flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 font-[var(--font-playfair)] tracking-[0.14em] text-white disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 font-(--font-playfair) tracking-[0.14em] text-white disabled:opacity-60"
           style={{ background: 'var(--gradient-cta)' }}
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
@@ -395,7 +395,7 @@ function PaymentShell({ bookingId, totalEur, onPaid }: PaymentShellProps) {
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 0.85, ease: 'linear' }}
               />
-              <span className="font-[var(--font-jetbrains)] text-xs tracking-[0.15em]">PROCESANDO PROTOCOLO...</span>
+              <span className="font-(--font-jetbrains) text-xs tracking-[0.15em]">PROCESANDO PROTOCOLO...</span>
             </>
           ) : (
             <span className="flex items-center gap-2">
@@ -409,7 +409,7 @@ function PaymentShell({ bookingId, totalEur, onPaid }: PaymentShellProps) {
 
   return (
     <Elements stripe={stripePromise} options={{ clientSecret, appearance: cardAppearance }}>
-      {loadError ? <p className="mb-3 font-[var(--font-inter)] text-sm text-red-400">{loadError}</p> : null}
+      {loadError ? <p className="mb-3 font-(--font-inter) text-sm text-red-400">{loadError}</p> : null}
       <StripePaymentForm
         clientSecret={clientSecret}
         totalEur={totalEur}
@@ -508,7 +508,7 @@ export function Step5Checkout() {
       <AnimatePresence>{!overlayDone && !shouldReduceMotion ? <AccessGrantedOverlay key="overlay" onComplete={handleOverlayComplete} /> : null}</AnimatePresence>
 
       <StepHeader actLabel="V" title="LAS PUERTAS SE ABREN" />
-      <p className="-mt-4 mb-8 font-[var(--font-inter)] text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+      <p className="-mt-4 mb-8 font-(--font-inter) text-sm" style={{ color: 'var(--color-text-secondary)' }}>
         El último paso. Después, todo empieza.
       </p>
 
@@ -524,19 +524,19 @@ export function Step5Checkout() {
         className="mb-8 rounded-2xl border p-5 sm:p-6"
         style={{ borderColor: 'rgba(185,48,158,0.2)', background: 'var(--color-bg-elevated)', boxShadow: 'var(--glow-card)' }}
       >
-        <h3 className="font-[var(--font-jetbrains)] text-xs tracking-[0.2em]" style={{ color: 'var(--color-text-muted)' }}>
+        <h3 className="font-(--font-jetbrains) text-xs tracking-[0.2em]" style={{ color: 'var(--color-text-muted)' }}>
           TU NOCHE, EN DETALLE
         </h3>
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <h4 className="font-[var(--font-playfair)] text-xl text-white">{experience.title}</h4>
+          <h4 className="font-(--font-playfair) text-xl text-white">{experience.title}</h4>
         </div>
-        <p className="mt-2 font-[var(--font-jetbrains)] text-xs tracking-wide" style={{ color: 'var(--color-text-secondary)' }}>
+        <p className="mt-2 font-(--font-jetbrains) text-xs tracking-wide" style={{ color: 'var(--color-text-secondary)' }}>
           {dateLine}
         </p>
 
         {selectedUpsells.length > 0 ? (
           <div className="mt-6">
-            <p className="font-[var(--font-jetbrains)] text-[10px] tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
+            <p className="font-(--font-jetbrains) text-[10px] tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
               TU BAÚL
             </p>
             <div className="mt-3 flex flex-wrap gap-3">
@@ -545,7 +545,7 @@ export function Step5Checkout() {
                 return (
                   <div key={u.id} className="flex items-center gap-2 rounded-lg border border-[rgba(185,48,158,0.15)] px-2 py-1.5" style={{ background: 'rgba(0,0,0,0.2)' }}>
                     <Icon className="h-4 w-4 shrink-0" style={{ color: 'var(--color-magenta)' }} aria-hidden="true" />
-                    <span className="font-[var(--font-inter)] text-xs text-white">{u.name}</span>
+                    <span className="font-(--font-inter) text-xs text-white">{u.name}</span>
                   </div>
                 )
               })}
@@ -557,7 +557,7 @@ export function Step5Checkout() {
           <ArchetypeCard archetype={archetype} size="sm" />
         </div>
 
-        <div className="mt-8 border-t border-[rgba(185,48,158,0.15)] pt-4 font-[var(--font-inter)] text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+        <div className="mt-8 border-t border-[rgba(185,48,158,0.15)] pt-4 font-(--font-inter) text-sm" style={{ color: 'var(--color-text-secondary)' }}>
           <div className="flex justify-between">
             <span>Base</span>
             <span>{formatCurrency(basePrice)}</span>
@@ -566,7 +566,7 @@ export function Step5Checkout() {
             <span>Baúl</span>
             <span>{formatCurrency(arsenalTotal)}</span>
           </div>
-          <div className="mt-3 flex justify-between border-t border-[rgba(185,48,158,0.15)] pt-3 font-[var(--font-playfair)] text-lg" style={{ color: 'var(--color-gold)' }}>
+          <div className="mt-3 flex justify-between border-t border-[rgba(185,48,158,0.15)] pt-3 font-(--font-playfair) text-lg" style={{ color: 'var(--color-gold)' }}>
             <span>Total</span>
             <span>{formatCurrency(total)}</span>
           </div>
@@ -580,11 +580,11 @@ export function Step5Checkout() {
         <div className="flex items-start gap-3">
           <Lock className="h-5 w-5 shrink-0" style={{ color: 'var(--color-gold)' }} aria-hidden="true" />
           <div>
-            <p className="font-[var(--font-jetbrains)] text-[10px] tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
+            <p className="font-(--font-jetbrains) text-[10px] tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
               EN TU EXTRACTO BANCARIO APARECERÁ COMO:
             </p>
-            <p className="mt-2 font-[var(--font-jetbrains)] text-base text-white">Ocio y Eventos SL</p>
-            <p className="mt-2 font-[var(--font-inter)] text-xs italic" style={{ color: 'var(--color-text-muted)' }}>
+            <p className="mt-2 font-(--font-jetbrains) text-base text-white">Ocio y Eventos SL</p>
+            <p className="mt-2 font-(--font-inter) text-xs italic" style={{ color: 'var(--color-text-muted)' }}>
               Tu privacidad protegida. Nadie sabrá lo que viviste aquí.
             </p>
           </div>
@@ -592,7 +592,7 @@ export function Step5Checkout() {
       </div>
 
       <section className="mb-8">
-        <h3 className="font-[var(--font-jetbrains)] text-xs tracking-[0.2em]" style={{ color: 'var(--color-text-muted)' }}>
+        <h3 className="font-(--font-jetbrains) text-xs tracking-[0.2em]" style={{ color: 'var(--color-text-muted)' }}>
           EL ÚLTIMO PASO
         </h3>
         <div className="mt-4">
@@ -603,7 +603,7 @@ export function Step5Checkout() {
           <button
             type="button"
             onClick={() => setDiscountOpen((o) => !o)}
-            className="flex w-full items-center justify-between py-2 font-[var(--font-inter)] text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-magenta)]"
+            className="flex w-full items-center justify-between py-2 font-(--font-inter) text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta)"
             style={{ color: 'var(--color-text-secondary)' }}
             aria-expanded={discountOpen}
           >
@@ -624,14 +624,14 @@ export function Step5Checkout() {
                 <input
                   type="text"
                   placeholder="Introduce código"
-                  className="mt-2 w-full rounded-xl border border-[rgba(185,48,158,0.25)] bg-[var(--color-bg-elevated)] px-3 py-2 font-[var(--font-inter)] text-sm text-white placeholder:text-[var(--color-text-muted)] focus-visible:border-[var(--color-magenta)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-magenta)]"
+                  className="mt-2 w-full rounded-xl border border-[rgba(185,48,158,0.25)] bg-(--color-bg-elevated) px-3 py-2 font-(--font-inter) text-sm text-white placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta)"
                 />
               </motion.div>
             ) : null}
           </AnimatePresence>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-[var(--font-inter)] text-[11px]" style={{ color: 'var(--color-text-muted)' }}>
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-(--font-inter) text-[11px]" style={{ color: 'var(--color-text-muted)' }}>
           <span className="flex items-center gap-1">
             <CalendarDays className="h-4 w-4" style={{ color: 'var(--color-gold)' }} aria-hidden="true" />
             Cancelación libre 48h antes
@@ -653,7 +653,7 @@ export function Step5Checkout() {
         <button
           type="button"
           onClick={prevStep}
-          className="rounded-full border border-[rgba(185,48,158,0.2)] px-6 py-3 font-[var(--font-jetbrains)] text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-magenta)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-base)]"
+          className="rounded-full border border-[rgba(185,48,158,0.2)] px-6 py-3 font-(--font-jetbrains) text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
           style={{ color: 'var(--color-text-secondary)' }}
         >
           ← VOLVER

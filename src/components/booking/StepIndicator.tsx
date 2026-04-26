@@ -65,7 +65,7 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
                   ) : null}
                 </div>
 
-                <div className="mt-3 font-[var(--font-jetbrains)] text-[9px] tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
+                <div className="mt-3 font-(--font-jetbrains) text-[9px] tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
                   {ACTS[idx]} · {step.name}
                 </div>
               </div>
@@ -93,10 +93,10 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
       </div>
 
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-6 sm:px-6 md:hidden">
-        <div className="font-[var(--font-jetbrains)] text-xs tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
+        <div className="font-(--font-jetbrains) text-xs tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
           {ACTS[Math.max(0, Math.min(4, currentStep - 1))]} · DE V
         </div>
-        <div className="font-[var(--font-playfair)] text-sm text-white">
+        <div className="font-(--font-playfair) text-sm text-white">
           {STEPS[Math.max(0, Math.min(4, currentStep - 1))]?.name}
         </div>
       </div>

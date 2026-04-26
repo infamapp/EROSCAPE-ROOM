@@ -1,7 +1,7 @@
 'use client'
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Step1Selection } from '@/components/booking/Step1Selection'
@@ -35,8 +35,9 @@ export function ReservarClient() {
   const shouldReduceMotion = useReducedMotion()
   const router = useRouter()
   const sp = useSearchParams()
-  const { state, goToStep, isStepValid, resetFlow } = useBookingFlow()
+  const { state, goToStep, isStepValid } = useBookingFlow()
   const step = state.currentStep
+  const isApplyingUrlRef = useRef(false)
 
   const [lastStep, setLastStep] = useState<Step>(step)
   const direction: 1 | -1 = step >= lastStep ? 1 : -1
@@ -47,15 +48,11 @@ export function ReservarClient() {
     return () => window.clearTimeout(t)
   }, [lastStep, step])
 
-  // Sync context <-> URL (supports back/forward and deep links).
+  // URL -> state (back/forward + deep links). This effect MUST NOT also "sync state -> URL"
+  // or we can end up oscillating between steps in production.
   useEffect(() => {
-    // IMPORTANT: during hydration `useSearchParams()` can transiently return empty,
-    // which would incorrectly reset the flow. Read from window.location as source of truth.
-    const raw =
-      typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('step') : sp.get('step')
+    const raw = sp.get('step')
     if (!raw) {
-      resetFlow()
-      goToStep(1)
       router.replace('/reservar?step=1')
       return
     }
@@ -71,20 +68,30 @@ export function ReservarClient() {
       }
     }
 
-    // If URL changed (e.g. back/forward) update state.
-    if (safeStep !== step) {
-      goToStep(safeStep)
-    }
     // If URL is ahead of what we allow, correct it.
     if (safeStep !== urlStep) {
       router.replace(`/reservar?step=${safeStep}`)
       return
     }
-    // If state changed (e.g. user clicked CONTINUAR/ VOLVER), keep URL in sync.
+
+    // If URL changed (e.g. back/forward) update state.
+    if (safeStep !== step) {
+      isApplyingUrlRef.current = true
+      goToStep(safeStep)
+    }
+  }, [goToStep, isStepValid, router, sp, step])
+
+  // state -> URL (user clicks Next/Back). Skip immediately after URL -> state to avoid ping-pong.
+  useEffect(() => {
+    if (isApplyingUrlRef.current) {
+      isApplyingUrlRef.current = false
+      return
+    }
+    const urlStep = parseStep(sp.get('step'))
     if (urlStep !== step) {
       router.replace(`/reservar?step=${step}`)
     }
-  }, [goToStep, isStepValid, resetFlow, router, sp, step])
+  }, [router, sp, step])
 
   // When changing steps, ensure the new section is visible.
   useEffect(() => {

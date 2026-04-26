@@ -31,9 +31,12 @@ export function RouteTransitionLoader({
     if (!prev || prev === pathname) return
     if (excludePathPrefixes.some((p) => pathname.startsWith(p))) return
 
-    setVisible(true)
-    const t = window.setTimeout(() => setVisible(false), minVisibleMs)
-    return () => window.clearTimeout(t)
+    const t0 = window.setTimeout(() => setVisible(true), 0)
+    const t1 = window.setTimeout(() => setVisible(false), minVisibleMs)
+    return () => {
+      window.clearTimeout(t0)
+      window.clearTimeout(t1)
+    }
   }, [excludePathPrefixes, minVisibleMs, pathname])
 
   if (excludePathPrefixes.some((p) => pathname.startsWith(p))) return null

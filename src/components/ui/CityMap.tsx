@@ -140,15 +140,26 @@ export function CityMap({ cities, activeCitySlug, onSelectCity, className }: Cit
 
       if (union) {
         const padded = padBBox(union, 18)
-        setComputedViewBox({ x: padded.x, y: padded.y, width: padded.width, height: padded.height })
-        setSilhouettePath(mainlandCandidates.map((c) => c.d).join(' '))
+        const nextViewBox = { x: padded.x, y: padded.y, width: padded.width, height: padded.height }
+        const nextPath = mainlandCandidates.map((c) => c.d).join(' ')
+        const t = window.setTimeout(() => {
+          setComputedViewBox(nextViewBox)
+          setSilhouettePath(nextPath)
+        }, 0)
+        return () => window.clearTimeout(t)
       } else {
-        setComputedViewBox(SPAIN_VIEWBOX)
-        setSilhouettePath(SPAIN_PATHS.join(' '))
+        const t = window.setTimeout(() => {
+          setComputedViewBox(SPAIN_VIEWBOX)
+          setSilhouettePath(SPAIN_PATHS.join(' '))
+        }, 0)
+        return () => window.clearTimeout(t)
       }
     } catch {
-      setComputedViewBox(SPAIN_VIEWBOX)
-      setSilhouettePath(SPAIN_PATHS.join(' '))
+      const t = window.setTimeout(() => {
+        setComputedViewBox(SPAIN_VIEWBOX)
+        setSilhouettePath(SPAIN_PATHS.join(' '))
+      }, 0)
+      return () => window.clearTimeout(t)
     } finally {
       document.body.removeChild(svg)
     }
@@ -162,7 +173,7 @@ export function CityMap({ cities, activeCitySlug, onSelectCity, className }: Cit
     const xPct = ((x - computedViewBox.x) / computedViewBox.width) * 100
     const yPct = ((y - computedViewBox.y) / computedViewBox.height) * 100
     return { city, xPct, yPct }
-  }, [cities, computedViewBox.height, computedViewBox.width, computedViewBox.x, computedViewBox.y, hoverSlug])
+  }, [cities, computedViewBox, hoverSlug])
 
   return (
     <div

@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { Lock, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
 import { cn } from '@/lib/utils'

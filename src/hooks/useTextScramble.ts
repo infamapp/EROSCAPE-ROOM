@@ -95,14 +95,20 @@ export function useTextScramble({
       return false
     }
 
-    setIsComplete(false)
+    const t0 = window.setTimeout(() => {
+      if (runIdRef.current !== runId) return
+      setIsComplete(false)
+    }, 0)
     tick()
     const id = window.setInterval(() => {
       const done = tick()
       if (done) window.clearInterval(id)
     }, Math.max(10, speed))
 
-    return () => window.clearInterval(id)
+    return () => {
+      window.clearTimeout(t0)
+      window.clearInterval(id)
+    }
   }, [replayToken, shouldReduceMotion, speed, text, totalMs, trigger])
 
   return { displayText, isComplete }

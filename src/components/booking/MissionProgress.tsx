@@ -21,7 +21,7 @@ export function MissionProgress() {
   const gradient = useMemo(() => getTensionGradient(narrativeTension), [narrativeTension])
 
   return (
-    <div className="fixed left-0 right-0 top-0 z-[100]">
+    <div className="fixed left-0 right-0 top-0 z-100">
       <div className="relative h-1 w-full bg-black/40">
         <motion.div
           className={cn('h-1')}
@@ -34,7 +34,7 @@ export function MissionProgress() {
 
       <div className="pointer-events-none hidden justify-end px-3 pt-1 md:flex">
         <motion.div
-          className="font-[var(--font-jetbrains)] text-[10px] tracking-[0.18em]"
+          className="font-(--font-jetbrains) text-[10px] tracking-[0.18em]"
           style={{ color: 'var(--color-text-muted)' }}
           initial={shouldReduceMotion ? false : { opacity: 0 }}
           animate={shouldReduceMotion ? undefined : { opacity: 1 }}

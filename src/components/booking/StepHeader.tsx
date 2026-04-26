@@ -14,11 +14,11 @@ export function StepHeader({ actLabel, title }: StepHeaderProps) {
 
   return (
     <header className="mb-8">
-      <div className="font-[var(--font-jetbrains)] text-xs tracking-[0.2em] uppercase" style={{ color: '#DC2626' }}>
+      <div className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: '#DC2626' }}>
         PASO {actLabel}
       </div>
       <h2
-        className="mt-3 font-[var(--font-playfair)] text-white"
+        className="mt-3 font-(--font-playfair) text-white"
         style={{ fontSize: 'clamp(24px, 3.2vw, 32px)' }}
       >
         {title}
