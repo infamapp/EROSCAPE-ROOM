@@ -4,6 +4,7 @@ import type { LucideIcon } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Flame, Heart, Infinity as InfinityIcon, Sparkles, Swords, Users, X, Zap } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 import { StepHeader } from '@/components/booking/StepHeader'
 import { useBookingFlow } from '@/hooks/useBookingFlow'
@@ -210,7 +211,8 @@ function IntensityOption({ level, missionLevel, isSelected, onSelect, title, des
 
 export function Step2Configurator() {
   const shouldReduceMotion = useReducedMotion()
-  const { state, updateStep2, nextStep, prevStep } = useBookingFlow()
+  const router = useRouter()
+  const { state, updateStep2 } = useBookingFlow()
 
   const companyType = state.step2.companyType ?? null
   const intensityLevel = state.step2.intensityLevel ?? null
@@ -285,9 +287,14 @@ export function Step2Configurator() {
   }
 
   const canContinue = Boolean(companyType && intensityLevel)
+  const handlePrev = () => router.push('/reservar?step=1')
+  const handleNext = () => {
+    if (!canContinue) return
+    router.push('/reservar?step=3')
+  }
 
   return (
-    <div className="relative min-h-screen overflow-hidden pb-32" style={{ background: 'var(--color-bg-base)' }}>
+    <div className="relative min-h-screen overflow-hidden pb-24 sm:pb-32" style={{ background: 'var(--color-bg-base)' }}>
       <div
         className="pointer-events-none absolute inset-0"
         style={{
@@ -310,14 +317,14 @@ export function Step2Configurator() {
         ) : null}
       </AnimatePresence>
 
-      <div className="relative mx-auto max-w-6xl px-4 pt-10 sm:px-6">
+      <div className="relative mx-auto max-w-6xl px-4 pt-8 sm:px-6 sm:pt-10">
         <StepHeader actLabel="II" title="CUÉNTANOS LO QUE DESEAS" />
 
         <p className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
           ¿CON QUIÉN VAS A EXPLORAR?
         </p>
 
-        <div className="mt-4 grid grid-cols-2 gap-4">
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:gap-4">
           {COMPANY_TYPES.map((c) => (
             <CompanyTypeCard
               key={c.id}
@@ -331,12 +338,12 @@ export function Step2Configurator() {
           ))}
         </div>
 
-        <div className="mt-12">
+        <div className="mt-9 sm:mt-12">
           <p className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
             ¿HASTA DÓNDE QUIERES LLEGAR?
           </p>
 
-          <div className="relative mt-6">
+          <div className="relative mt-4 sm:mt-6">
             <div className="relative mb-3 hidden h-3 md:block">
               <div className="absolute left-[10%] right-[10%] top-1/2 h-px -translate-y-1/2" style={{ background: 'rgba(255,255,255,0.08)' }} />
               <motion.div
@@ -390,10 +397,10 @@ export function Step2Configurator() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="mt-8 overflow-hidden rounded-2xl border border-[rgba(185,48,158,0.2)] border-l-[3px] border-l-(--color-gm-alert)"
+              className="mt-6 sm:mt-8 overflow-hidden rounded-2xl border border-[rgba(185,48,158,0.2)] border-l-[3px] border-l-(--color-gm-alert)"
               style={{ background: 'var(--color-bg-elevated)' }}
             >
-              <div className="relative p-5">
+              <div className="relative p-4 sm:p-5">
                 <button
                   type="button"
                   className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-elevated)"
@@ -413,7 +420,7 @@ export function Step2Configurator() {
                   )}
                 </div>
 
-                <p className="mt-3 font-(--font-inter) text-sm leading-6" style={{ color: 'var(--color-text-secondary)' }}>
+                <p className="mt-3 font-(--font-inter) text-[13px] leading-6 sm:text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                   <OmegaGmMessage text={gmText} shouldReduceMotion={Boolean(shouldReduceMotion)} replayToken={gmReplayKey} />
                 </p>
               </div>
@@ -421,13 +428,13 @@ export function Step2Configurator() {
           ) : null}
         </AnimatePresence>
 
-        <div className="mt-10">
+        <div className="mt-8 sm:mt-10">
           <p className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
             ¿CÓMO QUIERES QUE TE LLAMEN?
           </p>
 
           {nameFieldCount === 0 ? (
-            <p className="mt-4 font-(--font-inter) text-sm" style={{ color: 'var(--color-text-muted)' }}>
+            <p className="mt-3 sm:mt-4 font-(--font-inter) text-[13px] sm:text-sm" style={{ color: 'var(--color-text-muted)' }}>
               Selecciona un tipo de operativo para continuar.
             </p>
           ) : (
@@ -438,14 +445,14 @@ export function Step2Configurator() {
                   value={names[idx] ?? ''}
                   onChange={(e) => handleNameChange(idx, e.target.value)}
                   placeholder="Tu nombre, un apodo, lo que prefieras..."
-                  className="w-full rounded-xl border border-[rgba(185,48,158,0.2)] bg-(--color-bg-elevated) px-4 py-3 font-(--font-inter) text-sm text-(--color-text-primary) placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+                  className="w-full rounded-xl border border-[rgba(185,48,158,0.2)] bg-(--color-bg-elevated) px-4 py-2.5 font-(--font-inter) text-[13px] text-(--color-text-primary) placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:py-3 sm:text-sm"
                 />
               ))}
             </div>
           )}
         </div>
 
-        <div className="mt-8">
+        <div className="mt-6 sm:mt-8">
           <label className="block font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }} htmlFor="booking-language">
             IDIOMA DEL PLACER
           </label>
@@ -456,7 +463,7 @@ export function Step2Configurator() {
               const v = e.target.value
               if (v === 'es' || v === 'en' || v === 'fr') updateStep2({ language: v })
             }}
-            className="mt-3 w-full rounded-xl border border-[rgba(185,48,158,0.2)] bg-(--color-bg-elevated) px-4 py-3 font-(--font-inter) text-sm text-(--color-text-primary) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) md:w-64"
+            className="mt-3 w-full rounded-xl border border-[rgba(185,48,158,0.2)] bg-(--color-bg-elevated) px-4 py-2.5 font-(--font-inter) text-[13px] text-(--color-text-primary) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:py-3 sm:text-sm md:w-64"
           >
             <option value="es">ES</option>
             <option value="en">EN</option>
@@ -511,11 +518,11 @@ export function Step2Configurator() {
           ) : null}
         </AnimatePresence>
 
-        <div className="mt-14 flex flex-col gap-3 pb-6 md:flex-row md:items-center md:justify-between">
+        <div className="mt-10 flex flex-col gap-2.5 pb-6 sm:mt-14 sm:gap-3 md:flex-row md:items-center md:justify-between">
           <button
             type="button"
-            onClick={prevStep}
-            className="rounded-full border border-[rgba(185,48,158,0.2)] px-6 py-3 font-(--font-jetbrains) text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+            onClick={handlePrev}
+            className="rounded-full border border-[rgba(185,48,158,0.2)] px-5 py-2.5 font-(--font-jetbrains) text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:px-6 sm:py-3 sm:text-sm"
             style={{ color: 'var(--color-text-secondary)' }}
           >
             ← VOLVER
@@ -523,9 +530,9 @@ export function Step2Configurator() {
 
           <button
             type="button"
-            onClick={nextStep}
+            onClick={handleNext}
             disabled={!canContinue}
-            className="rounded-full px-6 py-3 font-(--font-jetbrains) text-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-full px-5 py-2.5 font-(--font-jetbrains) text-[13px] text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) disabled:cursor-not-allowed disabled:opacity-50 sm:px-6 sm:py-3 sm:text-[11px]"
             style={{ background: canContinue ? 'var(--gradient-cta)' : 'var(--color-bg-subtle)' }}
           >
             CONTINUAR →

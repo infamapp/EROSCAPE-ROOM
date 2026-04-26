@@ -244,7 +244,7 @@ function StripePaymentForm({ clientSecret, totalEur, onSuccess, onError, loading
         type="button"
         disabled={loading || !cardComplete || !stripe}
         onClick={() => void handleCardPay()}
-        className="relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-4 font-(--font-playfair) tracking-[0.14em] text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) disabled:cursor-not-allowed disabled:opacity-50"
+        className="relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full px-5 py-3.5 font-(--font-playfair) text-[13px] tracking-[0.14em] text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) disabled:cursor-not-allowed disabled:opacity-50 sm:px-6 sm:py-4 sm:text-base"
         style={{ background: 'var(--gradient-cta)' }}
         whileHover={loading ? undefined : { scale: 1.01 }}
         whileTap={loading ? undefined : { scale: 0.98 }}
@@ -339,7 +339,7 @@ function PaymentShell({ bookingId, totalEur, onPaid }: PaymentShellProps) {
         <motion.button
           type="button"
           onClick={onPaid}
-          className="mt-4 flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 font-(--font-playfair) tracking-[0.14em] text-white"
+          className="mt-4 flex w-full items-center justify-center gap-2 rounded-full px-5 py-3.5 font-(--font-playfair) text-[13px] tracking-[0.14em] text-white sm:px-6 sm:py-4 sm:text-base"
           style={{ background: 'var(--gradient-cta)' }}
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
@@ -382,7 +382,7 @@ function PaymentShell({ bookingId, totalEur, onPaid }: PaymentShellProps) {
             }, 450)
           }}
           disabled={loading}
-          className="flex w-full items-center justify-center gap-2 rounded-full px-6 py-4 font-(--font-playfair) tracking-[0.14em] text-white disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-2 rounded-full px-5 py-3.5 font-(--font-playfair) text-[13px] tracking-[0.14em] text-white disabled:opacity-60 sm:px-6 sm:py-4 sm:text-base"
           style={{ background: 'var(--gradient-cta)' }}
           whileHover={{ scale: 1.01 }}
           whileTap={{ scale: 0.98 }}
@@ -425,7 +425,7 @@ function PaymentShell({ bookingId, totalEur, onPaid }: PaymentShellProps) {
 export function Step5Checkout() {
   const shouldReduceMotion = useReducedMotion()
   const router = useRouter()
-  const { state, prevStep, finalizeCheckout, getTotalPrice } = useBookingFlow()
+  const { state, finalizeCheckout, getTotalPrice } = useBookingFlow()
 
   const [overlayDone, setOverlayDone] = useState(false)
   const [showArchetype, setShowArchetype] = useState(false)
@@ -504,48 +504,48 @@ export function Step5Checkout() {
   }, [finalizeCheckout, router, state.bookingId])
 
   return (
-    <div className="relative mx-auto max-w-3xl px-4 pb-28 pt-8 sm:px-6">
+    <div className="relative mx-auto max-w-3xl px-4 pb-24 pt-8 sm:px-6 sm:pb-28">
       <AnimatePresence>{!overlayDone && !shouldReduceMotion ? <AccessGrantedOverlay key="overlay" onComplete={handleOverlayComplete} /> : null}</AnimatePresence>
 
       <StepHeader actLabel="V" title="LAS PUERTAS SE ABREN" />
-      <p className="-mt-4 mb-8 font-(--font-inter) text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+      <p className="-mt-4 mb-6 font-(--font-inter) text-[13px] sm:mb-8 sm:text-sm" style={{ color: 'var(--color-text-secondary)' }}>
         El último paso. Después, todo empieza.
       </p>
 
       <AnimatePresence>
         {showArchetype ? (
-          <div key="archetype" className="mb-10">
+          <div key="archetype" className="mb-8 sm:mb-10">
             <ArchetypeCard archetype={archetype} size="lg" onRevealAnimationComplete={handleArchetypeRevealDone} />
           </div>
         ) : null}
       </AnimatePresence>
 
       <section
-        className="mb-8 rounded-2xl border p-5 sm:p-6"
+        className="mb-6 rounded-2xl border p-4 sm:mb-8 sm:p-6"
         style={{ borderColor: 'rgba(185,48,158,0.2)', background: 'var(--color-bg-elevated)', boxShadow: 'var(--glow-card)' }}
       >
         <h3 className="font-(--font-jetbrains) text-xs tracking-[0.2em]" style={{ color: 'var(--color-text-muted)' }}>
           TU NOCHE, EN DETALLE
         </h3>
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <h4 className="font-(--font-playfair) text-xl text-white">{experience.title}</h4>
+          <h4 className="font-(--font-playfair) text-lg text-white sm:text-xl">{experience.title}</h4>
         </div>
         <p className="mt-2 font-(--font-jetbrains) text-xs tracking-wide" style={{ color: 'var(--color-text-secondary)' }}>
           {dateLine}
         </p>
 
         {selectedUpsells.length > 0 ? (
-          <div className="mt-6">
+          <div className="mt-5 sm:mt-6">
             <p className="font-(--font-jetbrains) text-[10px] tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
               TU BAÚL
             </p>
-            <div className="mt-3 flex flex-wrap gap-3">
+            <div className="mt-3 flex flex-wrap gap-2.5 sm:gap-3">
               {selectedUpsells.map((u) => {
                 const Icon = UPS_ICON[u.icon] ?? Package
                 return (
                   <div key={u.id} className="flex items-center gap-2 rounded-lg border border-[rgba(185,48,158,0.15)] px-2 py-1.5" style={{ background: 'rgba(0,0,0,0.2)' }}>
                     <Icon className="h-4 w-4 shrink-0" style={{ color: 'var(--color-magenta)' }} aria-hidden="true" />
-                    <span className="font-(--font-inter) text-xs text-white">{u.name}</span>
+                    <span className="font-(--font-inter) text-[11px] text-white sm:text-xs">{u.name}</span>
                   </div>
                 )
               })}
@@ -557,7 +557,7 @@ export function Step5Checkout() {
           <ArchetypeCard archetype={archetype} size="sm" />
         </div>
 
-        <div className="mt-8 border-t border-[rgba(185,48,158,0.15)] pt-4 font-(--font-inter) text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+        <div className="mt-6 border-t border-[rgba(185,48,158,0.15)] pt-4 font-(--font-inter) text-[13px] sm:mt-8 sm:text-sm" style={{ color: 'var(--color-text-secondary)' }}>
           <div className="flex justify-between">
             <span>Base</span>
             <span>{formatCurrency(basePrice)}</span>
@@ -566,7 +566,7 @@ export function Step5Checkout() {
             <span>Baúl</span>
             <span>{formatCurrency(arsenalTotal)}</span>
           </div>
-          <div className="mt-3 flex justify-between border-t border-[rgba(185,48,158,0.15)] pt-3 font-(--font-playfair) text-lg" style={{ color: 'var(--color-gold)' }}>
+          <div className="mt-3 flex justify-between border-t border-[rgba(185,48,158,0.15)] pt-3 font-(--font-playfair) text-base sm:text-lg" style={{ color: 'var(--color-gold)' }}>
             <span>Total</span>
             <span>{formatCurrency(total)}</span>
           </div>
@@ -574,7 +574,7 @@ export function Step5Checkout() {
       </section>
 
       <div
-        className="mb-8 rounded-2xl border p-5"
+        className="mb-6 rounded-2xl border p-4 sm:mb-8 sm:p-5"
         style={{ borderColor: 'var(--border-gold)', background: 'color-mix(in srgb, var(--color-bg-elevated) 92%, transparent)' }}
       >
         <div className="flex items-start gap-3">
@@ -583,7 +583,7 @@ export function Step5Checkout() {
             <p className="font-(--font-jetbrains) text-[10px] tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
               EN TU EXTRACTO BANCARIO APARECERÁ COMO:
             </p>
-            <p className="mt-2 font-(--font-jetbrains) text-base text-white">Ocio y Eventos SL</p>
+            <p className="mt-2 font-(--font-jetbrains) text-[13px] text-white sm:text-base">Ocio y Eventos SL</p>
             <p className="mt-2 font-(--font-inter) text-xs italic" style={{ color: 'var(--color-text-muted)' }}>
               Tu privacidad protegida. Nadie sabrá lo que viviste aquí.
             </p>
@@ -591,7 +591,7 @@ export function Step5Checkout() {
         </div>
       </div>
 
-      <section className="mb-8">
+      <section className="mb-6 sm:mb-8">
         <h3 className="font-(--font-jetbrains) text-xs tracking-[0.2em]" style={{ color: 'var(--color-text-muted)' }}>
           EL ÚLTIMO PASO
         </h3>
@@ -599,11 +599,11 @@ export function Step5Checkout() {
           <PaymentShell bookingId={state.bookingId} totalEur={total} onPaid={handlePaid} />
         </div>
 
-        <div className="mt-6">
+        <div className="mt-5 sm:mt-6">
           <button
             type="button"
             onClick={() => setDiscountOpen((o) => !o)}
-            className="flex w-full items-center justify-between py-2 font-(--font-inter) text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta)"
+            className="flex w-full items-center justify-between py-2 font-(--font-inter) text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) sm:text-sm"
             style={{ color: 'var(--color-text-secondary)' }}
             aria-expanded={discountOpen}
           >
@@ -624,7 +624,7 @@ export function Step5Checkout() {
                 <input
                   type="text"
                   placeholder="Introduce código"
-                  className="mt-2 w-full rounded-xl border border-[rgba(185,48,158,0.25)] bg-(--color-bg-elevated) px-3 py-2 font-(--font-inter) text-sm text-white placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta)"
+                  className="mt-2 w-full rounded-xl border border-[rgba(185,48,158,0.25)] bg-(--color-bg-elevated) px-3 py-2 font-(--font-inter) text-[13px] text-white placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) sm:text-sm"
                 />
               </motion.div>
             ) : null}
@@ -652,8 +652,8 @@ export function Step5Checkout() {
       <div className="flex justify-start">
         <button
           type="button"
-          onClick={prevStep}
-          className="rounded-full border border-[rgba(185,48,158,0.2)] px-6 py-3 font-(--font-jetbrains) text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+          onClick={() => router.push('/reservar?step=4')}
+          className="rounded-full border border-[rgba(185,48,158,0.2)] px-5 py-2.5 font-(--font-jetbrains) text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:px-6 sm:py-3 sm:text-[11px]"
           style={{ color: 'var(--color-text-secondary)' }}
         >
           ← VOLVER

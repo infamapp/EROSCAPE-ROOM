@@ -11,6 +11,7 @@ export const COMPLETED_BOOKING_STORAGE_KEY = 'eroscape_completed_booking'
 
 export interface BookingContextValue {
   state: BookingState
+  isHydrated: boolean
   narrativeTension: number
   nextStep: () => void
   prevStep: () => void
@@ -95,7 +96,18 @@ function restoreState(): BookingState {
 export const BookingContext = createContext<BookingContextValue>(null!)
 
 export function BookingProvider({ children }: BookingProviderProps) {
-  const [state, setState] = useState<BookingState>(() => restoreState())
+  // Keep SSR + first client render deterministic, then restore after mount.
+  const [state, setState] = useState<BookingState>(() => createInitialState())
+  const [isHydrated, setIsHydrated] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const t = window.setTimeout(() => {
+      setState(restoreState())
+      setIsHydrated(true)
+    }, 0)
+    return () => window.clearTimeout(t)
+  }, [])
 
   const getTotalPrice = useCallback(() => computeTotalPrice(state.step3), [state.step3])
 
@@ -198,17 +210,19 @@ export function BookingProvider({ children }: BookingProviderProps) {
   }, [state.currentStep, state.step2.intensityLevel, state.step3.selectedUpsells.length, state.step4.consent])
 
   useEffect(() => {
+    if (!isHydrated) return
     if (typeof window === 'undefined') return
     try {
       window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state))
     } catch {
       // ignore
     }
-  }, [state])
+  }, [isHydrated, state])
 
   const value = useMemo<BookingContextValue>(
     () => ({
       state,
+      isHydrated,
       narrativeTension,
       nextStep,
       prevStep,
@@ -226,6 +240,7 @@ export function BookingProvider({ children }: BookingProviderProps) {
     [
       finalizeCheckout,
       getTotalPrice,
+      isHydrated,
       isStepValid,
       narrativeTension,
       nextStep,

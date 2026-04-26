@@ -85,7 +85,7 @@ function DossierCard({
 
   return (
     <motion.article
-      className={cn('relative overflow-hidden rounded-2xl p-6')}
+      className={cn('relative overflow-hidden rounded-2xl p-4 sm:p-6')}
       style={{
         background: 'var(--color-bg-elevated)',
         border: 'var(--border-subtle)',
@@ -114,19 +114,19 @@ function DossierCard({
       <div className="pointer-events-none absolute left-0 top-0 h-0.5 w-full opacity-80" style={{ background: 'var(--color-gold)' }} aria-hidden="true" />
 
       <div
-        className="absolute left-4 top-4 font-[var(--font-playfair)] italic tracking-[0.08em]"
+        className="absolute left-4 top-4 font-(--font-playfair) italic tracking-[0.08em]"
         style={{
           color: 'var(--color-gold)',
-          fontSize: '28px',
+          fontSize: '24px',
         }}
       >
         {truthNumber}
       </div>
 
       <div className="flex flex-col items-center text-center">
-        <Icon className="h-8 w-8" style={{ color: 'var(--color-magenta)' }} aria-hidden="true" />
-        <h3 className="mt-4 font-[var(--font-playfair)] text-xl text-white">{title}</h3>
-        <p className="mt-3 text-sm leading-6" style={{ color: 'var(--color-text-secondary)' }}>
+        <Icon className="h-7 w-7 sm:h-8 sm:w-8" style={{ color: 'var(--color-magenta)' }} aria-hidden="true" />
+        <h3 className="mt-3 sm:mt-4 font-(--font-playfair) text-lg sm:text-xl text-white">{title}</h3>
+        <p className="mt-2.5 sm:mt-3 text-[13px] sm:text-sm leading-6" style={{ color: 'var(--color-text-secondary)' }}>
           {description}
         </p>
       </div>
@@ -185,24 +185,24 @@ export function ConceptSection() {
     <section
       id="concepto"
       ref={ref}
-      className="relative w-full py-20 sm:py-28"
+      className="relative w-full py-14 sm:py-20 lg:py-28"
       style={{ background: 'var(--color-bg-subtle)' }}
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="relative text-center">
           <h2
-            className="font-[var(--font-playfair)] text-white tracking-[0.30em]"
+            className="font-(--font-playfair) text-white tracking-[0.30em]"
             style={{ fontSize: 'clamp(18px, 2.6vw, 28px)' }}
           >
             LO QUE NADIE MÁS TE DICE
           </h2>
 
-          <p className="mt-6 text-sm sm:text-base" style={{ color: 'var(--color-text-muted)' }}>
+          <p className="mt-3 sm:mt-6 text-[13px] sm:text-base" style={{ color: 'var(--color-text-muted)' }}>
             Cinco verdades sobre lo que vas a vivir.
           </p>
         </div>
 
-        <div className="mt-14 grid gap-6 md:grid-cols-6">
+        <div className="mt-8 sm:mt-14 grid gap-4 sm:gap-6 md:grid-cols-6">
           {/* row 1: 3 cards */}
           {TRUTH_ITEMS.slice(0, 3).map((item, idx) => (
             <div key={item.truthNumber} className="md:col-span-2">
@@ -233,11 +233,11 @@ export function ConceptSection() {
           <div className="hidden md:block md:col-span-1" aria-hidden="true" />
         </div>
 
-        <div className="mt-14 flex justify-center">
+        <div className="mt-9 sm:mt-14 flex justify-center">
           <button
             type="button"
             onClick={handleScrollToExperiencias}
-            className="group inline-flex items-center gap-2 rounded-full px-6 py-3 font-[var(--font-jetbrains)] text-sm"
+            className="group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-center font-(--font-jetbrains) text-xs sm:px-6 sm:py-3 sm:text-sm"
             style={{
               color: 'var(--color-magenta)',
               border: 'var(--border-subtle)',
@@ -246,7 +246,7 @@ export function ConceptSection() {
             }}
           >
             {'> descubre lo que te excita...'}
-            <span className="inline-block h-4 w-[10px] translate-y-[1px] bg-current opacity-80 animate-pulse" />
+            <span className="inline-block h-4 w-[10px] translate-y-px bg-current opacity-80 animate-pulse" />
           </button>
         </div>
       </div>

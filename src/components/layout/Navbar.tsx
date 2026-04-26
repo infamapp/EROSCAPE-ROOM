@@ -53,7 +53,7 @@ export function Navbar() {
     <>
       <motion.header
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 py-4',
+          'fixed top-0 left-0 right-0 z-50 py-3',
           'transition-[background-color,backdrop-filter,border-color] duration-300',
           isScrolled ? 'backdrop-blur-md border-b' : 'border-b border-transparent',
         )}
@@ -66,7 +66,14 @@ export function Navbar() {
         animate={shouldReduceMotion ? undefined : 'visible'}
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <Link href="/" className="group inline-flex items-center gap-3">
+          <Link
+            href="/"
+            className={cn(
+              'group inline-flex items-center gap-3 transition-[opacity,transform] duration-300',
+              isScrolled ? 'opacity-100 pointer-events-auto' : 'opacity-0 -translate-y-1 pointer-events-none',
+              'lg:opacity-100 lg:translate-y-0 lg:pointer-events-auto',
+            )}
+          >
             <Image
               src="/erosLogo.png"
               alt="Eroscape"
@@ -74,7 +81,7 @@ export function Navbar() {
               height={80}
               quality={100}
               priority
-              className="h-28 w-28"
+              className="h-24 w-24"
             />
             <span className="sr-only">Eroscape</span>
           </Link>

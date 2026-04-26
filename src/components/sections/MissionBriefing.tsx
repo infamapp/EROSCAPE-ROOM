@@ -147,7 +147,11 @@ function ScrambleParagraph({ text }: { text: string }) {
   })
 
   return (
-    <p ref={ref as unknown as React.RefObject<HTMLParagraphElement>} className="mt-4 text-sm leading-7" style={{ color: 'var(--color-text-secondary)' }}>
+    <p
+      ref={ref as unknown as React.RefObject<HTMLParagraphElement>}
+      className="mt-3 text-[13px] leading-6 sm:mt-4 sm:text-sm sm:leading-7"
+      style={{ color: 'var(--color-text-secondary)' }}
+    >
       {reduce ? text : displayText}
     </p>
   )
@@ -238,7 +242,7 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
 
   return (
     <div className="min-h-screen" style={{ background: 'var(--color-bg-base)' }}>
-      <div className="mx-auto max-w-6xl px-4 pt-24 sm:px-6">
+      <div className="mx-auto max-w-6xl px-4 pt-20 sm:px-6 sm:pt-24">
         <div className="flex items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
             <IntensityBadge level={experience.intensity} pulse={experience.missionLevel === 'OMEGA'} />
@@ -253,7 +257,7 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
           <button
             type="button"
             onClick={handleShare}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full sm:h-10 sm:w-10"
             style={{ border: 'var(--border-subtle)', background: 'rgba(17,0,17,0.35)' }}
             aria-label="Compartir"
           >
@@ -261,7 +265,10 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
           </button>
         </div>
 
-        <div className="relative mt-6 h-[50vh] overflow-hidden rounded-3xl" style={{ border: 'var(--border-subtle)' }}>
+        <div
+          className="relative mt-5 h-[42vh] overflow-hidden rounded-2xl sm:mt-6 sm:h-[50vh] sm:rounded-3xl"
+          style={{ border: 'var(--border-subtle)' }}
+        >
           <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${accent} 0%, rgba(8,0,8,0.92) 70%, rgba(8,0,8,1) 100%)` }} />
 
           <div className="absolute inset-0 opacity-20" aria-hidden="true">
@@ -296,8 +303,8 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
           <div className="absolute inset-x-0 bottom-0 h-40" style={{ background: 'var(--gradient-overlay)' }} />
 
           <motion.h1
-            className="absolute bottom-8 left-6 right-6 font-(--font-playfair) text-white"
-            style={{ fontSize: 'clamp(36px, 5vw, 56px)' }}
+            className="absolute bottom-6 left-5 right-5 font-(--font-playfair) text-white sm:bottom-8 sm:left-6 sm:right-6"
+            style={{ fontSize: 'clamp(28px, 5vw, 56px)' }}
             variants={heroTitleVariants}
             initial={shouldReduceMotion ? false : 'hidden'}
             animate={shouldReduceMotion ? undefined : 'visible'}
@@ -306,19 +313,19 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
           </motion.h1>
         </div>
 
-        <div className="mt-12 grid gap-10 lg:grid-cols-10">
+        <div className="mt-8 grid gap-8 lg:mt-12 lg:grid-cols-10 lg:gap-10">
           <div className="lg:col-span-6">
             <div className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
-                  LO QUE TE ESPERA
+              LO QUE TE ESPERA
             </div>
 
             {experience.synopsis.map((p) => (
               <ScrambleParagraph key={p} text={p} />
             ))}
 
-            <div className="mt-10">
+            <div className="mt-8 sm:mt-10">
               <div className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
-                    LOS DETALLES
+                LOS DETALLES
               </div>
 
               <div
@@ -329,15 +336,15 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
                   {(
                     [
                       { k: 'DURACIÓN', v: `${experience.duration} min` },
-                          { k: 'PARA CUÁNTOS', v: String(experience.maxParticipants) },
-                          { k: 'EL MAESTRO', v: experience.specs.aiLevel },
-                          { k: 'INTENSIDAD', intensity: true as const },
-                          { k: 'PRECIO', v: priceText },
+                      { k: 'PARA CUÁNTOS', v: String(experience.maxParticipants) },
+                      { k: 'EL MAESTRO', v: experience.specs.aiLevel },
+                      { k: 'INTENSIDAD', intensity: true as const },
+                      { k: 'PRECIO', v: priceText },
                     ] as const
                   ).map((row) => (
                     <div
                       key={row.k}
-                      className="grid grid-cols-2 gap-4 px-5 py-4 transition-colors"
+                      className="grid grid-cols-2 gap-4 px-4 py-3 transition-colors sm:px-5 sm:py-4"
                       style={{ background: 'rgba(185,48,158,0)', color: 'var(--color-text-secondary)' }}
                     >
                       <div className="font-(--font-jetbrains) text-xs" style={{ color: 'var(--color-text-muted)' }}>
@@ -361,10 +368,10 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
             <div className="grid gap-6">
               <div>
                 <div className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
-                      UNA MUESTRA
+                  UNA MUESTRA
                 </div>
 
-                <div className="mt-4 grid grid-cols-3 gap-4">
+                <div className="mt-4 grid grid-cols-3 gap-3 sm:gap-4">
                   {[0, 1, 2].map((i) => (
                     <motion.button
                       key={i}
@@ -411,10 +418,10 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
 
               <div>
                 <div className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
-                      ELIGE TU NOCHE
+                  ELIGE TU NOCHE
                 </div>
 
-                <div className="mt-4 rounded-2xl p-4" style={{ background: 'var(--color-bg-elevated)', border: 'var(--border-subtle)' }}>
+                <div className="mt-4 rounded-2xl p-3 sm:p-4" style={{ background: 'var(--color-bg-elevated)', border: 'var(--border-subtle)' }}>
                   <div className="flex items-center justify-between">
                     <button
                       type="button"
@@ -452,7 +459,7 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
                           key={day}
                           type="button"
                           onClick={() => handlePickDate(day)}
-                          className="relative flex h-10 w-10 items-center justify-center rounded-lg text-sm"
+                          className="relative flex h-9 w-9 items-center justify-center rounded-lg text-sm sm:h-10 sm:w-10"
                           disabled={!available}
                           style={{
                             color: available ? 'var(--color-text-primary)' : 'var(--color-text-muted)',
@@ -470,7 +477,7 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
                     })}
                   </div>
 
-                  <div className="mt-4 text-xs" style={{ color: 'var(--color-text-muted)' }}>
+                  <div className="mt-3 text-[11px] sm:mt-4 sm:text-xs" style={{ color: 'var(--color-text-muted)' }}>
                     Disponibilidad simulada: fines de semana + algunos días laborables.
                   </div>
                 </div>
@@ -510,14 +517,17 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
         </div>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-80 border-t p-4 lg:hidden" style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(8,0,8,0.92)', backdropFilter: 'blur(10px)' }}>
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
-          <div className="font-(--font-playfair)" style={{ color: 'var(--color-gold)' }}>
+      <div
+        className="fixed inset-x-0 bottom-0 z-80 border-t p-3 sm:p-4 lg:hidden"
+        style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(8,0,8,0.92)', backdropFilter: 'blur(10px)' }}
+      >
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-3 sm:px-6">
+          <div className="font-(--font-playfair) text-base sm:text-lg" style={{ color: 'var(--color-gold)' }}>
             Desde {priceText}
           </div>
           <button
             type="button"
-            className="rounded-full px-5 py-3 font-(--font-playfair) tracking-[0.14em] text-white"
+            className="rounded-full px-4 py-2.5 font-(--font-playfair) text-[11px] tracking-[0.14em] text-white sm:px-5 sm:py-3 sm:text-base"
             style={{ background: 'var(--gradient-cta)' }}
             onClick={handleAcceptMission}
           >

@@ -156,10 +156,8 @@ export function HeroSection() {
           animate={shouldReduceMotion ? undefined : contentMotionStyle}
           transition={shouldReduceMotion ? undefined : { duration: 0.6, ease: SENSUAL_EASE }}
         >
-  
-
           <motion.div
-            className="mb-4"
+            className="mb-3 sm:mb-4"
             initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
             animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={shouldReduceMotion ? undefined : { duration: 0.6, ease: SENSUAL_EASE, delay: 0.35 }}
@@ -170,14 +168,14 @@ export function HeroSection() {
               width={200}
               height={88}
               priority
-              className="mx-auto"
+              className="mx-auto h-auto w-[150px] sm:w-[170px] lg:w-[200px]"
             />
           </motion.div>
           <motion.svg
             width="260"
             height="24"
             viewBox="0 0 260 24"
-            className="mb-6"
+            className="mb-4 sm:mb-6"
             aria-hidden="true"
           >
             <motion.path
@@ -191,8 +189,8 @@ export function HeroSection() {
             />
           </motion.svg>
           <motion.h1
-            className="font-(--font-playfair) text-white tracking-[0.25em] leading-none"
-            style={{ fontSize: 'clamp(48px, 7vw, 72px)' }}
+            className="font-(--font-playfair) text-white leading-none tracking-[0.22em] sm:tracking-[0.25em]"
+            style={{ fontSize: 'clamp(38px, 7vw, 72px)' }}
             variants={titleVariants}
             initial={shouldReduceMotion ? false : 'hidden'}
             animate={shouldReduceMotion ? undefined : 'visible'}
@@ -201,14 +199,14 @@ export function HeroSection() {
           </motion.h1>
 
           <div
-            className={cn('mt-6 font-(--font-playfair) italic')}
-            style={{ color: 'var(--color-text-secondary)', fontSize: 'clamp(22px, 3.2vw, 28px)' }}
+            className={cn('mt-4 sm:mt-6 font-(--font-playfair) italic')}
+            style={{ color: 'var(--color-text-secondary)', fontSize: 'clamp(18px, 3.2vw, 28px)' }}
           >
             {shouldReduceMotion ? 'El primer Escape Room Erótico del mundo' : taglineText}
           </div>
 
           <motion.p
-            className="mt-4 font-(--font-jetbrains) text-sm sm:text-base"
+            className="mt-3 sm:mt-4 font-(--font-jetbrains) text-xs sm:text-base"
             style={{ color: 'var(--color-purple-muted)' }}
             variants={sublineVariants}
             initial={shouldReduceMotion ? false : 'hidden'}
@@ -219,21 +217,21 @@ export function HeroSection() {
           </motion.p>
 
           <motion.div
-            className="mt-10 flex w-full flex-col gap-3 sm:flex-row sm:justify-center"
+            className="mt-7 sm:mt-10 flex w-full flex-col gap-2.5 sm:gap-3 sm:flex-row sm:justify-center"
             variants={ctaContainerVariants}
             initial={shouldReduceMotion ? false : 'hidden'}
             animate={shouldReduceMotion ? undefined : 'visible'}
           >
             <Link
               href="/reservar"
-              className="w-full rounded-full px-6 py-3 text-center text-white sm:w-auto"
+              className="w-full rounded-full px-5 py-2.5 text-center text-white sm:w-auto sm:px-6 sm:py-3"
               style={{ background: 'var(--gradient-cta)' }}
             >
               <span className="font-(--font-playfair) tracking-[0.12em]">RENDIRSE AL DESEO</span>
             </Link>
             <a
               href="#concepto"
-              className="w-full rounded-full px-6 py-3 text-center sm:w-auto"
+              className="w-full rounded-full px-5 py-2.5 text-center sm:w-auto sm:px-6 sm:py-3"
               style={{ border: '1px solid rgba(255,255,255,0.7)', color: 'white' }}
             >
               <span className="font-(--font-playfair) tracking-[0.12em]">DESCUBRIR EL SECRETO</span>
@@ -241,7 +239,7 @@ export function HeroSection() {
           </motion.div>
 
           <motion.div
-            className="mt-14 font-(--font-jetbrains) text-xs sm:text-sm"
+            className="mt-10 sm:mt-14 font-(--font-jetbrains) text-xs sm:text-sm"
             style={{ color: 'var(--color-text-muted)' }}
             initial={shouldReduceMotion ? false : { opacity: 0 }}
             animate={

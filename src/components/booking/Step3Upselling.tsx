@@ -6,6 +6,7 @@ import { Clock, Clock3, Cpu, Crown, Gift, Package, Swords } from 'lucide-react'
 import { createPortal } from 'react-dom'
 import type { RefObject } from 'react'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 import { StepHeader } from '@/components/booking/StepHeader'
 import { RarityBadge } from '@/components/ui/RarityBadge'
@@ -143,7 +144,7 @@ function UpsellItemCard({ item, isSelected, selectionPulse, onToggle, hexRef }: 
     <motion.article
       layout
       className={cn(
-        'relative rounded-2xl border-2 p-4 transition-shadow md:p-5',
+        'relative rounded-2xl border-2 p-3.5 transition-shadow sm:p-4 md:p-5',
         'focus-within:ring-2 focus-within:ring-(--color-magenta) focus-within:ring-offset-2 focus-within:ring-offset-(--color-bg-base)'
       )}
       style={{
@@ -164,7 +165,7 @@ function UpsellItemCard({ item, isSelected, selectionPulse, onToggle, hexRef }: 
         </div>
       ) : null}
 
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
         <div ref={(el) => hexRef(el)} className="flex shrink-0 justify-center sm:justify-start">
           <div ref={innerRef}>
             <HexFrame iconName={item.icon} rarity={item.rarity} isSelected={isSelected} selectionPulse={selectionPulse} />
@@ -172,21 +173,21 @@ function UpsellItemCard({ item, isSelected, selectionPulse, onToggle, hexRef }: 
         </div>
 
         <div className="min-w-0 flex-1">
-          <h3 className="font-(--font-playfair) text-lg text-white">{item.name}</h3>
-          <div className="mt-2">
+          <h3 className="font-(--font-playfair) text-base text-white sm:text-lg">{item.name}</h3>
+          <div className="mt-1.5 sm:mt-2">
             <RarityBadge rarity={item.rarity} />
           </div>
-          <p className="mt-2 font-(--font-inter) text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
+          <p className="mt-2 font-(--font-inter) text-[13px] leading-6 sm:text-sm sm:leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
             {item.description}
           </p>
         </div>
 
         <div className="flex shrink-0 flex-col items-stretch gap-3 sm:items-end sm:text-right">
-          <p className="font-(--font-playfair) text-xl text-white">{formatCurrency(item.price)}</p>
+          <p className="font-(--font-playfair) text-lg text-white sm:text-xl">{formatCurrency(item.price)}</p>
           <button
             type="button"
             onClick={handleToggle}
-            className="rounded-full px-4 py-2 font-(--font-jetbrains) text-xs tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+            className="rounded-full px-3.5 py-2 font-(--font-jetbrains) text-[11px] tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:px-4 sm:text-xs"
             style={
               isSelected
                 ? { background: 'transparent', border: `2px solid ${rarityColor}`, color: rarityColor }
@@ -316,7 +317,8 @@ function ArsenalPanel({ selectedIds, panelDropRef, className }: ArsenalPanelProp
 
 export function Step3Upselling() {
   const shouldReduceMotion = useReducedMotion()
-  const { state, updateStep3, nextStep, prevStep, getTotalPrice } = useBookingFlow()
+  const router = useRouter()
+  const { state, updateStep3, getTotalPrice } = useBookingFlow()
 
   const selected = state.step3.selectedUpsells as UpsellId[]
   const [itemAdded, setItemAdded] = useState<UpsellId | null>(null)
@@ -339,6 +341,8 @@ export function Step3Upselling() {
   }, [itemAdded])
 
   const total = getTotalPrice()
+  const handlePrev = () => router.push('/reservar?step=2')
+  const handleNext = () => router.push('/reservar?step=4')
 
   const clearLootFlight = useCallback(() => setLootFlight(null), [])
 
@@ -381,16 +385,16 @@ export function Step3Upselling() {
     ) : null
 
   return (
-    <div className="relative min-h-screen pb-40 md:pb-28">
+    <div className="relative min-h-screen pb-32 md:pb-28">
       {lootPortal}
 
-      <div className="relative mx-auto max-w-6xl px-4 pt-10 sm:px-6 lg:max-w-[1200px]">
+      <div className="relative mx-auto max-w-6xl px-4 pt-8 sm:px-6 sm:pt-10 lg:max-w-[1200px]">
         <StepHeader actLabel="III" title="ABRE EL BAÚL" />
-        <p className="-mt-4 mb-10 font-(--font-jetbrains) text-xs tracking-wide" style={{ color: 'var(--color-text-muted)' }}>
+        <p className="-mt-4 mb-7 font-(--font-jetbrains) text-[11px] tracking-wide sm:mb-10 sm:text-xs" style={{ color: 'var(--color-text-muted)' }}>
           Suma tentaciones a tu noche
         </p>
 
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,35%)] lg:items-start">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,35%)] lg:items-start">
           <div className="space-y-4">
             {UPSELL_ITEMS.map((item) => (
               <UpsellItemCard
@@ -407,11 +411,15 @@ export function Step3Upselling() {
             ))}
           </div>
 
-          <ArsenalPanel selectedIds={selected} panelDropRef={panelDropRef} className="hidden lg:flex lg:min-h-[420px] lg:sticky lg:top-24" />
+          <ArsenalPanel
+            selectedIds={selected}
+            panelDropRef={panelDropRef}
+            className="hidden lg:flex lg:min-h-[420px] lg:sticky lg:top-24"
+          />
         </div>
 
         <div
-          className="fixed inset-x-0 bottom-[72px] z-110 border-t px-4 py-3 lg:hidden"
+          className="fixed inset-x-0 bottom-[64px] z-110 border-t px-3 py-2.5 sm:bottom-[72px] sm:px-4 sm:py-3 lg:hidden"
           style={{
             background: 'rgba(8,0,8,0.80)',
             borderColor: 'rgba(185,48,158,0.25)',
@@ -419,37 +427,37 @@ export function Step3Upselling() {
           }}
         >
           <div ref={mobileLootTargetRef} className="mx-auto max-w-lg">
-            <p className="text-center font-(--font-jetbrains) text-xs tracking-wide" style={{ color: 'var(--color-text-secondary)' }}>
+            <p className="text-center font-(--font-jetbrains) text-[11px] tracking-wide sm:text-xs" style={{ color: 'var(--color-text-secondary)' }}>
               {selected.length} tentaci{selected.length === 1 ? 'ón' : 'ones'} elegida{selected.length === 1 ? '' : 's'} · {formatCurrency(total)}
             </p>
           </div>
         </div>
 
         <div
-          className="fixed inset-x-0 bottom-0 z-120 border-t px-4 py-4"
+          className="fixed inset-x-0 bottom-0 z-120 border-t px-3 py-3 sm:px-4 sm:py-4"
           style={{
             background: 'rgba(8,0,8,0.86)',
             borderColor: 'rgba(185,48,158,0.25)',
             backdropFilter: 'blur(12px)',
           }}
         >
-          <div className="mx-auto flex max-w-6xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-center font-(--font-jetbrains) text-sm sm:text-left" style={{ color: 'var(--color-text-muted)' }}>
+          <div className="mx-auto flex max-w-6xl flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+            <p className="text-center font-(--font-jetbrains) text-[13px] sm:text-left sm:text-sm" style={{ color: 'var(--color-text-muted)' }}>
               El valor de tu noche: <span style={{ color: 'var(--color-gold)' }}>{formatCurrency(total)}</span>
             </p>
             <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
               <button
                 type="button"
-                onClick={prevStep}
-                className="rounded-full border border-[rgba(185,48,158,0.2)] px-5 py-3 font-(--font-jetbrains) text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+                onClick={handlePrev}
+                className="rounded-full border border-[rgba(185,48,158,0.2)] px-4 py-2.5 font-(--font-jetbrains) text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:px-5 sm:py-3 sm:text-sm"
                 style={{ color: 'var(--color-text-secondary)' }}
               >
                 ← VOLVER
               </button>
               <button
                 type="button"
-                onClick={nextStep}
-                className="rounded-full px-5 py-3 font-(--font-jetbrains) text-sm text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+                onClick={handleNext}
+                className="rounded-full px-4 py-2.5 font-(--font-jetbrains) text-[13px] text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:px-5 sm:py-3 sm:text-[11px]"
                 style={{ background: 'var(--gradient-cta)' }}
               >
                 CONTINUAR →

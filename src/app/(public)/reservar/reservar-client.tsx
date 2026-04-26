@@ -1,7 +1,7 @@
 'use client'
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import { Step1Selection } from '@/components/booking/Step1Selection'
@@ -9,6 +9,8 @@ import { Step2Configurator } from '@/components/booking/Step2Configurator'
 import { Step3Upselling } from '@/components/booking/Step3Upselling'
 import { Step4Legal } from '@/components/booking/Step4Legal'
 import { Step5Checkout } from '@/components/booking/Step5Checkout'
+import { MissionProgress } from '@/components/booking/MissionProgress'
+import { StepIndicator } from '@/components/booking/StepIndicator'
 import { useBookingFlow } from '@/hooks/useBookingFlow'
 
 type Step = 1 | 2 | 3 | 4 | 5
@@ -35,73 +37,56 @@ export function ReservarClient() {
   const shouldReduceMotion = useReducedMotion()
   const router = useRouter()
   const sp = useSearchParams()
-  const { state, goToStep, isStepValid } = useBookingFlow()
-  const step = state.currentStep
-  const isApplyingUrlRef = useRef(false)
+  const { state, isStepValid } = useBookingFlow()
+  const lastRenderedStepRef = useRef<Step>(1)
 
-  const [lastStep, setLastStep] = useState<Step>(step)
-  const direction: 1 | -1 = step >= lastStep ? 1 : -1
+  const raw = sp.get('step')
+  const urlStep = parseStep(raw)
+
+  // Guardrail: don't allow jumping ahead if prior steps aren't valid.
+  let safeStep: Step = urlStep
+  for (let s: Step = 1; s < urlStep; s = ((s + 1) as Step)) {
+    if (!isStepValid(s)) {
+      safeStep = s
+      break
+    }
+  }
+
+  const [direction, setDirection] = useState<1 | -1>(1)
+
+  const tension = useMemo(() => {
+    const base = (safeStep - 1) * 20
+    const bonusOmega = state.step2.intensityLevel === 'turbio' ? 5 : 0
+    const bonusUpsells = Math.min(10, state.step3.selectedUpsells.length * 2)
+    const bonusConsent = state.step4.consent ? 5 : 0
+    return Math.min(100, base + bonusOmega + bonusUpsells + bonusConsent)
+  }, [safeStep, state.step2.intensityLevel, state.step3.selectedUpsells.length, state.step4.consent])
 
   useEffect(() => {
-    if (step === lastStep) return
-    const t = window.setTimeout(() => setLastStep(step), 0)
-    return () => window.clearTimeout(t)
-  }, [lastStep, step])
-
-  // URL -> state (back/forward + deep links). This effect MUST NOT also "sync state -> URL"
-  // or we can end up oscillating between steps in production.
-  useEffect(() => {
-    const raw = sp.get('step')
+    // Normalize missing/invalid params.
     if (!raw) {
       router.replace('/reservar?step=1')
       return
     }
-
-    const urlStep = parseStep(raw)
-
-    // Guardrail: don't allow jumping ahead if prior steps aren't valid.
-    let safeStep: Step = urlStep
-    for (let s: Step = 1; s < urlStep; s = ((s + 1) as Step)) {
-      if (!isStepValid(s)) {
-        safeStep = s
-        break
-      }
-    }
-
     // If URL is ahead of what we allow, correct it.
     if (safeStep !== urlStep) {
       router.replace(`/reservar?step=${safeStep}`)
       return
     }
-
-    // If URL changed (e.g. back/forward) update state.
-    if (safeStep !== step) {
-      isApplyingUrlRef.current = true
-      goToStep(safeStep)
-    }
-  }, [goToStep, isStepValid, router, sp, step])
-
-  // state -> URL (user clicks Next/Back). Skip immediately after URL -> state to avoid ping-pong.
-  useEffect(() => {
-    if (isApplyingUrlRef.current) {
-      isApplyingUrlRef.current = false
-      return
-    }
-    const urlStep = parseStep(sp.get('step'))
-    if (urlStep !== step) {
-      router.replace(`/reservar?step=${step}`)
-    }
-  }, [router, sp, step])
+    const prev = lastRenderedStepRef.current
+    lastRenderedStepRef.current = safeStep
+    setDirection(safeStep >= prev ? 1 : -1)
+  }, [raw, router, safeStep, urlStep])
 
   // When changing steps, ensure the new section is visible.
   useEffect(() => {
     if (typeof window === 'undefined') return
     // Use standards-compliant behavior to avoid runtime errors in some browsers.
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
-  }, [step])
+  }, [safeStep])
 
   const content = (() => {
-    switch (step) {
+    switch (safeStep) {
       case 1:
         return <Step1Selection />
       case 2:
@@ -113,17 +98,22 @@ export function ReservarClient() {
       case 5:
         return <Step5Checkout />
       default: {
-        const _exhaustive: never = step
+        const _exhaustive: never = safeStep
         return _exhaustive
       }
     }
   })()
 
   return (
-    <div className="min-h-screen pb-24">
+    <>
+      <MissionProgress tension={tension} />
+      <div className="pt-18">
+        <StepIndicator currentStep={safeStep} />
+      </div>
+      <div className="min-h-screen pb-24">
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
-          key={step}
+          key={safeStep}
           custom={direction}
           variants={pageVariants}
           initial={shouldReduceMotion ? false : 'enter'}
@@ -133,7 +123,8 @@ export function ReservarClient() {
           {content}
         </motion.div>
       </AnimatePresence>
-    </div>
+      </div>
+    </>
   )
 }
 

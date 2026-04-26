@@ -31,7 +31,7 @@ export function CitySelector() {
   }, [])
 
   return (
-    <section id="experiencias" className="w-full py-20 sm:py-28" style={{ background: 'var(--color-bg-base)' }}>
+    <section id="experiencias" className="w-full py-14 sm:py-20 lg:py-28" style={{ background: 'var(--color-bg-base)' }}>
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="text-center">
           <h2
@@ -40,12 +40,12 @@ export function CitySelector() {
           >
             ¿DÓNDE QUIERES QUE OCURRA?
           </h2>
-          <p className="mt-5 font-(--font-jetbrains) text-xs sm:text-sm" style={{ color: 'var(--color-text-muted)' }}>
+          <p className="mt-3 sm:mt-5 font-(--font-jetbrains) text-[11px] sm:text-sm" style={{ color: 'var(--color-text-muted)' }}>
             5 ciudades · 5 experiencias por ciudad · Plazas limitadas
           </p>
         </div>
 
-        <div className="mt-14">
+        <div className="mt-8 sm:mt-14">
           <div ref={mapRef} className="flex w-full justify-center">
             <CityMap
               className="w-full"
@@ -56,7 +56,7 @@ export function CitySelector() {
           </div>
         </div>
 
-        <div className="mt-14">
+        <div className="mt-10 sm:mt-14">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeCity}
@@ -64,7 +64,7 @@ export function CitySelector() {
               animate={shouldReduceMotion ? undefined : { opacity: 1 }}
               exit={shouldReduceMotion ? undefined : { opacity: 0 }}
               transition={shouldReduceMotion ? undefined : { duration: 0.25, ease: SENSUAL_EASE }}
-              className="grid gap-6 md:grid-cols-2 lg:grid-cols-12"
+              className="grid gap-4 sm:gap-6 md:grid-cols-2 lg:grid-cols-12"
             >
               {experiences.map((exp, index) => (
                 <motion.div
@@ -89,7 +89,7 @@ export function CitySelector() {
             </motion.div>
           </AnimatePresence>
 
-          <div className="mt-8 text-center font-(--font-jetbrains) text-xs" style={{ color: 'var(--color-text-muted)' }}>
+          <div className="mt-6 sm:mt-8 text-center font-(--font-jetbrains) text-[11px] sm:text-xs" style={{ color: 'var(--color-text-muted)' }}>
             Ciudad: <span style={{ color: 'var(--color-text-secondary)' }}>{activeCityData.displayName}</span>
             {' · '}
             <Link href={`/experiencias/${activeCityData.slug}`} style={{ color: 'var(--color-magenta)' }}>

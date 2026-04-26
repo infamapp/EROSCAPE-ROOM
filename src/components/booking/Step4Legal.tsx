@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Check, CheckCircle, ChevronDown, PenLine, Shield } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import type SignaturePad from 'signature_pad'
+import { useRouter } from 'next/navigation'
 
 import { StepHeader } from '@/components/booking/StepHeader'
 import { useBookingFlow } from '@/hooks/useBookingFlow'
@@ -150,14 +151,12 @@ function WaxSealMark() {
         shouldReduceMotion
           ? { opacity: 1, scale: 1, rotate: 0 }
           : {
-              opacity: 1,
-              scale: [0, 1.1, 1],
-              rotate: [-15, 0],
-              transition: {
-                opacity: { duration: 0.2, ease: SENSUAL_EASE },
-                scale: { type: 'spring', stiffness: 200, damping: 10 },
-                rotate: { type: 'spring', stiffness: 200, damping: 10 },
-              },
+            scale: 1,
+            transition: {
+              opacity: { duration: 0.2, ease: SENSUAL_EASE },
+              scale: { type: 'spring', stiffness: 200, damping: 10 },
+              rotate: { type: 'spring', stiffness: 200, damping: 10 },
+            },
             }
       }
       style={{ filter: 'drop-shadow(var(--shadow-wax-seal))' }}
@@ -181,7 +180,8 @@ function WaxSealMark() {
 
 export function Step4Legal() {
   const shouldReduceMotion = useReducedMotion()
-  const { state, prevStep, sealPactAndAdvance } = useBookingFlow()
+  const router = useRouter()
+  const { state, sealPactAndAdvance } = useBookingFlow()
 
   const scrollRef = useRef<HTMLDivElement | null>(null)
   const [scrollProgress, setScrollProgress] = useState(0)
@@ -249,21 +249,22 @@ export function Step4Legal() {
 
     // Advance immediately to avoid state/URL desync.
     sealPactAndAdvance(consent)
+    router.push('/reservar?step=5')
   }
 
   return (
-    <div className="relative mx-auto max-w-3xl px-4 pb-28 pt-10 sm:px-6">
+    <div className="relative mx-auto max-w-3xl px-4 pb-24 pt-8 sm:px-6 sm:pb-28 sm:pt-10">
       <StepHeader actLabel="IV" title="EL JURAMENTO" />
-      <p className="-mt-4 mb-6 font-(--font-inter) text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+      <p className="-mt-4 mb-5 font-(--font-inter) text-[13px] sm:mb-6 sm:text-sm" style={{ color: 'var(--color-text-secondary)' }}>
         Lo que sigue tiene reglas. Tuyas. Nuestras. De nadie más.
       </p>
 
       <div
-        className="mb-8 flex items-center gap-2 rounded-xl border px-4 py-3"
+        className="mb-6 flex items-center gap-2 rounded-xl border px-4 py-2.5 sm:mb-8 sm:py-3"
         style={{ borderColor: 'rgba(22,163,74,0.35)', background: 'rgba(22,163,74,0.08)' }}
       >
         <Shield className="h-5 w-5 shrink-0" style={{ color: 'var(--color-gm-terminal)' }} aria-hidden="true" />
-        <p className="font-(--font-inter) text-sm" style={{ color: 'var(--color-gm-terminal)' }}>
+        <p className="font-(--font-inter) text-[13px] sm:text-sm" style={{ color: 'var(--color-gm-terminal)' }}>
           Tu privacidad es sagrada aquí
         </p>
       </div>
@@ -271,7 +272,7 @@ export function Step4Legal() {
       <div
         ref={scrollRef}
         onScroll={handleScroll}
-        className="relative max-h-[45vh] overflow-y-auto rounded-2xl border font-(--font-playfair) text-base leading-relaxed"
+        className="relative max-h-[42vh] overflow-y-auto rounded-2xl border font-(--font-playfair) text-[15px] leading-7 sm:max-h-[45vh] sm:text-base sm:leading-relaxed"
         style={{
           borderColor: 'var(--color-magenta-dim)',
           backgroundColor: 'var(--color-bg-elevated)',
@@ -286,7 +287,7 @@ export function Step4Legal() {
           />
         </div>
 
-        <div className="space-y-6 px-5 py-6 sm:px-8">
+        <div className="space-y-5 px-4 py-5 sm:space-y-6 sm:px-8 sm:py-6">
           <section>
             <h3 className="mb-2 font-(--font-jetbrains) text-[10px] tracking-[0.2em]" style={{ color: 'var(--color-text-muted)' }}>
               ALCANCE DE LA EXPERIENCIA
@@ -351,11 +352,11 @@ export function Step4Legal() {
         <AnimatePresence>{hasReadDocument ? <WaxSealMark key="wax" /> : null}</AnimatePresence>
       </div>
 
-      <div className="mt-10 border-t pt-8" style={{ borderColor: 'var(--color-gold)' }}>
-        <h3 className="font-(--font-playfair) text-xl italic" style={{ color: 'var(--color-gold)' }}>
+      <div className="mt-8 border-t pt-6 sm:mt-10 sm:pt-8" style={{ borderColor: 'var(--color-gold)' }}>
+        <h3 className="font-(--font-playfair) text-lg italic sm:text-xl" style={{ color: 'var(--color-gold)' }}>
           TU PALABRA MÁGICA
         </h3>
-        <p className="mt-3 font-(--font-inter) text-sm" style={{ color: 'var(--color-text-muted)' }}>
+        <p className="mt-2.5 font-(--font-inter) text-[13px] sm:mt-3 sm:text-sm" style={{ color: 'var(--color-text-muted)' }}>
           Una sola palabra lo detiene todo. Inmediatamente. Sin preguntas. Sin consecuencias. Solo tú tienes ese poder.
         </p>
 
@@ -365,7 +366,7 @@ export function Step4Legal() {
           onChange={(e) => setSafeWord(e.target.value)}
           placeholder="Elige tu palabra..."
           autoComplete="off"
-          className="mt-4 w-full rounded-xl border border-[rgba(185,48,158,0.25)] bg-(--color-bg-elevated) px-4 py-3 font-(--font-inter) text-sm text-(--color-text-primary) placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+          className="mt-4 w-full rounded-xl border border-[rgba(185,48,158,0.25)] bg-(--color-bg-elevated) px-4 py-2.5 font-(--font-inter) text-[13px] text-(--color-text-primary) placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:py-3 sm:text-sm"
         />
 
         <motion.div
@@ -380,7 +381,7 @@ export function Step4Legal() {
               type="button"
               variants={chipItemVariants}
               onClick={() => handleChip(w)}
-              className="rounded-full border px-3 py-1.5 font-(--font-inter) text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+              className="rounded-full border px-3 py-1.5 font-(--font-inter) text-[11px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:text-xs"
               style={{
                 border: 'var(--border-subtle)',
                 background: 'rgba(185,48,158,0.1)',
@@ -396,17 +397,17 @@ export function Step4Legal() {
         </motion.div>
       </div>
 
-      <div className="mt-10">
+      <div className="mt-8 sm:mt-10">
         <PactSignatureBlock onSignedChange={setIsSigned} />
       </div>
 
-      <div className="mt-8">
+      <div className="mt-6 sm:mt-8">
         <button
           type="button"
           role="checkbox"
           aria-checked={ageConfirmed}
           onClick={() => setAgeConfirmed((v) => !v)}
-          className="flex w-full items-start gap-3 rounded-xl border border-[rgba(185,48,158,0.15)] p-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+          className="flex w-full items-start gap-3 rounded-xl border border-[rgba(185,48,158,0.15)] p-3.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:p-4"
           style={{ background: 'var(--color-bg-elevated)' }}
         >
           <span
@@ -419,17 +420,17 @@ export function Step4Legal() {
           >
             {ageConfirmed ? <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} /> : null}
           </span>
-          <span className="font-(--font-inter) text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+          <span className="font-(--font-inter) text-[13px] sm:text-sm" style={{ color: 'var(--color-text-secondary)' }}>
             Confirmo que soy mayor de edad (+18) y acepto las condiciones de este espacio.
           </span>
         </button>
       </div>
 
-      <div className="mt-8 border-t border-[rgba(185,48,158,0.15)] pt-4">
+      <div className="mt-6 border-t border-[rgba(185,48,158,0.15)] pt-4 sm:mt-8">
         <button
           type="button"
           onClick={() => setPrivacyOpen((o) => !o)}
-          className="flex w-full items-center justify-between gap-2 py-2 font-(--font-inter) text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+          className="flex w-full items-center justify-between gap-2 py-2 font-(--font-inter) text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:text-sm"
           style={{ color: 'var(--color-text-secondary)' }}
           aria-expanded={privacyOpen}
         >
@@ -457,7 +458,7 @@ export function Step4Legal() {
         </AnimatePresence>
       </div>
 
-      <div className="relative mt-12">
+      <div className="relative mt-9 sm:mt-12">
         <AnimatePresence>
           {buttonPhase === 'seal' ? (
             <motion.div
@@ -482,7 +483,7 @@ export function Step4Legal() {
           type="button"
           disabled={!canSeal || buttonPhase !== 'idle'}
           onClick={handleSealPact}
-          className="relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-4 font-(--font-jetbrains) text-sm tracking-wide text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) disabled:cursor-not-allowed"
+          className="relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-full px-5 py-3.5 font-(--font-jetbrains) text-[13px] tracking-wide text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) disabled:cursor-not-allowed sm:px-6 sm:py-4 sm:text-sm"
           style={{
             background: canSeal ? 'var(--gradient-cta)' : 'var(--color-cta-disabled)',
             boxShadow: shouldReduceMotion && canSeal ? 'var(--glow-magenta)' : undefined,
@@ -510,11 +511,11 @@ export function Step4Legal() {
         </motion.button>
       </div>
 
-      <div className="mt-10 flex justify-start pb-8">
+      <div className="mt-8 flex justify-start pb-8 sm:mt-10">
         <button
           type="button"
-          onClick={prevStep}
-          className="rounded-full border border-[rgba(185,48,158,0.2)] px-6 py-3 font-(--font-jetbrains) text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+          onClick={() => router.push('/reservar?step=3')}
+          className="rounded-full border border-[rgba(185,48,158,0.2)] px-5 py-2.5 font-(--font-jetbrains) text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:px-6 sm:py-3 sm:text-[11px]"
           style={{ color: 'var(--color-text-secondary)' }}
         >
           ← VOLVER
