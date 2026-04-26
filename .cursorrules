@@ -1,0 +1,302 @@
+# EROSCAPE — .cursorrules
+# Versión: 2.0 Gamificada
+# Stack: Next.js 16 · React 19 · TypeScript 5 · Tailwind CSS v4 · Framer Motion · Lucide React
+
+## PROJECT CONTEXT
+
+Eroscape is a premium adult erotic escape room booking platform.
+The UI is dark, luxurious, immersive, and GAMIFIED.
+The product is NOT explicit — it is elegant, sensual, and adult-oriented.
+Privacy and discretion are core UX requirements at all times.
+
+The booking flow is a 5-ACT NARRATIVE, not a form.
+Every screen is a level. Every choice has visual consequences.
+The user is the protagonist of the story.
+
+---
+
+## TECH STACK — NEVER DEVIATE
+
+- Framework: Next.js 16 with App Router (NOT Pages Router)
+- Language: TypeScript 5 — strict mode, no `any` types ever
+- Styling: Tailwind CSS v4 — use CSS variables via var() for brand colors
+- Animation: Framer Motion — for all transitions and interactions
+- Icons: Lucide React — no other icon library
+- UI Primitives: hand-built (no shadcn, no radix in prototype)
+- State: React Context + custom hooks (no Redux, no Zustand in prototype)
+- Forms: controlled components with React state (no react-hook-form in prototype)
+- Canvas: native HTML5 Canvas for ParticleField and signature pad
+
+---
+
+## FILE STRUCTURE
+
+- Pages:           src/app/(public)/[route]/page.tsx
+- Auth pages:      src/app/(auth)/[route]/page.tsx
+- API routes:      src/app/api/[route]/route.ts
+- Reusable UI:     src/components/ui/
+- Page sections:   src/components/sections/
+- Booking flow:    src/components/booking/
+- Dashboard:       src/components/dashboard/
+- Custom hooks:    src/hooks/use[Name].ts
+- Types:           src/types/[domain].ts
+- Utilities:       src/lib/utils.ts
+- Constants:       src/lib/constants.ts
+- Archetype logic: src/lib/archetype.ts
+
+---
+
+## TYPESCRIPT RULES
+
+- Strict mode always on
+- Never use `any` — use `unknown` then narrow
+- All props: explicit TypeScript interface named `[ComponentName]Props`
+- Use `const` assertions for static data arrays in constants.ts
+- Export types as named exports from src/types/
+- No implicit returns in JSX-returning functions
+
+---
+
+## COMPONENT RULES
+
+- Named exports everywhere (default exports ONLY for page.tsx files)
+- File name = component name in PascalCase
+- One component per file (small sub-components in same file are OK)
+- 'use client' only when strictly necessary
+- Server components by default
+- Props destructured at function signature
+
+```typescript
+// ✅ CORRECT
+export function ExperienceCard({ title, intensity, missionCode }: ExperienceCardProps) {
+  const handleSelect = () => { /* logic */ }
+  return (...)
+}
+
+// ❌ WRONG
+export default function Card(props: any) {
+  return <button onClick={() => { complexLogic() }}>...</button>
+}
+```
+
+---
+
+## STYLING RULES
+
+- Tailwind utilities as primary method
+- Brand colors ALWAYS via CSS var(): var(--color-magenta), NEVER hardcoded hex in JSX
+- Responsive: mobile-first always (sm: md: lg: breakpoints)
+- Dark backgrounds only — no white/light except PanicMode
+- Hover + focus + active states always defined
+- Focus rings always visible (accessibility non-negotiable)
+- No inline style={{ }} except for dynamic values Tailwind cannot express
+- Use cn() from clsx + tailwind-merge for conditional classes
+- Intensity-reactive backgrounds use CSS custom property --current-bg driven by JS
+
+---
+
+## ANIMATION RULES — FRAMER MOTION
+
+- Variants defined OUTSIDE the component (no inline variant objects in JSX)
+- All entrance animations: fade + translate (never scale alone)
+- Durations: micro-interactions 0.15s · UI transitions 0.3s · page reveals 0.6s · hero 0.8s
+- Easing: always cubic-bezier(0.25, 0.46, 0.45, 0.94) for the "sensual" feel
+- Always check prefers-reduced-motion via useReducedMotion()
+- AnimatePresence required for any conditional mount/unmount with animation
+- No layout shift animations on mobile (performance)
+- Milestone animations (seal, access granted, archetype reveal): can be longer (1-2s), dramatic
+
+```typescript
+// ✅ CORRECT
+const cardVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] } }
+}
+export function ExperienceCard() {
+  return <motion.div variants={cardVariants} initial="hidden" animate="visible" />
+}
+```
+
+---
+
+## GAMIFICATION RULES (v2.0 — CORE)
+
+### Narrative Copy — Always Use These Labels
+
+| Elemento | Prohibido | Correcto |
+|----------|-----------|----------|
+| Step indicator | "Paso 1 de 5" | "I · EL ENCUENTRO" (etc.) |
+| CTA inicial | "Reservar" / "COMENZAR MISIÓN" | "RENDIRSE AL DESEO" |
+| CTA experiencia | "ACEPTAR MISIÓN" | "QUIERO ESTA NOCHE" |
+| CTA legal | "SELLAR EL PACTO" | "FIRMAR EL JURAMENTO" |
+| CTA checkout | "ACTIVAR MISIÓN" | "CONFIRMAR MI NOCHE" |
+| Progress bar | "NIVEL DE TENSIÓN" | "TEMPERATURA" |
+| Dashboard main tab | "MISIÓN ACTIVA" | "TU NOCHE" |
+| Countdown | "TIEMPO HASTA INFILTRACIÓN" | "CUENTA REGRESIVA HACIA TU NOCHE" |
+| Upsells panel | "ARSENAL ACTIVO" | "TU BAÚL" |
+| Questionnaire tab | "PERFIL DE AGENTE" | "TUS DESEOS" |
+| QR tab | "CREDENCIAL DE ACCESO" | "TU ACCESO" |
+| Upsell section title | "ARMA TU ARSENAL" | "ABRE EL BAÚL" |
+| Intensity Bajo | "NIVEL ALPHA" | "DESPERTAR · Suave" |
+| Intensity Medio | "NIVEL BETA" | "INTENSO · Sin frenos" |
+| Intensity Turbio | "NIVEL OMEGA" | "SIN LÍMITES · Todo permitido" |
+| GM messages | "Agente." | "Ya te esperábamos." |
+| Archetype reveal | "TU PERFIL DE JUGADOR" | "TU FORMA DE DESEAR" |
+| Boutique | "LA ARMERÍA" | "EL TOCADOR" |
+| Concept section | "ARCHIVOS DESCLASIFICADOS" | "LO QUE NADIE MÁS TE DICE" |
+| City selector | "ZONA DE OPERACIONES" | "¿DÓNDE QUIERES QUE OCURRA?" |
+
+---
+
+## TONE OF VOICE — REGLA MAESTRA
+
+- The tone is dark luxury: intimate, confident, slightly forbidden, always consensual, never vulgar.
+- The user is never “authorized” or “cleared”: they are welcomed, desired, and cared for.
+- Copy should feel like a velvet curtain parting: a confident whisper in the dark.
+
+### Reactive UI Rules
+
+- Intensity selection MUST change ambient background color of containing section:
+  Alpha → var(--gradient-alpha), Beta → var(--gradient-beta), Omega → var(--gradient-omega)
+- Every step completion triggers a visual reward (glow pulse, scale flash, particle burst)
+- OMEGA selection triggers Game Master IA message with typewriter effect
+- Archetype is computed silently throughout flow; revealed dramatically at checkout
+
+### Player Archetype System
+
+Archetypes are computed in src/lib/archetype.ts from BookingState.
+They are NEVER shown to the user before Step 5 checkout.
+They are revealed as a dramatic moment at Step 5 and featured in the dashboard.
+
+| Combination | Archetype |
+|-------------|-----------|
+| Pareja + Alpha | El Explorador Curioso |
+| Pareja + Beta + Pack Sensorial | El Romántico Atrevido |
+| Cualquiera + Omega + 3+ upsells | El Maestro del Caos |
+| Cualquiera + Upgrade IA | El Estratega Digital |
+| Rollete/Swinger + Beta | El Arquitecto del Placer |
+
+### RPG Rarity System (Arsenal — Step 3)
+
+type ItemRarity = 'comun' | 'descomun' | 'raro' | 'epico'
+- comun:    var(--color-rarity-comun)    — grey
+- descomun: var(--color-rarity-descomun) — emerald
+- raro:     var(--color-rarity-raro)     — magenta
+- epico:    var(--color-rarity-epico)    — gold
+
+---
+
+## CANVAS & PARTICLE RULES
+
+- ParticleField is ALWAYS pointer-events: none (background only)
+- Canvas animations use requestAnimationFrame, ALWAYS clean up on unmount
+- Max particles: 80 desktop, 30 mobile (check window.innerWidth < 768)
+- Never run particles AND complex Framer Motion simultaneously on same viewport area
+- Signature canvas: dynamic import (next/dynamic with ssr: false)
+
+---
+
+## TEXT EFFECTS RULES
+
+- Typewriter: headline text only, never body copy or form labels
+- Scramble: synopsis/briefing text triggered by Intersection Observer
+- Both effects: always provide instant-reveal fallback for prefers-reduced-motion
+- Max typewriter duration: 2000ms. Max scramble duration: 1200ms.
+- Never block user interaction during text animations
+
+---
+
+## NAMING CONVENTIONS
+
+- Components: PascalCase → ExperienceCard.tsx
+- Hooks: camelCase with use prefix → useBookingFlow.ts
+- Types/Interfaces: PascalCase → BookingState, ExperienceCardProps
+- Constants: SCREAMING_SNAKE_CASE → CITIES, UPSELL_ITEMS, ARCHETYPES
+- CSS variables: kebab-case → --color-magenta, --glow-card
+- URL slugs: kebab-case → /experiencias/madrid/habitacion-veneciana
+- Event handlers: handle prefix → handleCitySelect, handlePactSign
+- Booleans: is/has prefix → isSelected, hasScrolled, isPanicMode
+
+---
+
+## STATE MANAGEMENT
+
+- Booking flow: useBookingFlow hook + BookingContext (single source of truth)
+- UI state (modal, tab, hover): local useState per component
+- Server state: Next.js server components + fetch (no SWR/React Query in prototype)
+- Booking persistence: sessionStorage (survives refresh, not tab close)
+- Global state across routes: React Context only
+- Archetype: computed on-demand from BookingState, never stored separately
+- NEVER store sensitive data (payment, safe word) in anything but controlled state
+
+---
+
+## SECURITY & PRIVACY RULES — CRITICAL
+
+- Never log user personal data (names, safe words) to console
+- Safe words: ALWAYS masked in UI, revealed ONLY on explicit user action (eye toggle)
+- Safe word: never appears as plain text in DOM when masked state is active
+- Payment: Stripe Elements only, never handle raw card data client-side
+- Booking IDs: UUIDs (crypto.randomUUID()), never sequential integers in URLs
+- OG meta tags: neutral descriptions — no explicit content keywords, no "erotic" or "eroscape" in preview
+- document.title on panic mode: instant switch, zero async delay
+- No analytics pageview events with room names in production
+
+---
+
+## PERFORMANCE RULES
+
+- Images: always Next.js <Image> with proper sizes prop
+- Fonts: preload Playfair Display + Inter critical weights
+- Animations: transform and opacity only (never width/height/top/left)
+- Heavy components: dynamic import with next/dynamic:
+  - signature_pad → dynamic import ssr: false
+  - qrcode.react → dynamic import ssr: false
+  - canvas-confetti → dynamic import ssr: false
+- Particle count caps: 80 desktop, 30 mobile
+- Bundle: prefer server components, minimize 'use client' surface
+
+---
+
+## ACCESSIBILITY RULES
+
+- All interactive elements keyboard accessible
+- Images: meaningful alt text or aria-hidden="true" for decorative
+- Color contrast: minimum 4.5:1 for body text on dark backgrounds
+- Focus rings: always visible (never outline:none without ring alternative)
+- Icon-only buttons: <span className="sr-only">Label</span>
+- Form inputs: aria-label or associated <label> always present
+- Panic mode: keyboard accessible (Escape / Ctrl+Shift+E)
+- Animations: always respect prefers-reduced-motion
+
+---
+
+## COMMIT CONVENTIONS
+
+feat: add gamified intensity selector with reactive background
+fix: resolve mobile step indicator overflow
+style: update rarity glow effects on arsenal cards
+chore: add canvas-confetti for checkout success
+refactor: extract archetype computation to lib/archetype.ts
+docs: document Game Master chat scripted flow
+perf: cap particle count on mobile viewport
+
+---
+
+## WHAT TO NEVER DO
+
+- Never use `any` TypeScript type
+- Never hardcode brand colors as hex in JSX/TSX files
+- Never use Pages Router (App Router only)
+- Never use default exports except page.tsx files
+- Never use setTimeout for animations (use Framer Motion)
+- Never store payment data in localStorage/sessionStorage
+- Never add console.log (use console.error for real errors only)
+- Never make components over 200 lines without splitting
+- Never use libraries not in package.json without asking
+- Never generate explicit/pornographic content, descriptions, or image prompts
+- Never skip the prefers-reduced-motion check on animated components
+- Never use `any` — seriously, never
+- Never use military vocabulary (mission, operation, agent, classified, protocol) in user-facing copy
+- Never make the user feel they are being evaluated — they are being desired and welcomed
+- The tone is always: welcoming darkness, not threatening darkness

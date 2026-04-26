@@ -1,7 +1,17 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
-const nextConfig: NextConfig = {
-  /* config options here */
-};
+const config: NextConfig = {
+  reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'cdn.eroscaperoom.com' },
+    ],
+  },
+  experimental: {
+    // typedRoutes: true, // enable when all routes are defined
+  },
+  // Bundle analyzer: import('@next/bundle-analyzer')({ enabled: process.env.ANALYZE === 'true' })
+}
 
-export default nextConfig;
+export default config

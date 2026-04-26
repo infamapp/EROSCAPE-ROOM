@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Eroscape v2.0 — Setup & Development Guide
 
-## Getting Started
+Eroscape es una plataforma premium de reserva de escape rooms para adultos (sensual, elegante, no explícita), con UI oscura, lujosa e inmersiva, y un flujo de reserva narrativo en **5 ACTOS**.
 
-First, run the development server:
+## Requisitos
+
+- Node.js 20+
+- pnpm
+
+## Variables de entorno
+
+- Copia el ejemplo y crea tu archivo local:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.local.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Variables clave:
+  - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
+  - `STRIPE_SECRET_KEY`
+  - `STRIPE_WEBHOOK_SECRET`
+  - `NEXT_PUBLIC_APP_URL`
+  - `IA_WEBHOOK_URL` (opcional en prototipo)
+  - `IA_WEBHOOK_SECRET` (si lo defines, el webhook IA exige `Authorization: Bearer ...`)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Instalar dependencias
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm install
+```
 
-## Learn More
+## Desarrollo
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+La app corre en `http://localhost:3000`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Estructura de carpetas (resumen)
 
-## Deploy on Vercel
+- `src/app/(public)/.../page.tsx`: páginas públicas
+- `src/app/(auth)/.../page.tsx`: páginas de auth
+- `src/app/api/.../route.ts`: API routes (App Router)
+- `src/components/ui/`: componentes reutilizables
+- `src/components/sections/`: secciones de páginas
+- `src/components/booking/`: flujo de reserva (5 actos)
+- `src/components/dashboard/`: dashboard de misión activa
+- `src/hooks/`: hooks (`use...`)
+- `src/types/`: tipos de dominio
+- `src/lib/`: utilidades, constantes, lógica de arquetipos
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploy (Vercel recomendado)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Framework**: Next.js (App Router)
+- **Build command**: `pnpm build`
+- **Output**: (Next.js default)
+- **Env vars**: configura en Vercel las mismas claves de `.env.local.example` (especialmente Stripe).
+- **Stripe webhooks**:
+  - Endpoint: `/api/webhook/stripe`
+  - Firma: `STRIPE_WEBHOOK_SECRET`
+
+## Desarrollo asistido por IA
+
+Las reglas del proyecto (stack, convenciones, privacidad, narrativa y restricciones) están en `.cursorrules`. Mantén Cursor/IA alineado con ese archivo para no romper el estilo y los requisitos de discreción.

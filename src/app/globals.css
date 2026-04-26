@@ -1,26 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+  /* --- FONDOS --- */
+  --color-bg-base: #080008;
+  --color-bg-elevated: #110011;
+  --color-bg-subtle: #1A0A1A;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  /* --- ACENTOS PRIMARIOS --- */
+  --color-magenta: #B9309E;
+  --color-magenta-glow: #D040B8;
+  --color-magenta-dim: #7A1F68;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* --- ACENTOS SECUNDARIOS --- */
+  --color-purple: #9F349B;
+  --color-purple-mid: #6B2080;
+  --color-purple-muted: #9A8EBE;
+
+  /* --- DORADO / LUJO --- */
+  --color-gold: #CB7B1B;
+  --color-gold-light: #E8A040;
+
+  /* --- SEMÁFORO DE INTENSIDAD --- */
+  --color-intensity-alpha: #3B82F6;
+  --color-intensity-beta: #F59E0B;
+  --color-intensity-omega: #B9309E;
+
+  /* --- RAREZA RPG (Arsenal) --- */
+  --color-rarity-comun: #6B7280;
+  --color-rarity-descomun: #10B981;
+  --color-rarity-raro: #B9309E;
+  --color-rarity-epico: #CB7B1B;
+
+  /* --- TEXTO --- */
+  --color-text-primary: #FFFFFF;
+  --color-text-secondary: #C8B8D0;
+  --color-text-muted: #7A6A82;
+
+  /* --- GRADIENTES SIGNATURE --- */
+  --gradient-hero: linear-gradient(135deg, #B9309E 0%, #6B2080 50%, #080008 100%);
+  --gradient-card: linear-gradient(180deg, rgba(185,48,158,0.15) 0%, rgba(8,0,8,0.95) 100%);
+  --gradient-cta: linear-gradient(90deg, #B9309E 0%, #9F349B 100%);
+  --gradient-overlay: linear-gradient(180deg, transparent 0%, #080008 100%);
+  --gradient-alpha: linear-gradient(135deg, #1E3A5F 0%, #080008 100%);
+  --gradient-beta: linear-gradient(135deg, #3D2800 0%, #080008 100%);
+  --gradient-omega: linear-gradient(135deg, #3D0020 0%, #080008 100%);
+
+  /* --- EFECTOS --- */
+  --glow-magenta: 0 0 40px rgba(185,48,158,0.4);
+  --glow-gold: 0 0 30px rgba(203,123,27,0.4);
+  --glow-card: 0 8px 32px rgba(0,0,0,0.6);
+  --glow-intense: 0 0 60px rgba(185,48,158,0.6);
+  --border-subtle: 1px solid rgba(185,48,158,0.2);
+  --border-active: 1px solid rgba(185,48,158,0.6);
+  --border-gold: 1px solid rgba(203,123,27,0.5);
+
+  /* Game Master terminal (Step 2) */
+  --color-gm-alert: #dc2626;
+  --color-gm-terminal: #16a34a;
+
+  /* Pact / wax seal (Step 4) */
+  --color-wax-seal: #8b0000;
+  --shadow-wax-seal: 0 8px 24px rgba(0, 0, 0, 0.8);
+  --color-cta-disabled: #4b5563;
+
+  /* Parchment noise (SVG data URI) */
+  --texture-parchment-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
 }
