@@ -229,13 +229,13 @@ export function HeroSection() {
             >
               <span className="font-(--font-playfair) tracking-[0.12em]">RENDIRSE AL DESEO</span>
             </Link>
-            <a
+            <Link
               href="/experiencias"
               className="w-full rounded-full px-5 py-2.5 text-center sm:w-auto sm:px-6 sm:py-3"
               style={{ border: '1px solid rgba(255,255,255,0.7)', color: 'white' }}
             >
               <span className="font-(--font-playfair) tracking-[0.12em]">ELIGE TU NOCHE</span>
-            </a>
+            </Link>
           </motion.div>
 
           <motion.div

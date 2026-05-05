@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 
-import { ElClubPageContent } from '@/components/sections/ElClubPageContent'
+import { ElClubPageContent } from '@/components/marketing/ElClubPageContent'
 
 export const metadata: Metadata = {
   title: 'El Club — Eroscape',

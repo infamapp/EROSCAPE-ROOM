@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 
-import spainPaths from '../../../tmp/spain-paths.json'
+import spainPaths from '@/lib/geo/spain-paths.json'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 

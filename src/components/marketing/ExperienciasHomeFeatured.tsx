@@ -2,8 +2,8 @@
 
 import { useState } from 'react'
 
-import { ExperienciasHomeCatalog } from '@/components/sections/ExperienciasHomeCatalog'
-import { SpainMapSection } from '@/components/sections/SpainMapSection'
+import { ExperienciasHomeCatalog } from '@/components/marketing/ExperienciasHomeCatalog'
+import { SpainMapSection } from '@/components/marketing/SpainMapSection'
 import { CITIES } from '@/lib/constants'
 
 type CitySlug = (typeof CITIES)[number]['slug']

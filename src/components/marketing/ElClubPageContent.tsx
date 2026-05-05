@@ -3,11 +3,11 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect, useState } from 'react'
 
-import { ElClubComparisonTable } from '@/components/sections/ElClubComparisonTable'
-import { ElClubHero } from '@/components/sections/ElClubHero'
-import { ElClubMembershipActions } from '@/components/sections/ElClubMembershipActions'
-import { ElClubTestimonialsSection } from '@/components/sections/ElClubTestimonialsSection'
-import { ElClubTierGrid } from '@/components/sections/ElClubTierGrid'
+import { ElClubComparisonTable } from '@/components/marketing/ElClubComparisonTable'
+import { ElClubHero } from '@/components/marketing/ElClubHero'
+import { ElClubMembershipActions } from '@/components/marketing/ElClubMembershipActions'
+import { ElClubTestimonialsSection } from '@/components/marketing/ElClubTestimonialsSection'
+import { ElClubTierGrid } from '@/components/marketing/ElClubTierGrid'
 import { setClubMemberLocalStorage, type ClubTierDefinition, type ClubTierId } from '@/lib/el-club'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]

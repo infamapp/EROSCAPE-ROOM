@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import { useMemo, useState } from 'react'
 
-import { CatalogExperienceCard } from '@/components/sections/CatalogExperienceCard'
+import { CatalogExperienceCard } from '@/components/marketing/CatalogExperienceCard'
 import { CITIES } from '@/lib/constants'
 import { EXPERIENCIAS_CATALOG_ITEMS, EXPERIENCIAS_DESTACADAS_SLICES } from '@/lib/experiences/catalog-items'
 import { cn } from '@/lib/utils'

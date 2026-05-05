@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
-import { AppMovilPlaceholderQr } from '@/components/sections/AppMovilPlaceholderQr'
-import { AppStoreBadgeSvg, GooglePlayBadgeSvg } from '@/components/sections/AppMovilStoreBadges'
+import { AppMovilPlaceholderQr } from '@/components/marketing/AppMovilPlaceholderQr'
+import { AppStoreBadgeSvg, GooglePlayBadgeSvg } from '@/components/marketing/AppMovilStoreBadges'
 import { APP_MOVIL_STORES_ANCHOR_ID, APP_STORE_URL, GOOGLE_PLAY_URL } from '@/lib/app-movil'
 
 export function AppMovilStoresStrip() {

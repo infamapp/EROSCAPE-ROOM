@@ -1,8 +1,8 @@
-import { ComoFuncionaSection } from '@/components/sections/ComoFuncionaSection'
-import { ConceptSection } from '@/components/sections/ConceptSection'
-import { CtaSection } from '@/components/sections/CtaSection'
-import { ExperienciasHomeFeatured } from '@/components/sections/ExperienciasHomeFeatured'
-import { HeroSection } from '@/components/sections/HeroSection'
+import { ComoFuncionaSection } from '@/components/marketing/ComoFuncionaSection'
+import { ConceptSection } from '@/components/marketing/ConceptSection'
+import { CtaSection } from '@/components/marketing/CtaSection'
+import { ExperienciasHomeFeatured } from '@/components/marketing/ExperienciasHomeFeatured'
+import { HeroSection } from '@/components/marketing/HeroSection'
 
 export default function Home() {
   return (

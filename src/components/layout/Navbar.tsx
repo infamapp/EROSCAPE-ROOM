@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 import { useScrollTrigger } from '@/hooks/useScrollTrigger'
@@ -161,10 +161,6 @@ export function Navbar() {
     ],
     [],
   )
-
-  useEffect(() => {
-    setIsMenuOpen(false)
-  }, [pathname])
 
   return (
     <>

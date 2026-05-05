@@ -6,7 +6,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { CITIES, EXPERIENCES_TEMPLATE } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import { ExperienceCard } from '@/components/sections/ExperienceCard'
+import { ExperienceCard } from '@/components/marketing/ExperienceCard'
 import { CityMap } from '@/components/ui/CityMap'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]

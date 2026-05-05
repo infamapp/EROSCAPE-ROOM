@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import { Brain, Send } from 'lucide-react'
 
-import { AppStoreBadgeSvg, GooglePlayBadgeSvg } from '@/components/sections/AppMovilStoreBadges'
+import { AppStoreBadgeSvg, GooglePlayBadgeSvg } from '@/components/marketing/AppMovilStoreBadges'
 import { APP_STORE_URL, GOOGLE_PLAY_URL } from '@/lib/app-movil'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]

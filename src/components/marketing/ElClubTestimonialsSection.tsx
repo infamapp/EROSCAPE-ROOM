@@ -2,7 +2,7 @@
 
 import { motion, useReducedMotion } from 'framer-motion'
 
-import { GeometricMemberAvatar } from '@/components/sections/GeometricMemberAvatar'
+import { GeometricMemberAvatar } from '@/components/marketing/GeometricMemberAvatar'
 import { CLUB_TESTIMONIALS } from '@/lib/el-club'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 
-import { CtaSection } from '@/components/sections/CtaSection'
-import { ExperienciasHomeCatalog } from '@/components/sections/ExperienciasHomeCatalog'
+import { CtaSection } from '@/components/marketing/CtaSection'
+import { ExperienciasHomeCatalog } from '@/components/marketing/ExperienciasHomeCatalog'
 
 export const metadata: Metadata = {
   title: 'Experiencias — Eroscape',
