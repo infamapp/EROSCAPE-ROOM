@@ -140,7 +140,7 @@ export function InversoresLanding({ className }: InversoresLandingProps) {
             Inversión discreta
           </motion.p>
           <motion.h1
-            className="mt-5 text-balance font-serif text-5xl font-semibold uppercase leading-[0.95] text-white sm:text-6xl md:text-7xl"
+            className="mt-5 text-balance text-5xl font-bold uppercase leading-[0.95] text-white [font-family:var(--font-playfair)] sm:text-6xl md:text-7xl"
             variants={heroVariants}
             initial={shouldReduceMotion ? false : 'hidden'}
             animate={shouldReduceMotion ? undefined : 'visible'}

@@ -22,30 +22,45 @@ const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 const stripePk = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? ''
 const stripePromise = stripePk.startsWith('pk_') ? loadStripe(stripePk) : null
 
-const cardAppearance = {
-  theme: 'night' as const,
-  variables: {
-    colorBackground: '#110011',
-    colorText: '#FFFFFF',
-    colorPrimary: '#B9309E',
-    colorDanger: '#EF4444',
-    fontFamily: 'Inter, system-ui, sans-serif',
-    borderRadius: '10px',
-  },
-  rules: {
-    '.Input': {
-      backgroundColor: '#110011',
-      color: '#FFFFFF',
-      border: '1px solid rgba(185,48,158,0.25)',
+function getCssVar(name: string, fallback: string): string {
+  if (typeof window === 'undefined') return fallback
+  const value = window.getComputedStyle(document.documentElement).getPropertyValue(name).trim()
+  return value.length > 0 ? value : fallback
+}
+
+function getStripeAppearanceFromTokens() {
+  const colorBackground = getCssVar('--color-bg-elevated', '#110011')
+  const colorText = getCssVar('--color-text-primary', '#FFFFFF')
+  const colorPrimary = getCssVar('--color-magenta', '#B9309E')
+  const colorDanger = getCssVar('--color-omega-badge', '#EF4444')
+  const colorLabel = getCssVar('--color-text-secondary', '#C8B8D0')
+  const colorPlaceholder = getCssVar('--color-text-muted', '#7A6A82')
+
+  return {
+    theme: 'night' as const,
+    variables: {
+      colorBackground,
+      colorText,
+      colorPrimary,
+      colorDanger,
+      fontFamily: 'Inter, system-ui, sans-serif',
+      borderRadius: '10px',
     },
-    '.Input--focus': {
-      border: '1px solid #B9309E',
-      boxShadow: '0 0 0 1px #B9309E',
+    rules: {
+      '.Input': {
+        backgroundColor: colorBackground,
+        color: colorText,
+        border: `1px solid color-mix(in srgb, ${colorPrimary} 25%, transparent)`,
+      },
+      '.Input--focus': {
+        border: `1px solid ${colorPrimary}`,
+        boxShadow: `0 0 0 1px ${colorPrimary}`,
+      },
+      '.Label': { color: colorLabel },
+      '::placeholder': { color: colorPlaceholder },
+      '.Icon': { color: colorPrimary },
     },
-    '.Label': { color: '#C8B8D0' },
-    '::placeholder': { color: '#7A6A82' },
-    '.Icon': { color: '#B9309E' },
-  },
+  }
 }
 
 const CONFETTI_COLORS = ['#B9309E', '#9F349B', '#CB7B1B']
@@ -284,6 +299,7 @@ function PaymentShell({ bookingId, totalEur, onPaid }: PaymentShellProps) {
   const [intentReady, setIntentReady] = useState(false)
   const [loadError, setLoadError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const appearance = useMemo(() => getStripeAppearanceFromTokens(), [])
 
   useEffect(() => {
     let cancelled = false
@@ -409,7 +425,7 @@ function PaymentShell({ bookingId, totalEur, onPaid }: PaymentShellProps) {
   }
 
   return (
-    <Elements stripe={stripePromise} options={{ clientSecret, appearance: cardAppearance }}>
+    <Elements stripe={stripePromise} options={{ clientSecret, appearance }}>
       {loadError ? <p className="mb-3 font-(--font-inter) text-sm text-red-400">{loadError}</p> : null}
       <StripePaymentForm
         clientSecret={clientSecret}
