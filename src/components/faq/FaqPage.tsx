@@ -115,7 +115,7 @@ export function FaqPage({ className }: FaqPageProps) {
           Lo que todos preguntan (pero pocos se atreven a decir)
         </motion.p>
         <motion.h1
-          className="mt-4 text-balance font-(--font-cormorant,serif) text-5xl italic leading-[1.02] text-white sm:text-6xl"
+          className="mt-4 text-balance font-(--font-cormorant) text-5xl italic leading-[1.02] text-white sm:text-6xl"
           variants={headerVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate={shouldReduceMotion ? undefined : 'visible'}
@@ -231,7 +231,7 @@ export function FaqPage({ className }: FaqPageProps) {
             aria-hidden="true"
           />
           <div className="relative">
-            <h2 className="text-balance font-(--font-cormorant,serif) text-3xl italic text-white sm:text-4xl">
+            <h2 className="text-balance font-(--font-cormorant) text-3xl italic text-white sm:text-4xl">
               ¿Aún te queda una duda en la garganta?
             </h2>
             <p className="mx-auto mt-3 max-w-2xl text-pretty text-sm leading-relaxed text-(--color-text-secondary) sm:text-base">
