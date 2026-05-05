@@ -5,12 +5,14 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 import { useScrollTrigger } from '@/hooks/useScrollTrigger'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
+
+const NAV_MAX_WIDTH_CLASS = 'max-w-7xl'
 
 const navVariants = {
   hidden: { opacity: 0, y: -20 },
@@ -41,11 +43,111 @@ function isNavActive(pathname: string, href: string): boolean {
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
+interface LogoProps {
+  href: string
+  src: string
+  alt: string
+  size: 'desktop' | 'mobile'
+  isVisible: boolean
+}
+
+function Logo({ href, src, alt, size, isVisible }: LogoProps) {
+  const imageSize = size === 'desktop' ? 44 : 36
+  const className = size === 'desktop' ? 'h-11 w-11' : 'h-9 w-9'
+
+  return (
+    <Link
+      href={href}
+      className={cn(
+        'group inline-flex items-center gap-3 rounded-full px-2 py-1 transition-[opacity,transform,background-color] duration-300',
+        isVisible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-1 pointer-events-none',
+        'lg:opacity-100 lg:translate-y-0 lg:pointer-events-auto',
+        'hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+      )}
+      aria-label="Ir al inicio"
+    >
+      <Image src={src} alt={alt} width={imageSize} height={imageSize} quality={100} priority className={cn(className, 'select-none')} />
+      {size === 'desktop' ? (
+        <span className="uppercase leading-none tracking-[0.12em] text-xl sm:text-2xl">Eroscape</span>
+      ) : (
+        <span className="sr-only">Eroscape</span>
+      )}
+    </Link>
+  )
+}
+
+interface NavLinksProps {
+  items: ReadonlyArray<NavItem>
+  pathname: string
+  onNavigate?: () => void
+  variant: 'desktop' | 'mobile'
+}
+
+function NavLinks({ items, pathname, onNavigate, variant }: NavLinksProps) {
+  const baseLink = variant === 'desktop' ? 'text-sm' : 'text-base'
+
+  return (
+    <>
+      {items.map((item) => {
+        const active = isNavActive(pathname, item.href)
+        const label = item.label
+
+        if (variant === 'desktop') {
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={cn(
+                baseLink,
+                'relative font-medium tracking-wide transition-colors',
+                active ? 'text-white' : 'text-(--color-text-secondary) hover:text-white',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 rounded-md px-1 py-1',
+              )}
+              aria-current={active ? 'page' : undefined}
+            >
+              <span
+                className={cn(
+                  'relative inline-flex pb-1',
+                  active && 'border-b border-[color-mix(in_srgb,var(--color-magenta)_55%,transparent)]',
+                )}
+              >
+                {label}
+              </span>
+            </Link>
+          )
+        }
+
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={cn(
+              'rounded-2xl px-4 py-3',
+              baseLink,
+              'transition-[border-color,background-color,color] duration-300',
+              active ? 'text-white bg-white/5' : 'text-(--color-text-secondary) hover:text-white hover:bg-white/5',
+            )}
+            style={{ border: 'var(--border-subtle)' }}
+            aria-current={active ? 'page' : undefined}
+            onClick={onNavigate}
+          >
+            {label}
+          </Link>
+        )
+      })}
+    </>
+  )
+}
+
 export function Navbar() {
   const pathname = usePathname()
   const { isScrolled } = useScrollTrigger({ threshold: 80 })
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const shouldReduceMotion = useReducedMotion()
+  const isInversores = pathname === '/inversores' || pathname.startsWith('/inversores/')
+
+  const desktopLogoSrc = isInversores ? '/erosGold.png' : '/eros-logo-ico.png'
+  const mobileLogoSrc = isInversores ? '/erosGold.png' : '/erosLogo.png'
 
   const navItems = useMemo<NavItem[]>(
     () => [
@@ -54,16 +156,21 @@ export function Navbar() {
       { label: 'La Sociedad', href: '/la-sociedad' },
       { label: 'Consentimiento', href: '/la-sociedad/seguridad' },
       { label: 'FAQ', href: '/FAQ' },
+      { label: 'Inversores', href: '/inversores' },
       { label: 'La App', href: '/app-movil' },
     ],
     [],
   )
 
+  useEffect(() => {
+    setIsMenuOpen(false)
+  }, [pathname])
+
   return (
     <>
       <motion.header
         className={cn(
-          'fixed top-0 left-0 right-0 z-50 py-3',
+          'fixed top-0 left-0 right-0 z-50',
           'transition-[background-color,backdrop-filter,border-color] duration-300',
           isScrolled ? 'backdrop-blur-md border-b' : 'border-b border-transparent',
         )}
@@ -75,62 +182,35 @@ export function Navbar() {
         initial={shouldReduceMotion ? false : 'hidden'}
         animate={shouldReduceMotion ? undefined : 'visible'}
       >
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
-          <Link
-            href="/"
-            className={cn(
-              'group inline-flex items-center justify-center gap-3 transition-[opacity,transform] duration-300',
-              isScrolled ? 'opacity-100 pointer-events-auto' : 'opacity-0 -translate-y-1 pointer-events-none',
-              'lg:opacity-100 lg:translate-y-0 lg:pointer-events-auto',
-            )}
-          >
-            <Image
-              src="/eros-logo-ico.png"
-              alt="Eroscape"
-              width={80}
-              height={80}
-              quality={100}
-              priority
-              className="h-18 w-18"
-            />
-            <span className="uppercase leading-none tracking-[0.12em] text-2xl">Eroscape</span>
-          </Link>
+        <div className={cn('mx-auto flex h-16 items-center justify-between px-4 sm:px-6', NAV_MAX_WIDTH_CLASS)}>
+          <Logo href="/" src={desktopLogoSrc} alt="Eroscape" size="desktop" isVisible={isScrolled} />
 
-          <nav className="hidden items-center gap-8 md:flex">
-            {navItems.map((item) => {
-              const active = isNavActive(pathname, item.href)
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    'text-sm transition-colors',
-                    active ? 'text-white' : 'text-[var(--color-text-secondary)] hover:text-white',
-                  )}
-                  aria-current={active ? 'page' : undefined}
-                >
-                  <span className={cn(active && 'border-b border-[color-mix(in_srgb,var(--color-magenta)_55%,transparent)] pb-0.5')}>
-                    {item.label}
-                  </span>
-                </Link>
-              )
-            })}
+          <nav className="hidden items-center gap-5 md:flex lg:gap-7">
+            <NavLinks items={navItems} pathname={pathname} variant="desktop" />
           </nav>
 
           <div className="hidden items-center gap-3 md:flex">
             <Link
               href="/reservar"
-              className={cn('rounded-full px-6 py-2 text-sm text-white')}
+              className={cn(
+                'rounded-full px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-white',
+                'transition-[filter,transform] duration-200 hover:brightness-110 active:translate-y-px',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+              )}
               style={{ background: 'var(--gradient-cta)' }}
             >
-              RENDIRSE AL DESEO
+              Rendirse al deseo
             </Link>
           </div>
 
           <button
             type="button"
-            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full"
+            className={cn(
+              'md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full',
+              'transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+            )}
             aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
+            aria-expanded={isMenuOpen}
             onClick={() => setIsMenuOpen((v) => !v)}
             style={{ border: 'var(--border-subtle)' }}
           >
@@ -164,18 +244,7 @@ export function Navbar() {
               exit={shouldReduceMotion ? undefined : 'exit'}
             >
               <div className="flex h-16 items-center justify-between px-4">
-                <div className="inline-flex items-center gap-3">
-                  <Image
-                    src="/erosLogo.png"
-                    alt="Eroscape"
-                    width={36}
-                    height={36}
-                    quality={100}
-                    priority
-                    className="h-9 w-9"
-                  />
-                  <span className="sr-only">Eroscape</span>
-                </div>
+                <Logo href="/" src={mobileLogoSrc} alt="Eroscape" size="mobile" isVisible />
                 <button
                   type="button"
                   className="inline-flex h-10 w-10 items-center justify-center rounded-full"
@@ -187,33 +256,18 @@ export function Navbar() {
                 </button>
               </div>
 
-              <div className="flex flex-col gap-3 px-4 pt-6">
-                {navItems.map((item) => {
-                  const active = isNavActive(pathname, item.href)
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      className={cn(
-                        'rounded-xl px-4 py-3 text-base',
-                        active ? 'text-white' : 'text-[var(--color-text-secondary)]',
-                      )}
-                      style={{ border: 'var(--border-subtle)' }}
-                      aria-current={active ? 'page' : undefined}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <span className="transition-colors hover:text-white">{item.label}</span>
-                    </Link>
-                  )
-                })}
-
+              <div className="flex flex-col gap-2 px-4 pt-6">
+                <NavLinks items={navItems} pathname={pathname} variant="mobile" onNavigate={() => setIsMenuOpen(false)} />
                 <Link
                   href="/reservar"
-                  className="mt-2 rounded-full px-6 py-3 text-center text-white"
+                  className={cn(
+                    'mt-3 rounded-full px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.18em] text-white',
+                    'transition-[filter,transform] duration-200 hover:brightness-110 active:translate-y-px',
+                  )}
                   style={{ background: 'var(--gradient-cta)' }}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  RENDIRSE AL DESEO
+                  Rendirse al deseo
                 </Link>
               </div>
             </motion.div>

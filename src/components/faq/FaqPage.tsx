@@ -107,7 +107,7 @@ export function FaqPage({ className }: FaqPageProps) {
     <main className={cn('min-h-screen pb-20 pt-16 sm:pt-20', className)}>
       <section className="mx-auto max-w-4xl px-4 pt-12 text-center sm:px-6">
         <motion.p
-          className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-magenta)]"
+          className="text-xs font-semibold uppercase tracking-[0.22em] text-(--color-magenta)"
           variants={headerVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate={shouldReduceMotion ? undefined : 'visible'}
@@ -115,7 +115,7 @@ export function FaqPage({ className }: FaqPageProps) {
           Lo que todos preguntan (pero pocos se atreven a decir)
         </motion.p>
         <motion.h1
-          className="mt-4 text-balance font-[var(--font-cormorant,serif)] text-5xl italic leading-[1.02] text-white sm:text-6xl"
+          className="mt-4 text-balance font-(--font-cormorant,serif) text-5xl italic leading-[1.02] text-white sm:text-6xl"
           variants={headerVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate={shouldReduceMotion ? undefined : 'visible'}
@@ -123,7 +123,7 @@ export function FaqPage({ className }: FaqPageProps) {
           Tus dudas, resueltas.
         </motion.h1>
         <motion.p
-          className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-relaxed text-[var(--color-text-secondary)]"
+          className="mx-auto mt-5 max-w-2xl text-pretty text-base leading-relaxed text-(--color-text-secondary)"
           variants={headerVariants}
           initial={shouldReduceMotion ? false : 'hidden'}
           animate={shouldReduceMotion ? undefined : 'visible'}
@@ -144,8 +144,8 @@ export function FaqPage({ className }: FaqPageProps) {
                 className={cn(
                   'rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-[border-color,color,background-color,box-shadow] duration-300',
                   isActive
-                    ? 'text-[var(--color-bg)]'
-                    : 'border text-[var(--color-text-secondary)] hover:text-white',
+                    ? 'text-(--color-bg)'
+                    : 'border text-(--color-text-secondary) hover:text-white',
                 )}
                 style={{
                   background: isActive ? 'var(--gradient-cta)' : undefined,
@@ -189,7 +189,7 @@ export function FaqPage({ className }: FaqPageProps) {
                 <ChevronDown
                   className={cn(
                     'h-5 w-5 flex-none transition-transform duration-300',
-                    expanded ? 'rotate-180 text-[var(--color-gold)]' : 'text-[var(--color-text-secondary)]',
+                    expanded ? 'rotate-180 text-(--color-gold)' : 'text-(--color-text-secondary)',
                   )}
                 />
               </button>
@@ -206,7 +206,7 @@ export function FaqPage({ className }: FaqPageProps) {
                     transition={{ duration: 0.3, ease: SENSUAL_EASE }}
                     className="px-6 pb-6 sm:px-8"
                   >
-                    <p className="text-pretty text-sm leading-relaxed text-[var(--color-text-secondary)] sm:text-base">
+                    <p className="text-pretty text-sm leading-relaxed text-(--color-text-secondary) sm:text-base">
                       {item.answer}
                     </p>
                   </motion.div>
@@ -231,10 +231,10 @@ export function FaqPage({ className }: FaqPageProps) {
             aria-hidden="true"
           />
           <div className="relative">
-            <h2 className="text-balance font-[var(--font-cormorant,serif)] text-3xl italic text-white sm:text-4xl">
+            <h2 className="text-balance font-(--font-cormorant,serif) text-3xl italic text-white sm:text-4xl">
               ¿Aún te queda una duda en la garganta?
             </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-pretty text-sm leading-relaxed text-[var(--color-text-secondary)] sm:text-base">
+            <p className="mx-auto mt-3 max-w-2xl text-pretty text-sm leading-relaxed text-(--color-text-secondary) sm:text-base">
               Escríbenos con calma. Tu privacidad es parte del ritual: no pedimos más de lo necesario.
             </p>
             <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
