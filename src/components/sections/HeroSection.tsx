@@ -119,7 +119,7 @@ export function HeroSection() {
     <section className="relative h-svh overflow-hidden">
       <div className="absolute inset-0 z-0">
         <Image
-          src="/back-1.png"
+          src="/heroImage.png"
           alt=""
           fill
           priority
@@ -133,7 +133,7 @@ export function HeroSection() {
         aria-hidden="true"
         style={{
           background:
-            'radial-gradient(circle at 30% 20%, rgba(159,52,155,0.25), rgba(8,0,8,0.88) 60%), linear-gradient(180deg, rgba(8,0,8,0.80) 0%, rgba(8,0,8,0.92) 55%, rgba(8,0,8,0.96) 100%)',
+            'radial-gradient(circle at 30% 20%, rgba(159,52,155,0.25), rgba(8,0,8,0.88) 60%), linear-gradient(180deg, rgba(8,0,8,0.80) 0%, rgba(8,0,8,0.04) 55%, rgba(8,0,8,0.96) 100%)',
         }}
       />
 
@@ -230,11 +230,11 @@ export function HeroSection() {
               <span className="font-(--font-playfair) tracking-[0.12em]">RENDIRSE AL DESEO</span>
             </Link>
             <a
-              href="#concepto"
+              href="/experiencias"
               className="w-full rounded-full px-5 py-2.5 text-center sm:w-auto sm:px-6 sm:py-3"
               style={{ border: '1px solid rgba(255,255,255,0.7)', color: 'white' }}
             >
-              <span className="font-(--font-playfair) tracking-[0.12em]">DESCUBRIR EL SECRETO</span>
+              <span className="font-(--font-playfair) tracking-[0.12em]">ELIGE TU NOCHE</span>
             </a>
           </motion.div>
 

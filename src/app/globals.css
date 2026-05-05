@@ -25,6 +25,11 @@
   --color-intensity-alpha: #3B82F6;
   --color-intensity-beta: #F59E0B;
   --color-intensity-omega: #B9309E;
+  /* Catálogo: Omega como aviso rojo neón (distinto del gradiente de marca) */
+  --color-omega-badge: #ef4444;
+  --glow-omega-badge: 0 0 14px rgba(239, 68, 68, 0.55);
+  --glow-alpha-badge: 0 0 12px rgba(59, 130, 246, 0.45);
+  --glow-beta-badge: 0 0 12px rgba(245, 158, 11, 0.45);
 
   /* --- RAREZA RPG (Arsenal) --- */
   --color-rarity-comun: #6B7280;
@@ -45,6 +50,7 @@
   --gradient-alpha: linear-gradient(135deg, #1E3A5F 0%, #080008 100%);
   --gradient-beta: linear-gradient(135deg, #3D2800 0%, #080008 100%);
   --gradient-omega: linear-gradient(135deg, #3D0020 0%, #080008 100%);
+  --gradient-help-cta-card: linear-gradient(165deg, rgba(107, 32, 128, 0.5) 0%, rgba(26, 10, 26, 0.95) 45%, #0a0610 100%);
 
   /* --- EFECTOS --- */
   --glow-magenta: 0 0 40px rgba(185,48,158,0.4);
@@ -66,6 +72,80 @@
 
   /* Parchment noise (SVG data URI) */
   --texture-parchment-noise: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+
+  /* Ficha de experiencia (referencia dark luxury) */
+  --surface-experience: #141316;
+  --neon-cta-bloom: 0 0 20px rgba(225, 78, 246, 0.35), 0 0 44px rgba(225, 78, 246, 0.12);
+}
+
+.glass-card-detail {
+  background: rgba(20, 19, 22, 0.62);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.neon-bloom-cta {
+  box-shadow: var(--neon-cta-bloom);
+}
+
+/* Página El Tocador (membresía / boutique) */
+.tocador-page-root {
+  background-color: var(--color-bg-base);
+  background-image: radial-gradient(circle at 50% 20%, rgba(107, 32, 128, 0.35) 0%, var(--color-bg-base) 65%);
+}
+
+.tocador-glass {
+  background: rgba(20, 19, 22, 0.62);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.05);
+  transition:
+    box-shadow 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.tocador-magenta-glow {
+  box-shadow: 0 0 22px rgba(225, 78, 246, 0.22);
+}
+
+.tocador-magenta-glow:hover {
+  box-shadow: 0 0 42px rgba(225, 78, 246, 0.38);
+}
+
+.tocador-gold-ring {
+  border: 1px solid rgba(232, 160, 64, 0.35);
+}
+
+/* Página La Sociedad */
+.sociedad-page-root {
+  background-color: var(--surface-experience);
+  background-image: radial-gradient(
+    circle at 50% 0%,
+    color-mix(in srgb, var(--color-magenta) 14%, transparent) 0%,
+    var(--surface-experience) 58%
+  );
+}
+
+/* Página La App (móvil) */
+.app-movil-page-root {
+  background-color: var(--color-bg-base);
+}
+
+.app-movil-circuit-bg {
+  background-image: radial-gradient(
+    circle 1px at 2px 2px,
+    color-mix(in srgb, var(--color-magenta) 9%, transparent) 1px,
+    transparent 0
+  );
+  background-size: 40px 40px;
+}
+
+.app-movil-feature-glass {
+  background: color-mix(in srgb, var(--color-purple-mid) 38%, transparent);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.08);
 }
 
 body {

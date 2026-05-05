@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { Clock, Users } from 'lucide-react'
 import { useMemo, useState } from 'react'
 
+import { getExperienceCardImage } from '@/lib/experiences/visuals'
 import type { City } from '@/types/experience'
 import { cn, formatCurrency } from '@/lib/utils'
 
@@ -26,14 +27,6 @@ export interface ExperienceCardProps {
 }
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
-
-const EXPERIENCE_IMAGES: Record<string, { src: string; alt: string }> = {
-  'habitacion-veneciana': { src: '/habitacioveneciana.png', alt: 'La Habitación Veneciana' },
-  'ritual-de-medianoche': { src: '/ritualmedianoche.png', alt: 'El Ritual de Medianoche' },
-  'la-confesion': { src: '/laconfesion.png', alt: 'La Confesión' },
-  'espejo-negro': { src: '/lenceria.png', alt: 'Espejo Negro' },
-  'el-coleccionista': { src: '/llave.png', alt: 'El Coleccionista' },
-}
 
 function getIntensityBadgeClass(level: ExperienceTemplate['missionLevel']): string {
   switch (level) {
@@ -72,7 +65,7 @@ export function ExperienceCard({ experience, city }: ExperienceCardProps) {
   const [isHover, setIsHover] = useState(false)
 
   const href = `/experiencias/${city.slug}/${experience.slug}`
-  const heroImage = EXPERIENCE_IMAGES[experience.slug]
+  const heroImage = getExperienceCardImage(experience.slug, experience.title)
 
   const teaser = useMemo(() => {
     const map: Record<string, string> = {
@@ -81,6 +74,7 @@ export function ExperienceCard({ experience, city }: ExperienceCardProps) {
       'la-confesion': 'A veces lo que más excita es admitir lo que nunca te habías atrevido a decir.',
       'espejo-negro': 'El espejo no miente. Verás cosas de ti que preferías no saber.',
       'el-coleccionista': 'Guarda recuerdos de sus visitas. Esta noche, tú serás uno de ellos.',
+      'la-mascarada': 'Un entorno elegante donde los roles se diluyen.',
     }
     return map[experience.slug] ?? 'Una experiencia inmersiva que se queda contigo.'
   }, [experience.slug])
@@ -111,15 +105,13 @@ export function ExperienceCard({ experience, city }: ExperienceCardProps) {
         }
       >
         <div className="relative h-40 overflow-hidden">
-          {heroImage ? (
-            <Image
-              src={heroImage.src}
-              alt={heroImage.alt}
-              fill
-              sizes="(max-width: 768px) 92vw, (max-width: 1024px) 44vw, 360px"
-              className="object-cover"
-            />
-          ) : null}
+          <Image
+            src={heroImage.src}
+            alt={heroImage.alt}
+            fill
+            sizes="(max-width: 768px) 92vw, (max-width: 1024px) 44vw, 360px"
+            className="object-cover"
+          />
           <div
             className="absolute inset-0"
             style={{

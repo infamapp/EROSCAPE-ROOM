@@ -1,0 +1,74 @@
+import type { ExperienciasCatalogItem } from '@/types/experiencias-catalog'
+
+/** Salas mostradas en home (destacadas) y en /experiencias (catálogo completo). */
+export const EXPERIENCIAS_CATALOG_ITEMS: readonly ExperienciasCatalogItem[] = [
+  {
+    slug: 'habitacion-veneciana',
+    title: 'La Habitación Veneciana',
+    intensity: 'ALPHA',
+    availability: 'DISPONIBLE',
+    description: 'Para quienes saben que el placer más profundo empieza por los sentidos.',
+    durationMin: 90,
+    capacity: 2,
+    priceFrom: 120,
+    isComingSoon: false,
+  },
+  {
+    slug: 'ritual-de-medianoche',
+    title: 'El Ritual de Medianoche',
+    intensity: 'BETA',
+    availability: 'DISPONIBLE',
+    description: 'Hay rituales que no se explican. Solo se viven. ¿Estás listo?',
+    durationMin: 90,
+    capacity: 2,
+    priceFrom: 140,
+    isComingSoon: false,
+  },
+  {
+    slug: 'la-confesion',
+    title: 'La Confesión',
+    intensity: 'BETA',
+    availability: 'POCAS PLAZAS',
+    description: 'A veces lo que más excita es admitir lo que nunca te habías atrevido a decir.',
+    durationMin: 90,
+    capacity: 2,
+    priceFrom: 140,
+    isComingSoon: false,
+  },
+  {
+    slug: 'espejo-negro',
+    title: 'Espejo Negro',
+    intensity: 'OMEGA',
+    availability: 'DISPONIBLE',
+    description: 'El espejo no miente. Verás cosas de ti que preferías no saber.',
+    durationMin: 90,
+    capacity: 2,
+    priceFrom: 160,
+    isComingSoon: false,
+  },
+  {
+    slug: 'el-coleccionista',
+    title: 'El Coleccionista',
+    intensity: 'OMEGA',
+    availability: 'POCAS PLAZAS',
+    description: 'Guarda recuerdos de tus visitas. Esta noche, tú serás uno de ellos.',
+    durationMin: 90,
+    capacity: 2,
+    priceFrom: 160,
+    isComingSoon: false,
+  },
+  {
+    slug: 'la-mascarada',
+    title: 'La Mascarada',
+    intensity: 'BETA',
+    availability: 'POCAS PLAZAS',
+    description: 'Un entorno elegante donde los roles se diluyen.',
+    durationMin: 90,
+    capacity: 2,
+    priceFrom: 140,
+    isComingSoon: false,
+  },
+] as const
+
+/** Primeras salas del catálogo para el bloque “destacadas” en la home. */
+export const EXPERIENCIAS_DESTACADAS_SLICES = 3 as const

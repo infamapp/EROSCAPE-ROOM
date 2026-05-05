@@ -1,0 +1,443 @@
+{
+    "hero": {
+        "headline": "Atrévete a entrar. Salir es otra historia.",
+        "subheadline": "No es un juego. Es una experiencia sensorial. Diseñado para adultos que saben jugar.",
+        "franchise_cta": "Oportunidad de Franquicia Mundial: Se el primero en traer esta experiencia revolucionaria a tu ciudad. Inversión única en un mercado sin competencia."
+    },
+    "concept": {
+        "title": "¿Qué es EROSCAPE ROOM®?",
+        "description": "EROSCAPE ROOM® es el primer Escape Room Erótico del mundo. Una experiencia física y presencial en tu ciudad. No es un escape room tradicional. No es un club. No es 'una cita'.",
+        "core_experience": "Resuelve enigmas, descifra códigos y deja que la IA te guíe a través del misterio... ...hasta llegar a la habitación final: un espacio íntimo diseñado para el placer. Columpio, jacuzzi, ambiente tematizado... cada detalle pensado para que disfrutes del premio final."
+    },
+    "experiences": {
+        "lovers": {
+            "name": "Lovers",
+            "description": "Para parejas que quieren reconectar, jugar y volver a mirarse distinto. Resuelve enigmas juntos y llega a la habitación de placer."
+        },
+        "golf": {
+            "name": "Plan Golfo",
+            "description": "Para amigos con tensión, rolletes o parejas aventureras. Juego, adrenalina, risas nerviosas y una habitación final que no olvidarás."
+        },
+        "libertino": {
+            "name": "Libertino",
+            "description": "Para swingers y mentes muy abiertas. Tres niveles de intensidad. El escape te lleva a una habitación tematizada de exploración total."
+        },
+        "secreto": {
+            "name": "El Secreto",
+            "description": "No desvelamos pruebas ni recorrido. Porque el misterio… es parte del placer."
+        }
+    },
+    "technology": {
+        "game_master": {
+            "title": "Game Master IA",
+            "description": "Todas las experiencias son guiadas por una Game Master de Inteligencia Artificial automatizada. No hay presencia física humana durante tu experiencia. La IA te guía, adapta la narrativa y respeta tus límites en tiempo real. Si surge cualquier problema, contacto humano inmediato disponible desde la app."
+        },
+        "erosense": {
+            "title": "EROSENSE",
+            "description": "Nuestro motor sensorial personalizado que adapta luz, sonido y aromas para crear experiencias únicas orientadas al bienestar y la conexión.",
+            "features": [
+                "Tecnología sensorial: Sistema inteligente que adapta la experiencia en tiempo real",
+                "Bienestar y conexión: Diseñado para fomentar intimidad emocional y física",
+                "Investigación ética: Estudios sobre intimidad sin comprometer privacidad",
+                "Colabora en investigación: Si eres investigador, terapeuta de pareja o profesional del bienestar, te invitamos a explorar cómo EROSENSE puede contribuir a tu trabajo."
+            ]
+        }
+    },
+    "process": {
+        "title": "¿Cómo funciona?",
+        "steps": [
+            "Reserva y elige tu nivel: Selecciona la experiencia que más resuene con tus deseos y define tu nivel de intensidad.",
+            "Define límites y palabra segura: Establece tus límites personales y tu palabra segura. Tu comodidad es nuestra prioridad.",
+            "Resuelve y alcanza el destino: La IA te guía a través de enigmas y pruebas. Tu objetivo: llegar a la habitación final, un espacio íntimo y tematizado diseñado para el placer."
+        ],
+        "quote": "\"El consentimiento manda: sin él, no hay juego.\""
+    },
+    "specific_experiences": {
+        "el_vinculo": {
+            "name": "El Vínculo",
+            "tags": "Intimidad · Conexión · Misterio Compartido",
+            "description": "Hay secretos que solo se revelan cuando dos personas deciden avanzar juntas. Decisiones que no funcionan en solitario. Momentos que solo tienen sentido cuando se comparten. El Vínculo es una experiencia diseñada para explorar la complicidad, la comunicación y la tensión emocional entre personas que ya se conocen… o creen conocerse. Nada ocurre sin consenso. Nada se resuelve sin conexión. Aquí, el tiempo no corre en tu contra. Te observa.",
+            "ideal_for": "Ideal para: Personalización"
+        },
+        "territorio_salvaje": {
+            "name": "Territorio Salvaje",
+            "tags": "Urbano · Instinto · Provocación",
+            "description": "La ciudad tiene un lado que no aparece de día. Muros que observan. Símbolos que desafían. Territorios donde el instinto manda. Territorio Salvaje es una experiencia cruda, urbana y directa. Más rápida. Más intensa. Más imprevisible. Aquí no se viene a analizar demasiado. Se viene a reaccionar. A jugar con la tensión del momento. A dejarse llevar. No hay mapas. Solo señales.",
+            "ideal_for": "Ideal para: Personalización"
+        },
+        "la_mascarada": {
+            "name": "La Mascarada",
+            "tags": "Ritual · Identidad · Juego Social",
+            "description": "Cuando todos llevan máscara, nadie miente. O quizá todos lo hacen. La Mascarada es una experiencia elegante, oscura y ceremonial. Un entorno donde las normas cambian, los roles se diluyen y cada decisión tiene peso. Aquí no importa quién eres fuera. Importa qué versión decides mostrar dentro. Nada es explícito. Todo es sugerido. Y no todo el mundo juega igual.",
+            "ideal_for": "Ideal para: Personalización"
+        },
+        "customization_note": "No eliges solo una experiencia. Eliges cómo vivirla. ¿No estás seguro de qué experiencia se adapta mejor a ti? Nuestro equipo puede ayudarte a encontrar la perfecta según tus preferencias y límites."
+    },
+    "thematic_rooms": {
+        "title": "Experiencias Temáticas",
+        "intro": "Cada sala es un universo diferente. Descubre nuestros ambientes temáticos cuidadosamente diseñados para despertar tus sentidos y crear momentos inolvidables.",
+        "themes": [
+            {
+                "name": "Fantasía Glamurosa",
+                "desc": "Un mundo de lujo y sofisticación donde tus fantasías más glamurosas cobran vida"
+            },
+            {
+                "name": "Misterio Místico",
+                "desc": "Sumérgete en un ambiente mágico lleno de secretos ancestrales y conocimiento oculto"
+            },
+            {
+                "name": "Ritual Prohibido",
+                "desc": "Explora el lado oscuro del deseo en una ceremonia íntima y envolvente"
+            },
+            {
+                "name": "Futuro Neón",
+                "desc": "Una experiencia futurista donde la tecnología y el deseo se fusionan"
+            },
+            {
+                "name": "Elegancia Infinita",
+                "desc": "Reflejos, velas y una atmósfera de elegancia gótica para los sentidos"
+            }
+        ],
+        "uniqueness": "Cada Experiencia es Única: Nuestros ambientes temáticos se adaptan a tus preferencias y deseos. La IA Game Master personaliza cada detalle para crear una experiencia inolvidable diseñada exclusivamente para ti."
+    },
+    "final_rooms": {
+        "title": "Disfruta la experiencia hasta el final",
+        "description": "La habitación final es el destino de toda la experiencia. Una pasada de espacio donde posar al postureo. Todas las experiencias y temáticas son totalmente diferentes.",
+        "rooms": [
+            {
+                "name": "Nocturna",
+                "desc": "Habitación Tematizada Opulenta para seguir el juego. Una pasada de espacio con temática urbana y cruda."
+            },
+            {
+                "name": "Tenebrosa",
+                "desc": "Habitación Tematizada Opulenta para seguir el juego. Una pasada de espacio con temática misteriosa."
+            },
+            {
+                "name": "Simulación",
+                "desc": "Habitación Tematizada Opulenta para seguir el juego. Una pasada de espacio futurista y envolvente."
+            }
+        ],
+        "summary": "Cada sala temática tiene su propia habitación de placer tematizada, opulenta para seguir el juego. Todo lo necesario para que disfrutes del momento sin límites"
+    },
+    "safety": {
+        "title": "Seguridad, Consentimiento & Privacidad",
+        "intro": "En Eroscape, el placer solo existe con cuidado. Antes de empezar, defines tus límites, eliges tu palabra segura y decides tu nivel de intensidad. Nosotros cuidamos la ambientación, la higiene y tu privacidad.",
+        "quote": "\"El consentimiento manda: sin él, no hay juego.\"",
+        "guarantees": [
+            "Consentimiento Guiado: Formulario previo de límites y preferencias. Tu palabra segura siempre será respetada.",
+            "Seguridad Total: Protocolo de seguridad con personal presente en todo momento, sin intrusión en tu experiencia.",
+            "Privacidad Garantizada: Cámaras solo para seguridad, nunca para grabación. Tu intimidad está protegida.",
+            "Higiene Premium: Protocolos de limpieza hospitalaria entre sesiones. Todo esterilizado y renovado.",
+            "Game Master IA Automatizada: Experiencia guiada 100% por Inteligencia Artificial. Sin presencia física humana durante la experiencia.",
+            "Documentación Clara: Contratos transparentes, políticas claras y derecho de veto en cualquier momento."
+        ],
+        "process_steps": [
+            "Consulta Previa: Completás el formulario de límites y preferencias",
+            "Briefing Personal: Conversación privada sobre códigos y palabras seguras",
+            "Durante la Experiencia: Guiada completamente por Game Master IA automatizada. Personal humano disponible vía app ante cualquier emergencia",
+            "Aftercare: Debriefing opcional y espacio para procesar la experiencia"
+        ],
+        "our_guarantees": [
+            "Sin Grabaciones: Cero grabación de video, audio o fotos durante tu experiencia",
+            "Sin juicios: Personal formado en diversidad sexual y no discriminación",
+            "Todo Opcional: Podés parar, cambiar o modificar cualquier aspecto en cualquier momento",
+            "Tú Mandas: La experiencia se adapta a vos, no al revés"
+        ]
+    },
+    "boutique": {
+        "title": "Boutique Sensual",
+        "intro": "Lleva la magia de Eroscape a casa. Productos cuidadosamente seleccionados para extender tu experiencia más allá de nuestras salas.",
+        "products": [
+            {
+                "name": "Kit Sensorial de Lujo",
+                "desc": "Aceites aromáticos, plumas y elementos táctiles premium inspirados en nuestras salas"
+            },
+            {
+                "name": "Cartas del Deseo",
+                "desc": "Baraja exclusiva con preguntas íntimas y desafíos sensuales para parejas aventureras"
+            },
+            {
+                "name": "Lencería Veneciana",
+                "desc": "Diseños exclusivos inspirados en nuestro Burdel de Venecia, disponibles en todas las tallas"
+            },
+            {
+                "name": "Máscaras Artesanales",
+                "desc": "Máscaras venecianas auténticas hechas a mano para tus propios juegos de seducción"
+            },
+            {
+                "name": "Velas de Masaje Gourmet",
+                "desc": "Set de velas con aromas afrodisíacos que se convierten en aceites de masaje"
+            },
+            {
+                "name": "Box Experiencia Privada",
+                "desc": "Kit completo para recrear una experiencia Eroscape en casa con guía paso a paso"
+            }
+        ],
+        "offers": [
+            {
+                "name": "Para Parejas Nuevas",
+                "desc": "Kit de iniciación con 20% descuento para quienes reserven su primera experiencia."
+            },
+            {
+                "name": "Membresía VIP",
+                "desc": "Acceso exclusivo a productos limitados y descuentos permanentes del 15%."
+            }
+        ],
+        "reviews": [
+            "\" El Kit Sensorial de Lujo superó nuestras expectativas. Calidad premium y muy discreto. \" - Cliente verificado",
+            "\" Las Cartas del Deseo nos han dado horas de diversión. Preguntas muy creativas. \" - Cliente verificado",
+            "\" Envío rápido y packaging increíblemente elegante. Se nota el cuidado en cada detalle. \" - Cliente verificado"
+        ],
+        "newsletter": "¿Primera vez en nuestra boutique? Suscribite y recibe un 10% de descuento en tu primera compra, además de acceso a productos exclusivos para suscriptores."
+    },
+    "events": {
+        "title": "Eventos & Corporativo",
+        "intro": "Experiencias personalizadas para ocasiones especiales, team building empresarial y eventos de la comunidad. Siempre con nuestro sello de elegancia y profesionalidad.",
+        "types": [
+            {
+                "name": "Despedidas de Soltero/a",
+                "desc": "Una despedida única, elegante y memorable para el grupo más íntimo."
+            },
+            {
+                "name": "Aniversarios y Celebraciones",
+                "desc": "Celebra momentos especiales con una experiencia que nunca olvidaréis."
+            },
+            {
+                "name": "Eventos Corporativos",
+                "desc": "Team building diferente con educación sexual positiva y dinámicas de confianza."
+            },
+            {
+                "name": "Noches Temáticas",
+                "desc": "Eventos especiales mensuales para la comunidad Eroscape."
+            }
+        ],
+        "upcoming_events": [
+            {
+                "name": "Noche de Máscaras",
+                "desc": "Una velada veneciana con baile, música en vivo y experiencias grupales"
+            },
+            {
+                "name": "San Valentín Tardío",
+                "desc": "Para parejas que prefieren celebrar el amor fuera del bullicio comercial"
+            },
+            {
+                "name": "Taller de Comunicación Íntima",
+                "desc": "Aprende técnicas de comunicación sensual con tu pareja"
+            },
+            {
+                "name": "Team Building Diferente",
+                "desc": "Fortalece los vínculos de tu equipo con dinámicas de confianza, comunicación asertiva y educación sexual positiva en un ambiente profesional y respetuoso."
+            }
+        ],
+        "corporate_skills": [
+            "Comunicación Efectiva: Dinámicas para mejorar la comunicación interpersonal en el equipo",
+            "Gestión de Límites: Aprende a establecer y respetar límites profesionales saludables",
+            "Diversidad e Inclusión: Sensibilización sobre diversidad sexual y de género en el workplace"
+        ],
+        "cta": "¿Tienes una ocasión especial en mente? Contacta con nuestro equipo de eventos para crear una experiencia completamente personalizada para ti y tu grupo."
+    },
+    "pricing": {
+        "title": "Precios, Pagos & Ofertas",
+        "intro": "Selecciona Tu Experiencia: Elige el pack que más se ajuste a vuestros deseos, selecciona la intensidad y tu nivel de experiencia",
+        "packs": [
+            {
+                "name": "Pack Lovers",
+                "desc": "Experiencia íntima diseñada para parejas que desean reconectar. Una experiencia íntima diseñada para parejas que desean reconectar a través del juego sensorial y la comunicación profunda. Perfecto para aniversarios, ocasiones especiales o simplemente para redescubrirse. Incluye:"
+            },
+            {
+                "name": "Pack Golfo",
+                "desc": "Juguetón y atrevido para parejas que buscan diversión. Una experiencia divertida y traviesa diseñada para parejas que desean explorar su lado más juguetón y atrevido con dinámicas interactivas. Incluye:"
+            },
+            {
+                "name": "Pack Libertino",
+                "desc": "Intensidad máxima para los más aventureros. Una experiencia intensa y sin límites para parejas experimentadas que buscan llevar su intimidad al siguiente nivel con máxima libertad. Incluye:"
+            }
+        ],
+        "extras": {
+            "title": "Amplía Tu Experiencia",
+            "items": [
+                "Tiempo Adicional: Extiende tu experiencia con más tiempo en la sala",
+                "Experiencia Personalizada: Diseña una experiencia única adaptada a vuestros deseos",
+                "Productos Boutique: Añade productos de nuestra boutique exclusiva"
+            ]
+        },
+        "payment_methods": {
+            "title": "Métodos de Pago",
+            "guarantee": "Garantía con Tarjeta: Se requiere tarjeta de crédito como garantía (similar a hoteles)"
+        },
+        "policy": {
+            "changes": "No ofrecemos cancelaciones. Puedes cambiar tu fecha con 72-48h de antelación sin coste adicional.",
+            "duration": "Duración base: 2 horas. Ampliaciones disponibles:",
+        },
+        "terms": [
+            "Depósito con tarjeta: Se autoriza temporalmente tu tarjeta de crédito como garantía. No se cobra a menos que existan cargos adicionales.",
+            "Cambio de fecha: Puedes mover tu reserva a otra fecha sin coste si lo solicitas con 72h-48h de antelación. Sin excepciones fuera de este plazo.",
+            "Sin cancelaciones: No ofrecemos reembolsos ni cancelaciones. Solo cambios de fecha según política.",
+            "Cargos adicionales: Se cobrarán a la tarjeta registrada: ampliaciones no reservadas, daños materiales, limpieza extraordinaria o incumplimiento de normas."
+        ]
+    },
+    "offers": {
+        "title": "Ofertas Especiales",
+        "items": [
+            "Parejas nuevas: 15% de descuento en primera experiencia",
+            "Cumpleaños y aniversarios: Copa de champagne gratis",
+            "Grupo de 4+ personas: 10% descuento por persona"
+        ],
+        "promo_code": "¿Tienes un código promocional?"
+    },
+    "locations": {
+        "title": "Ciudades disponibles",
+        "current": "Ahora mismo: Granada · Málaga · Sevilla",
+        "upcoming": "Próximamente: Madrid · Barcelona · Valencia · Alicante · Murcia"
+    },
+    "booking": {
+        "title": "Reserva tu Experiencia",
+        "intro": "Completa el formulario para reservar tu noche de misterio y deseo. Te contactaremos para confirmar todos los detalles y preparar tu experiencia perfecta.",
+        "step_1": "Paso 1: Información Personal"
+    },
+    "digital_experience": {
+        "title": "EROSCAPE ONLINE",
+        "subtitle": "La revolución de las experiencias íntimas ahora en tu dispositivo",
+        "intro": "Vive la misma intensidad, misterio y seducción de nuestras salas físicas desde cualquier lugar del mundo. Con la primera IA Game Master adaptativa diseñada para experiencias adultos.",
+        "burdel_venecia": {
+            "title": "BIENVENIDO A El Burdel de Venecia",
+            "desc": "Experiencia Digital Interactiva. 'Las cortinas de terciopelo se abren lentamente... El aroma a jazmín y vainilla llena la estancia. Una figura enigmática te observa desde las sombras...'"
+        },
+        "how_it_works": {
+            "steps": [
+                "Descarga la App: Disponible en iOS, Android y Web. Instalación en segundos.",
+                "Elige tu Aventura: Selecciona sala, nivel de intensidad y si jugarás solo o acompañado.",
+                "Conéctate & Juega: La IA adapta la narrativa en tiempo real según tus decisiones.",
+                "Vive la Experiencia: Audio inmersivo, efectos visuales y narrativa que se adapta a ti."
+            ]
+        },
+        "tech": {
+            "title": "Tecnología Exclusiva",
+            "desc": "Utilizamos la misma IA revolucionaria de nuestras salas físicas, optimizada para dispositivos móviles. Procesamiento local para privacidad absoluta y respuestas instantáneas. Sin servidores externos, sin grabaciones, sin compromisos."
+        },
+        "features": [
+            "Experiencia Interactiva: Narrativas adaptativas con IA que responden a tus decisiones en tiempo real",
+            "Multijugador: Juega en pareja o grupos de hasta 4 personas desde cualquier lugar",
+            "Privacidad Total: Cifrado end-to-end. Tus conversaciones y decisiones son completamente privadas",
+            "IA Game Master: La misma tecnología revolucionaria de nuestras salas físicas en tu dispositivo",
+            "Modo Online/Offline: Descarga aventuras completas y juega sin conexión cuando quieras",
+            "Actualizaciones Mensuales: Nuevas historias, salas y experiencias cada mes incluidas en tu suscripción"
+        ],
+        "platforms": [
+            "iOS & Android App nativa optimizada",
+            "Tablet: Experiencia inmersiva",
+            "Desktop: Web y aplicación"
+        ],
+        "digital_rooms": "Todas nuestras experiencias físicas adaptadas a digital, con nuevas salas exclusivas para la plataforma. El Burdel de Venecia, The Dungeon, El Oasis Prohibido.",
+        "plans": [
+            "Mensual",
+            "Anual",
+            "Experiencia Única"
+        ],
+        "early_access": "Sé de los Primeros en Probarlo: Regístrate en nuestra lista de espera y obtén acceso anticipado + 3 meses gratis cuando lancemos +2.847 personas ya registradas | Lanzamiento Q2 2026"
+    },
+    "faq_digital": {
+        "questions": [
+            {
+                "q": "¿Es tan inmersivo como la experiencia física?",
+                "a": "Diferente pero igualmente potente. Usamos audio 3D, haptics y narrativa adaptativa para crear inmersión."
+            },
+            {
+                "q": "¿Es seguro y privado?",
+                "a": "100%. Procesamiento local, cifrado end-to-end, cero servidores. Ni nosotros vemos tu contenido."
+            },
+            {
+                "q": "¿Puedo cancelar cuando quiera?",
+                "a": "Sí, sin permanencia. Cancela en cualquier momento desde la app."
+            }
+        ]
+    },
+    "franchise": {
+        "title": "Franquicia EROSCAPE ROOM®",
+        "intro": "Únete a la revolución del entretenimiento adulto. Se el primero en traer esta experiencia física presencial a tu ciudad. Un espacio real con salas temáticas, habitaciones de placer y tecnología IA. Invierte en un negocio sin precedentes con rentabilidad probada.",
+        "why": [
+            "No es solo un negocio, es la oportunidad de liderar un mercado completamente nuevo",
+            "Marca Mundial Pionera: Primer Escape Room Erótico físico del mundo. Experiencia presencial única sin competencia directa en ninguna ciudad.",
+            "Tecnología Patentada: Acceso exclusivo a nuestra IA Game Master y metodología certificada de I+D.",
+            "Mercado en Crecimiento: Sector de entretenimiento adulto y experiencias inmersivas en expansión global.",
+            "Soporte Total: Formación completa, protocolos establecidos, marketing y asesoría continua.",
+            "Modelo Probado: Sistema de negocio validado con alta rentabilidad y satisfacción de clientes.",
+            "Expansión Estratégica: Plan de crecimiento internacional con territorios exclusivos por ciudad/región."
+        ],
+        "what_includes": "¿Qué incluye la Franquicia? Perfil Ideal del Franquiciado: No necesitas experiencia previa en escape rooms. Te formamos en todo.",
+        "benefits": [
+            "Del Mundo: Sin competencia directa en ningún mercado",
+            "Innovación I+D: Tecnología patentada y certificada",
+            "Potencial Global: Mercado adulto en expansión mundial"
+        ],
+        "cta": "Da el Primer Paso: Solicita información sin compromiso y descubre cómo puedes formar parte de esta revolución. Plazas limitadas por territorio. Reserva tu ciudad ahora.",
+        "form": "Email, Teléfono. Al enviar este formulario, aceptas que nos pongamos en contacto contigo para compartir información sobre la franquicia.",
+        "territories": "Territorios Prioritarios: Estamos buscando activamente franquiciados en estas ubicaciones estratégicas. ¿Tu ciudad no está en la lista? Contáctanos igualmente. Valoramos todas las propuestas."
+    },
+    "faq_general": {
+        "title": "Preguntas Frecuentes",
+        "categories": [
+            "General",
+            "Límites y Seguridad",
+            "Privacidad",
+            "Experiencia",
+            "Reservas y Cambios",
+            "Accesibilidad"
+        ],
+        "cta": "¿Tienes más preguntas? Nuestro equipo está disponible para resolver cualquier duda adicional sobre tu experiencia en Eroscape."
+    },
+    "legal": {
+        "title": "Información Legal",
+        "intro": "Términos, condiciones y políticas que garantizan tu seguridad y privacidad",
+        "terms_conditions": "Al utilizar nuestros servicios, aceptas cumplir con nuestros términos de uso, políticas de comportamiento y normas de convivencia.",
+        "privacy_policy": "Política de Privacidad: Cumplimiento estricto del GDPR. Tus datos personales están protegidos con encriptación de nivel bancario y nunca se comparten con terceros.",
+        "consent_policy": "Política de Consentimiento: Consentimiento informado y revocable en todo momento. Tu palabra segura es sagrada y respetada inmediatamente sin excepción.",
+        "cancellation_policy": "Política de Cancelación: Cancelación gratuita hasta 48h antes. Reembolso del 50% entre 48h-24h. Sin reembolso con menos de 24h de antelación excepto causas de fuerza mayor.",
+        "code_of_conduct": "Código de Conducta: Tolerancia cero con comportamientos no consensuados, acoso o irrespeto. Expulsión inmediata sin reembolso por incumplimiento.",
+        "corporate_info": {
+            "company": "EROSCAPE ROOM® - Empresa legalmente constituida. CIF: B-XXXXXXXX. Registro Mercantil de Granada, Tomo XXX, Folio XX, Hoja GR-XXXXX.",
+            "gdpr": {
+                "responsible": "Responsable del tratamiento: EROSCAPE ROOM S.L., con domicilio en Granada, España.",
+                "purpose": "Finalidad: Gestión de reservas, prestación de servicios, comunicaciones comerciales (solo con consentimiento previo) y mejora de la experiencia mediante análisis anónimos.",
+                "legitimacy": "Legitimación: Consentimiento del interesado y ejecución de contrato.",
+                "retention": "Conservación: Durante la relación comercial y 5 años adicionales para obligaciones legales y fiscales.",
+                "rights": "Derechos: Acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad.",
+                "contact": "Contacto: privacidad@eroscape.com",
+                "dpo": "Delegado de Protección de Datos: dpo@eroscape.com"
+            }
+        },
+        "cookies": {
+            "title": "Política de Cookies",
+            "types": "Utilizamos cookies técnicas (necesarias para el funcionamiento), analíticas (Google Analytics con IP anonimizada) y de preferencias (recordar tu configuración).",
+            "technical": "Cookies técnicas: Imprescindibles, no requieren consentimiento.",
+            "analytical": "Cookies analíticas: Requieren consentimiento. Puedes rechazarlas sin afectar la funcionalidad.",
+            "management": "Puedes gestionar tus preferencias de cookies en cualquier momento desde la configuración de tu navegador."
+        },
+        "security_protocols": {
+            "physical": "Seguridad física: Salas equipadas con sistemas de comunicación directa con personal de seguridad. Botones de emergencia accesibles en todo momento.",
+            "hygiene": "Higiene y limpieza: Desinfección profunda entre sesiones según protocolos sanitarios. Todos los elementos utilizados son de un solo uso o esterilizados según normativa médica.",
+            "confidentiality": "Confidencialidad absoluta: Accesos privados independientes. Sin registro público de entrada. Personal firmante de acuerdos de confidencialidad.",
+            "insurance": "Seguros: Cobertura de responsabilidad civil profesional por 1.000.000€. Seguro de accidentes para participantes."
+        },
+        "intellectual_property": {
+            "title": "Propiedad Intelectual",
+            "text": "EROSCAPE ROOM® es una marca registrada. Todos los derechos reservados. Las experiencias, narrativas, diseños, metodologías, tecnologías y protocolos son propiedad intelectual exclusiva de EROSCAPE ROOM S.L. y están protegidos por las leyes de propiedad intelectual e industrial españolas, europeas e internacionales. Queda prohibida la reproducción, distribución, comunicación pública, transformación o cualquier otra forma de explotación sin autorización expresa por escrito."
+        },
+        "dispute_resolution": {
+            "jurisdiction": "Jurisdicción: Para cualquier controversia derivada de estos términos, las partes se someten a los juzgados y tribunales de Granada, España, renunciando expresamente a cualquier otro fuero que pudiera corresponderles.",
+            "mediation": "Mediación: Antes de acudir a la vía judicial, recomendamos resolver disputas mediante nuestro servicio de atención al cliente: legal@eroscape.com",
+            "arbitration": "Arbitraje de consumo: Los usuarios consumidores pueden acudir a la Junta Arbitral de Consumo de su localidad."
+        },
+        "update": "Última actualización: Enero 2026. EROSCAPE ROOM S.L. se reserva el derecho de modificar estos términos en cualquier momento. Los cambios serán notificados con al menos 30 días de antelación y publicados en esta página. El uso continuado de nuestros servicios tras la notificación constituye aceptación de los nuevos términos."
+    },
+    "closing": {
+        "title": "¿Listos para el juego?",
+        "text": "Tu próxima aventura te está esperando. Una experiencia que recordaréis para siempre, en un entorno seguro, elegante y completamente personalizado según vuestros deseos. Guiada por una Game Master de Inteligencia Artificial automatizada consciente del consentimiento, cada experiencia es única, irrepetible y creada solo para vosotros. Sin presencia humana durante la experiencia, pero con soporte inmediato disponible desde la app ante cualquier necesidad.",
+        "tags": [
+            "Solo Adultos: Experiencia exclusiva para mayores de edad",
+            "100% Consensuado: Tu palabra segura siempre será respetada",
+            "Máxima Privacidad: Sin grabaciones, total confidencialidad"
+        ],
+        "promise": "Prometemos discreción, cuidamos tu seguridad y garantizamos una experiencia irrepetible. El deseo no espera. La aventura comienza con un clic."
+    }
+}

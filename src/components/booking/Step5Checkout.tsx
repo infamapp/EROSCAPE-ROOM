@@ -15,6 +15,7 @@ import { getPlayerArchetype } from '@/lib/archetype'
 import { CITIES, EXPERIENCES_TEMPLATE, UPSELL_ITEMS } from '@/lib/constants'
 import { formatCurrency } from '@/lib/utils'
 import type { BookingState } from '@/types/booking'
+import { BookingBottomBar } from '@/components/booking/BookingBottomBar'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
@@ -503,6 +504,12 @@ export function Step5Checkout() {
     }, 450)
   }, [finalizeCheckout, router, state.bookingId])
 
+  const handleCta = () => {
+    const el = document.querySelector('#checkout-payment')
+    if (!(el instanceof HTMLElement)) return
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   return (
     <div className="relative mx-auto max-w-3xl px-4 pb-24 pt-8 sm:px-6 sm:pb-28">
       <AnimatePresence>{!overlayDone && !shouldReduceMotion ? <AccessGrantedOverlay key="overlay" onComplete={handleOverlayComplete} /> : null}</AnimatePresence>
@@ -591,7 +598,7 @@ export function Step5Checkout() {
         </div>
       </div>
 
-      <section className="mb-6 sm:mb-8">
+      <section className="mb-6 sm:mb-8" id="checkout-payment">
         <h3 className="font-(--font-jetbrains) text-xs tracking-[0.2em]" style={{ color: 'var(--color-text-muted)' }}>
           EL ÚLTIMO PASO
         </h3>
@@ -649,16 +656,15 @@ export function Step5Checkout() {
         </div>
       </section>
 
-      <div className="flex justify-start">
-        <button
-          type="button"
-          onClick={() => router.push('/reservar?step=4')}
-          className="rounded-full border border-[rgba(185,48,158,0.2)] px-5 py-2.5 font-(--font-jetbrains) text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:px-6 sm:py-3 sm:text-[11px]"
-          style={{ color: 'var(--color-text-secondary)' }}
-        >
-          ← VOLVER
-        </button>
-      </div>
+      <div className="h-28" aria-hidden="true" />
+
+      <BookingBottomBar
+        summaryTitle="TOTAL"
+        summary={<span style={{ color: 'var(--color-gold)' }}>{formatCurrency(total)}</span>}
+        onBack={() => router.push('/reservar?step=4')}
+        onPrimary={handleCta}
+        primaryLabel="[ CONFIRMAR MI NOCHE ]"
+      />
     </div>
   )
 }

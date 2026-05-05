@@ -10,6 +10,7 @@ import { cn, formatCurrency } from '@/lib/utils'
 import { useBookingFlow } from '@/hooks/useBookingFlow'
 import { StepHeader } from '@/components/booking/StepHeader'
 import { CityMap } from '@/components/ui/CityMap'
+import { BookingBottomBar } from '@/components/booking/BookingBottomBar'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
@@ -343,41 +344,23 @@ export function Step1Selection() {
         </div>
       </div>
 
-      {/* Bottom bar */}
-      <div
-        className="fixed inset-x-0 bottom-0 z-120 border-t"
-        style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(8,0,8,0.92)', backdropFilter: 'blur(10px)' }}
-      >
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-3 py-3 sm:px-6 sm:py-4">
-          <div className="min-w-0">
-            <div className="font-(--font-jetbrains) text-[10px] tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
-              SELECCIÓN ACTIVA
-            </div>
-            <div className="mt-1 truncate text-[13px] sm:text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-              {cityData.displayName}
-              {' · '}
-              {selectedExpData?.title ?? '—'}
-              {' · '}
-              {selectedDate ?? '—'}
-              {' · '}
-              {selectedTime ?? '—'}
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleNext}
-            disabled={!canContinue}
-            className="shrink-0 rounded-full px-4 py-2.5 text-[11px] text-white sm:px-5 sm:py-3 sm:text-sm"
-            style={{
-              background: canContinue ? 'var(--gradient-cta)' : '#4B5563',
-              cursor: canContinue ? 'pointer' : 'not-allowed',
-            }}
-          >
-            ASÍ LO QUIERO →
-          </button>
-        </div>
-      </div>
+      <BookingBottomBar
+        summaryTitle="SELECCIÓN ACTIVA"
+        summary={
+          <>
+            {cityData.displayName}
+            {' · '}
+            {selectedExpData?.title ?? '—'}
+            {' · '}
+            {selectedDate ?? '—'}
+            {' · '}
+            {selectedTime ?? '—'}
+          </>
+        }
+        onPrimary={handleNext}
+        primaryLabel="ASÍ LO QUIERO →"
+        isPrimaryDisabled={!canContinue}
+      />
     </div>
   )
 }

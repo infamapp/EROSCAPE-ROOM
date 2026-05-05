@@ -8,6 +8,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { IntensityBadge } from '@/components/ui/IntensityBadge'
 import { useTextScramble } from '@/hooks/useTextScramble'
+import { EXPERIENCE_CARD_GALLERY_SLUG_ORDER, getExperienceCardImage } from '@/lib/experiences/visuals'
 import { cn, formatCurrency } from '@/lib/utils'
 import type { IntensityLevel, MissionLevel } from '@/types/booking'
 
@@ -51,22 +52,6 @@ const polaroidVariants = {
     transition: { duration: 0.6, delay: 0.15 * i, ease: SENSUAL_EASE },
   }),
 }
-
-const EXPERIENCE_IMAGES: Record<string, { src: string; alt: string }> = {
-  'habitacion-veneciana': { src: '/habitacioveneciana.png', alt: 'La Habitación Veneciana' },
-  'ritual-de-medianoche': { src: '/ritualmedianoche.png', alt: 'El Ritual de Medianoche' },
-  'la-confesion': { src: '/laconfesion.png', alt: 'La Confesión' },
-  'espejo-negro': { src: '/espejonegro.png', alt: 'Espejo Negro' },
-  'el-coleccionista': { src: '/llave.png', alt: 'El Coleccionista' },
-}
-
-const GALLERY_ORDER = [
-  'habitacion-veneciana',
-  'ritual-de-medianoche',
-  'la-confesion',
-  'espejo-negro',
-  'el-coleccionista',
-] as const
 
 function getCityAccent(slug: string): string {
   switch (slug) {
@@ -167,15 +152,19 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
 
   const priceText = useMemo(() => formatCurrency(experience.basePrice), [experience.basePrice])
   const accent = useMemo(() => getCityAccent(citySlug), [citySlug])
-  const heroImage = useMemo(() => EXPERIENCE_IMAGES[experience.slug], [experience.slug])
+  const heroImage = useMemo(
+    () => getExperienceCardImage(experience.slug, experience.title),
+    [experience.slug, experience.title],
+  )
 
   const gallery = useMemo(() => {
-    const idx = Math.max(0, GALLERY_ORDER.indexOf(experience.slug as (typeof GALLERY_ORDER)[number]))
-    const picks = [0, 1, 2].map((offset) => {
-      const slug = GALLERY_ORDER[(idx + offset) % GALLERY_ORDER.length]
-      return EXPERIENCE_IMAGES[slug]
+    const order = EXPERIENCE_CARD_GALLERY_SLUG_ORDER
+    const rawIdx = (order as readonly string[]).indexOf(experience.slug)
+    const idx = rawIdx === -1 ? 0 : rawIdx
+    return [0, 1, 2].map((offset) => {
+      const slug = order[(idx + offset) % order.length]
+      return getExperienceCardImage(slug)
     })
-    return picks.filter(Boolean)
   }, [experience.slug])
 
   useEffect(() => {
@@ -272,9 +261,7 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
           <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${accent} 0%, rgba(8,0,8,0.92) 70%, rgba(8,0,8,1) 100%)` }} />
 
           <div className="absolute inset-0 opacity-20" aria-hidden="true">
-            {heroImage ? (
-              <Image src={heroImage.src} alt="" fill sizes="100vw" className="object-cover" aria-hidden="true" />
-            ) : null}
+            <Image src={heroImage.src} alt="" fill sizes="100vw" className="object-cover" aria-hidden="true" />
           </div>
 
           <motion.div

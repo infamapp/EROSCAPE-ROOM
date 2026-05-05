@@ -41,7 +41,7 @@ export function CitySelector() {
             ¿DÓNDE QUIERES QUE OCURRA?
           </h2>
           <p className="mt-3 sm:mt-5 font-(--font-jetbrains) text-[11px] sm:text-sm" style={{ color: 'var(--color-text-muted)' }}>
-            5 ciudades · 5 experiencias por ciudad · Plazas limitadas
+            5 ciudades · 6 experiencias por ciudad · Plazas limitadas
           </p>
         </div>
 

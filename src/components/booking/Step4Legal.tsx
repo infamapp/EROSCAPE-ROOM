@@ -10,6 +10,7 @@ import { StepHeader } from '@/components/booking/StepHeader'
 import { useBookingFlow } from '@/hooks/useBookingFlow'
 import { SAFE_WORD_SUGGESTIONS } from '@/lib/constants'
 import type { LegalConsent } from '@/types/booking'
+import { BookingBottomBar } from '@/components/booking/BookingBottomBar'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
@@ -511,16 +512,16 @@ export function Step4Legal() {
         </motion.button>
       </div>
 
-      <div className="mt-8 flex justify-start pb-8 sm:mt-10">
-        <button
-          type="button"
-          onClick={() => router.push('/reservar?step=3')}
-          className="rounded-full border border-[rgba(185,48,158,0.2)] px-5 py-2.5 font-(--font-jetbrains) text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:px-6 sm:py-3 sm:text-[11px]"
-          style={{ color: 'var(--color-text-secondary)' }}
-        >
-          ← VOLVER
-        </button>
-      </div>
+      <div className="h-28" aria-hidden="true" />
+
+      <BookingBottomBar
+        summaryTitle="EL JURAMENTO"
+        summary="Todo listo para sellarlo."
+        onBack={() => router.push('/reservar?step=3')}
+        onPrimary={handleSealPact}
+        primaryLabel="FIRMAR EL JURAMENTO"
+        isPrimaryDisabled={!canSeal || buttonPhase !== 'idle'}
+      />
     </div>
   )
 }

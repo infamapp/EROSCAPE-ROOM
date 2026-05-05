@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { useMemo, useState } from 'react'
@@ -34,7 +35,14 @@ const mobileMenuVariants = {
 
 type NavItem = { label: string; href: string }
 
+function isNavActive(pathname: string, href: string): boolean {
+  if (href === '/') return pathname === '/'
+  if (href === '/la-sociedad') return pathname === '/la-sociedad'
+  return pathname === href || pathname.startsWith(`${href}/`)
+}
+
 export function Navbar() {
+  const pathname = usePathname()
   const { isScrolled } = useScrollTrigger({ threshold: 80 })
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const shouldReduceMotion = useReducedMotion()
@@ -43,7 +51,9 @@ export function Navbar() {
     () => [
       { label: 'Experiencias', href: '/experiencias' },
       { label: 'El Tocador', href: '/boutique' },
-      { label: 'La Sociedad', href: '/el-club' },
+      { label: 'La Sociedad', href: '/la-sociedad' },
+      { label: 'Consentimiento', href: '/la-sociedad/seguridad' },
+      { label: 'FAQ', href: '/FAQ' },
       { label: 'La App', href: '/app-movil' },
     ],
     [],
@@ -69,34 +79,42 @@ export function Navbar() {
           <Link
             href="/"
             className={cn(
-              'group inline-flex items-center gap-3 transition-[opacity,transform] duration-300',
+              'group inline-flex items-center justify-center gap-3 transition-[opacity,transform] duration-300',
               isScrolled ? 'opacity-100 pointer-events-auto' : 'opacity-0 -translate-y-1 pointer-events-none',
               'lg:opacity-100 lg:translate-y-0 lg:pointer-events-auto',
             )}
           >
             <Image
-              src="/erosLogo.png"
+              src="/eros-logo-ico.png"
               alt="Eroscape"
               width={80}
               height={80}
               quality={100}
               priority
-              className="h-24 w-24"
+              className="h-18 w-18"
             />
-            <span className="sr-only">Eroscape</span>
+            <span className="uppercase leading-none tracking-[0.12em] text-2xl">Eroscape</span>
           </Link>
 
           <nav className="hidden items-center gap-8 md:flex">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="text-sm"
-                style={{ color: 'var(--color-text-secondary)' }}
-              >
-                <span className="transition-colors hover:text-white">{item.label}</span>
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const active = isNavActive(pathname, item.href)
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    'text-sm transition-colors',
+                    active ? 'text-white' : 'text-[var(--color-text-secondary)] hover:text-white',
+                  )}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  <span className={cn(active && 'border-b border-[color-mix(in_srgb,var(--color-magenta)_55%,transparent)] pb-0.5')}>
+                    {item.label}
+                  </span>
+                </Link>
+              )
+            })}
           </nav>
 
           <div className="hidden items-center gap-3 md:flex">
@@ -170,17 +188,24 @@ export function Navbar() {
               </div>
 
               <div className="flex flex-col gap-3 px-4 pt-6">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="rounded-xl px-4 py-3 text-base"
-                    style={{ border: 'var(--border-subtle)', color: 'var(--color-text-secondary)' }}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <span className="hover:text-white transition-colors">{item.label}</span>
-                  </Link>
-                ))}
+                {navItems.map((item) => {
+                  const active = isNavActive(pathname, item.href)
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className={cn(
+                        'rounded-xl px-4 py-3 text-base',
+                        active ? 'text-white' : 'text-[var(--color-text-secondary)]',
+                      )}
+                      style={{ border: 'var(--border-subtle)' }}
+                      aria-current={active ? 'page' : undefined}
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <span className="transition-colors hover:text-white">{item.label}</span>
+                    </Link>
+                  )
+                })}
 
                 <Link
                   href="/reservar"

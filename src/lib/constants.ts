@@ -52,6 +52,7 @@ export const EXPERIENCES_TEMPLATE = [
   { n: 3, slug: 'la-confesion', title: 'La Confesión', intensity: 'medio', missionLevel: 'BETA', duration: 90, maxParticipants: 2, basePrice: 140 },
   { n: 4, slug: 'espejo-negro', title: 'Espejo Negro', intensity: 'turbio', missionLevel: 'OMEGA', duration: 90, maxParticipants: 4, basePrice: 160 },
   { n: 5, slug: 'el-coleccionista', title: 'El Coleccionista', intensity: 'turbio', missionLevel: 'OMEGA', duration: 90, maxParticipants: 2, basePrice: 160 },
+  { n: 6, slug: 'la-mascarada', title: 'La Mascarada', intensity: 'medio', missionLevel: 'BETA', duration: 90, maxParticipants: 2, basePrice: 140 },
 ] as const
 
 export const UPSELL_ITEMS = [

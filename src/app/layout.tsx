@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Inter, JetBrains_Mono, Playfair_Display } from 'next/font/google'
+import { Cormorant_Garamond, Inter, JetBrains_Mono, Playfair_Display } from 'next/font/google'
 
 import { Footer } from '@/components/layout/Footer'
 import { Navbar } from '@/components/layout/Navbar'
@@ -14,6 +14,12 @@ const playfair = Playfair_Display({
   subsets: ['latin'],
   weight: ['400', '700'],
   style: ['normal', 'italic'],
+})
+
+const cormorant = Cormorant_Garamond({
+  variable: '--font-cormorant',
+  subsets: ['latin'],
+  weight: ['400', '600', '700'],
 })
 
 const inter = Inter({
@@ -45,7 +51,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es" className={`${playfair.variable} ${inter.variable} ${jetbrains.variable} antialiased`}>
+    <html
+      lang="es"
+      className={`${playfair.variable} ${cormorant.variable} ${inter.variable} ${jetbrains.variable} antialiased`}
+    >
       <body className="min-h-screen" style={{ background: 'var(--color-bg-base)' }}>
         <PanicModeProvider>
           <BookingProvider>

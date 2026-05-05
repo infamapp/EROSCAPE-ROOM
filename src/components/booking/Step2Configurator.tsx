@@ -13,6 +13,7 @@ import { getPlayerArchetype } from '@/lib/archetype'
 import { COMPANY_TYPES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import type { BookingState, BookingStep2, CompanyType, IntensityLevel, MissionLevel } from '@/types/booking'
+import { BookingBottomBar } from '@/components/booking/BookingBottomBar'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
@@ -518,27 +519,23 @@ export function Step2Configurator() {
           ) : null}
         </AnimatePresence>
 
-        <div className="mt-10 flex flex-col gap-2.5 pb-6 sm:mt-14 sm:gap-3 md:flex-row md:items-center md:justify-between">
-          <button
-            type="button"
-            onClick={handlePrev}
-            className="rounded-full border border-[rgba(185,48,158,0.2)] px-5 py-2.5 font-(--font-jetbrains) text-[13px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:px-6 sm:py-3 sm:text-sm"
-            style={{ color: 'var(--color-text-secondary)' }}
-          >
-            ← VOLVER
-          </button>
-
-          <button
-            type="button"
-            onClick={handleNext}
-            disabled={!canContinue}
-            className="rounded-full px-5 py-2.5 font-(--font-jetbrains) text-[13px] text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) disabled:cursor-not-allowed disabled:opacity-50 sm:px-6 sm:py-3 sm:text-[11px]"
-            style={{ background: canContinue ? 'var(--gradient-cta)' : 'var(--color-bg-subtle)' }}
-          >
-            CONTINUAR →
-          </button>
-        </div>
+        <div className="h-28" aria-hidden="true" />
       </div>
+
+      <BookingBottomBar
+        summaryTitle="TU ELECCIÓN"
+        summary={
+          <>
+            {companyType ?? '—'}
+            {' · '}
+            {intensityLevel ?? '—'}
+          </>
+        }
+        onBack={handlePrev}
+        onPrimary={handleNext}
+        primaryLabel="CONTINUAR →"
+        isPrimaryDisabled={!canContinue}
+      />
     </div>
   )
 }

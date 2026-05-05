@@ -277,7 +277,7 @@ export function CityMap({ cities, activeCitySlug, onSelectCity, className }: Cit
             >
               <div className="font-(--font-playfair)">{tooltip.city.displayName}</div>
               <div className="mt-1 text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                5 experiencias disponibles
+                6 experiencias disponibles
               </div>
               <div className="mt-2 text-xs" style={{ color: 'var(--color-magenta)' }}>
                 Entrar →

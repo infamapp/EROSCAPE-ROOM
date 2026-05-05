@@ -1,13 +1,17 @@
-import { HeroSection } from '@/components/sections/HeroSection'
+import { ComoFuncionaSection } from '@/components/sections/ComoFuncionaSection'
 import { ConceptSection } from '@/components/sections/ConceptSection'
-import { CitySelector } from '@/components/sections/CitySelector'
+import { CtaSection } from '@/components/sections/CtaSection'
+import { ExperienciasHomeFeatured } from '@/components/sections/ExperienciasHomeFeatured'
+import { HeroSection } from '@/components/sections/HeroSection'
 
 export default function Home() {
   return (
     <>
       <HeroSection />
       <ConceptSection />
-      <CitySelector />
+      <ExperienciasHomeFeatured />
+      <ComoFuncionaSection />
+      <CtaSection />
     </>
   )
 }

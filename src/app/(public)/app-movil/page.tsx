@@ -1,19 +1,19 @@
 import type { Metadata } from 'next'
 
-import { AppMovilPageContent } from '@/components/sections/AppMovilPageContent'
+import { AppMovilPageContent } from '@/components/app-movil/AppMovilPageContent'
 
 export const metadata: Metadata = {
-  title: 'App móvil — Eroscape',
-  description: 'La misión en tu bolsillo. Inventario, control de sala y protocolo de seguridad.',
+  title: 'La App — Eroscape',
+  description: 'Curación digital, EROSENSE y una experiencia que empieza antes de llegar. Discreción en cada gesto.',
   openGraph: {
-    title: 'App móvil — Eroscape',
-    description: 'La misión en tu bolsillo. Inventario, control de sala y protocolo de seguridad.',
+    title: 'La App — Eroscape',
+    description: 'Curación digital, EROSENSE y una experiencia que empieza antes de llegar. Discreción en cada gesto.',
     type: 'website',
   },
   twitter: {
-    card: 'summary',
-    title: 'App móvil — Eroscape',
-    description: 'La misión en tu bolsillo. Inventario, control de sala y protocolo de seguridad.',
+    card: 'summary_large_image',
+    title: 'La App — Eroscape',
+    description: 'Curación digital, EROSENSE y una experiencia que empieza antes de llegar. Discreción en cada gesto.',
   },
 }
 
