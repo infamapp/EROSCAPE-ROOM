@@ -1,19 +1,19 @@
-import { Cpu, Droplets, Eye, FileText, Lock, ShieldCheck, type LucideIcon } from 'lucide-react'
+import { Brain, Eye, FileText, Shield, Sparkles, Lock, type LucideIcon } from 'lucide-react'
 
 import { SEGURIDAD_GUARANTEES, type SeguridadGuaranteeId } from '@/lib/la-sociedad-seguridad'
 
 function guaranteeIcon(id: SeguridadGuaranteeId): LucideIcon {
   switch (id) {
     case 'consentimiento':
-      return ShieldCheck
+      return Shield
     case 'seguridad':
       return Lock
     case 'privacidad':
       return Eye
     case 'higiene':
-      return Droplets
+      return Sparkles
     case 'digital':
-      return Cpu
+      return Brain
     case 'documentacion':
       return FileText
   }
@@ -23,20 +23,25 @@ export function SeguridadGuaranteesGrid() {
   return (
     <section className="px-4 py-20 sm:px-6 sm:py-28" style={{ background: 'var(--color-bg-base)' }}>
       <div className="mx-auto max-w-7xl">
-        <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-8 lg:grid-cols-3">
+        <ul className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:gap-6 lg:grid-cols-3">
           {SEGURIDAD_GUARANTEES.map((item) => {
             const Icon = guaranteeIcon(item.id)
             return (
               <li key={item.id}>
-                <article className="glass-card-detail h-full rounded-xl border-l-2 border-l-[color-mix(in_srgb,var(--color-gm-terminal)_45%,transparent)] p-8 transition-colors duration-500 hover:bg-[color-mix(in_srgb,var(--color-bg-elevated)_55%,transparent)] sm:p-10">
+                <article className="h-full rounded-xl border-(--border-subtle) bg-(--color-bg-elevated) p-5 [box-shadow:var(--glow-card)] transition-[box-shadow,border-color,transform] duration-500 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--color-gm-terminal)_45%,transparent)] hover:[box-shadow:0_0_28px_color-mix(in_srgb,var(--color-gm-terminal)_22%,transparent)]">
                   <Icon
-                    className="mb-5 block size-9 text-[var(--color-gm-terminal)] sm:size-10"
-                    style={{ filter: 'drop-shadow(0 0 12px color-mix(in srgb, var(--color-gm-terminal) 35%, transparent))' }}
+                    className="mb-4 block size-7 text-(--color-gm-terminal)"
+                    style={{
+                      filter:
+                        'drop-shadow(0 0 12px color-mix(in srgb, var(--color-gm-terminal) 35%, transparent))',
+                    }}
                     aria-hidden="true"
-                    strokeWidth={1.2}
+                    strokeWidth={1.4}
                   />
-                  <h3 className="font-(--font-playfair) text-xl text-white sm:text-2xl">{item.title}</h3>
-                  <p className="mt-3 font-(--font-inter) text-sm leading-relaxed text-[var(--color-text-muted)] sm:text-base">
+                  <h3 className="text-sm font-semibold text-white [font-family:var(--font-playfair)]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-xs leading-relaxed text-(--color-text-secondary) [font-family:var(--font-inter)]">
                     {item.body}
                   </p>
                 </article>

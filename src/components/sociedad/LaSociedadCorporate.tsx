@@ -1,53 +1,71 @@
 import Link from 'next/link'
-import { Drama, Heart, PartyPopper, Users } from 'lucide-react'
+import { Heart, Moon, PartyPopper, Users } from 'lucide-react'
 
 import { SOCIEDAD_CORPORATE_CARDS } from '@/lib/la-sociedad'
-import { cn } from '@/lib/utils'
 
-const CORP_ICONS = [PartyPopper, Heart, Users, Drama] as const
+const CORP_ICONS = [PartyPopper, Heart, Users, Moon] as const
 
 export function LaSociedadCorporate() {
   return (
-    <section className="overflow-hidden px-4 py-20 sm:px-6 sm:py-28" style={{ background: 'var(--color-bg-subtle)' }}>
-      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-24">
-        <div>
-          <p className="font-(--font-jetbrains) text-[11px] uppercase tracking-[0.42em] text-[var(--color-magenta-glow)]">
+    <section
+      className="overflow-hidden"
+      style={{ background: 'var(--color-bg-subtle)' }}
+    >
+      {/* Divider band canónico */}
+      <div className="mx-auto max-w-6xl px-4 pt-20 sm:px-6 sm:pt-28">
+        <div className="flex flex-col items-center text-center">
+          <p className="text-[11px] uppercase tracking-[0.32em] text-(--color-magenta-glow) [font-family:var(--font-jetbrains)]">
             Más allá de lo privado
           </p>
-          <h2 className="mt-4 font-(--font-playfair) text-4xl font-semibold leading-tight text-white sm:text-5xl lg:text-6xl">
+          <h2 className="mt-4 text-3xl font-bold uppercase tracking-[0.2em] text-white [font-family:var(--font-playfair)] sm:text-4xl">
             Eventos & corporativo
           </h2>
-          <p className="mt-6 max-w-xl font-(--font-inter) text-base leading-relaxed text-[var(--color-text-muted)] sm:text-lg">
+          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-(--color-text-secondary) [font-family:var(--font-inter)] sm:text-base">
             Llevamos nuestra filosofía de excelencia y comunicación consciente al ámbito profesional: encuentros donde
             la confianza y la escucha son el centro. Lo que se fortalece en la penumbra, ilumina el día a día.
           </p>
+          <div className="mt-6 h-px w-24 bg-[color-mix(in_srgb,var(--color-gold)_70%,transparent)]" />
+        </div>
+      </div>
+
+      <div className="mx-auto grid max-w-6xl grid-cols-1 items-start gap-12 px-4 pb-20 pt-14 sm:px-6 sm:pb-28 lg:grid-cols-2 lg:gap-20">
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.32em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]">
+            Tu evento, nuestra discreción
+          </p>
+          <h3 className="mt-3 text-2xl font-bold leading-tight text-white [font-family:var(--font-playfair)] sm:text-3xl">
+            Una noche pensada para ti
+          </h3>
+          <p className="mt-4 max-w-xl text-sm leading-relaxed text-(--color-text-secondary) [font-family:var(--font-inter)] sm:text-base">
+            Diseñamos cada noche a medida: confidencialidad firmada, cuidado integral y un equipo que sostiene la
+            experiencia desde antes hasta después.
+          </p>
+
           <Link
             href="/reservar"
-            className="mt-10 inline-flex items-center justify-center rounded-none px-10 py-4 font-(--font-jetbrains) text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-bg-base)] transition-transform duration-300 hover:scale-[1.02] focus:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--color-magenta)_55%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-subtle)]"
-            style={{
-              background: 'var(--color-gold-light)',
-              boxShadow: 'var(--glow-gold)',
-            }}
+            className="mt-8 inline-flex items-center justify-center rounded-full border px-8 py-3 text-[11px] font-bold uppercase tracking-[0.22em] text-(--color-gold-light) transition-[background-color,color,border-color,filter] duration-300 [font-family:var(--font-jetbrains)] hover:bg-[color-mix(in_srgb,var(--color-gold)_14%,transparent)] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-gold) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-subtle)"
+            style={{ borderColor: 'var(--color-gold)' }}
           >
             Consultar disponibilidad
           </Link>
         </div>
 
-        <ul className="grid grid-cols-2 gap-4 sm:gap-6">
+        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
           {SOCIEDAD_CORPORATE_CARDS.map((card, index) => {
             const Icon = CORP_ICONS[index]
-            const offset = index === 1 || index === 3
             return (
-              <li
-                key={card.id}
-                className={cn(offset && 'lg:translate-y-8')}
-              >
-                <div className="group glass-card-detail flex h-full flex-col items-center p-6 text-center transition-colors duration-300 hover:bg-white/[0.04] sm:p-8">
-                  <span className="mb-4 inline-flex text-[var(--color-gold-light)] transition-transform duration-300 group-hover:scale-110" aria-hidden="true">
-                    <Icon className="size-9 sm:size-10" strokeWidth={1.2} />
+              <li key={card.id}>
+                <div className="group flex h-full flex-col items-start rounded-xl border-(--border-subtle) bg-(--color-bg-elevated) p-5 [box-shadow:var(--glow-card)] transition-[box-shadow,border-color,transform] duration-300 hover:-translate-y-0.5 hover:border-[color-mix(in_srgb,var(--color-gold)_45%,transparent)] hover:[box-shadow:var(--glow-gold)]">
+                  <span
+                    className="inline-flex text-(--color-gold-light) transition-transform duration-300 group-hover:scale-110"
+                    aria-hidden="true"
+                  >
+                    {Icon ? <Icon className="size-6" strokeWidth={1.4} /> : null}
                   </span>
-                  <h3 className="font-(--font-playfair) text-lg text-white sm:text-xl">{card.title}</h3>
-                  <p className="mt-2 font-(--font-inter) text-[10px] uppercase tracking-[0.2em] text-[var(--color-text-muted)] sm:text-[11px]">
+                  <h4 className="mt-4 text-sm font-semibold text-white [font-family:var(--font-playfair)]">
+                    {card.title}
+                  </h4>
+                  <p className="mt-2 text-[9px] uppercase tracking-[0.12em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]">
                     {card.subtitle}
                   </p>
                 </div>

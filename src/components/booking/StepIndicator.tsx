@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import { Brain, CheckCircle, Compass, Package, PenLine, Unlock } from 'lucide-react'
+import { Check, Compass, Package, PenLine, SlidersHorizontal, Unlock } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -13,10 +13,10 @@ const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
 const STEPS = [
   { name: 'EL ENCUENTRO', icon: Compass },
-  { name: 'TUS DESEOS', icon: Brain },
+  { name: 'TUS DESEOS', icon: SlidersHorizontal },
   { name: 'EL BAÚL', icon: Package },
   { name: 'EL JURAMENTO', icon: PenLine },
-  { name: 'LAS PUERTAS SE ABREN', icon: Unlock },
+  { name: 'ACCESO', icon: Unlock },
 ] as const
 
 const ACTS = ['I', 'II', 'III', 'IV', 'V'] as const
@@ -37,18 +37,24 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
             <div key={step.name} className="flex items-center">
               <div className="relative flex flex-col items-center">
                 <div
-                  className={cn('relative flex h-10 w-10 items-center justify-center rounded-full')}
-                  style={{
-                    background: isCompleted ? 'var(--color-magenta)' : 'var(--color-bg-elevated)',
-                    border: isActive ? '2px solid var(--color-magenta)' : '1px solid rgba(255,255,255,0.08)',
-                  }}
+                  className={cn(
+                    'relative flex items-center justify-center rounded-full',
+                    isActive ? 'h-10 w-10' : 'h-8 w-8',
+                  )}
+                  style={
+                    isCompleted
+                      ? { background: 'var(--color-magenta)' }
+                      : isActive
+                        ? { background: 'var(--gradient-cta)', boxShadow: 'var(--glow-magenta)' }
+                        : { background: 'transparent', border: 'var(--border-subtle)' }
+                  }
                 >
                   {isCompleted ? (
-                    <CheckCircle className="h-5 w-5 text-white" aria-hidden="true" />
+                    <Check className="h-4 w-4 text-white" aria-hidden="true" />
                   ) : (
                     <Icon
-                      className="h-5 w-5"
-                      style={{ color: isActive ? 'var(--color-magenta-glow)' : 'var(--color-text-muted)' }}
+                      className={cn(isActive ? 'h-5 w-5' : 'h-4 w-4')}
+                      style={{ color: isActive ? 'white' : 'var(--color-text-muted)' }}
                       aria-hidden="true"
                     />
                   )}
@@ -56,33 +62,34 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
                   {isActive ? (
                     <motion.div
                       className="absolute inset-0 rounded-full"
-                      style={{ border: '2px solid rgba(185,48,158,0.55)' }}
+                      style={{ border: '2px solid rgba(185,48,158,0.45)' }}
                       initial={shouldReduceMotion ? false : { scale: 1, opacity: 1 }}
-                      animate={shouldReduceMotion ? undefined : { scale: [1, 1.3], opacity: [1, 0] }}
-                      transition={shouldReduceMotion ? undefined : { duration: 1.2, repeat: Infinity, ease: SENSUAL_EASE }}
+                      animate={shouldReduceMotion ? undefined : { scale: [1, 1.05, 1], opacity: 1 }}
+                      transition={shouldReduceMotion ? undefined : { duration: 2, repeat: Infinity, ease: SENSUAL_EASE }}
                       aria-hidden="true"
                     />
                   ) : null}
                 </div>
 
-                <div className="mt-3 font-(--font-jetbrains) text-[9px] tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
+                <div
+                  className="mt-3 font-(--font-jetbrains) text-[9px] uppercase tracking-[0.12em]"
+                  style={{
+                    color: isActive
+                      ? 'var(--color-text-primary)'
+                      : isCompleted
+                        ? 'var(--color-magenta)'
+                        : 'var(--color-text-muted)',
+                  }}
+                >
                   {ACTS[idx]} · {step.name}
                 </div>
               </div>
 
               {idx < STEPS.length - 1 ? (
-                <div className="mx-3 h-[2px] w-14 rounded-full bg-white/10">
-                  <motion.div
-                    className="h-[2px] rounded-full"
-                    style={{ background: 'var(--color-magenta)' }}
-                    initial={shouldReduceMotion ? false : { width: 0, opacity: 0 }}
-                    animate={
-                      shouldReduceMotion
-                        ? undefined
-                        : isCompleted
-                          ? { width: '100%', opacity: 1, transition: { duration: 0.35, ease: SENSUAL_EASE } }
-                          : { width: 0, opacity: 0 }
-                    }
+                <div className="mx-3 h-px w-14 bg-[rgba(185,48,158,0.2)]">
+                  <div
+                    className="h-px"
+                    style={{ background: isCompleted ? 'var(--color-magenta)' : 'transparent' }}
                     aria-hidden="true"
                   />
                 </div>
@@ -93,11 +100,10 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
       </div>
 
       <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-6 sm:px-6 md:hidden">
-        <div className="font-(--font-jetbrains) text-xs tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
-          {ACTS[Math.max(0, Math.min(4, currentStep - 1))]} · DE V
-        </div>
-        <div className="font-(--font-playfair) text-sm text-white">
-          {STEPS[Math.max(0, Math.min(4, currentStep - 1))]?.name}
+        <div className="w-full text-center">
+          <p className="font-(--font-jetbrains) text-[10px] uppercase tracking-[0.18em] text-(--color-text-muted)">
+            ACTO {ACTS[Math.max(0, Math.min(4, currentStep - 1))]} de V · {STEPS[Math.max(0, Math.min(4, currentStep - 1))]?.name}
+          </p>
         </div>
       </div>
     </div>

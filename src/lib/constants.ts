@@ -116,7 +116,7 @@ export const COMPANY_TYPES = [
 export const SAFE_WORD_SUGGESTIONS = ['Lluvia', 'Mariposa', 'Pausa', 'Aurora', 'Eclipse', 'Bruma'] as const
 
 export const GAME_MASTER_INTRO_MESSAGES = [
-  'Ya tenemos tu reserva. Ahora queremos conocerte mejor.',
-  'Cada detalle de esta noche se moldeará a lo que deseas.',
-  'Antes de que llegues, necesito saber algo más sobre ti.',
+  'Ya te esperábamos.',
+  'He analizado tus preferencias. La noche se adapta a vos.',
+  'Tengo una pregunta antes de preparar tu experiencia.',
 ] as const

@@ -18,12 +18,12 @@ type FaqItem = {
 }
 
 const CATEGORIES: ReadonlyArray<{ id: FaqCategory; label: string }> = [
-  { id: 'todas', label: 'Todas' },
-  { id: 'experiencia', label: 'La Experiencia' },
-  { id: 'reservas', label: 'Reservas' },
-  { id: 'seguridad', label: 'Seguridad' },
-  { id: 'privacidad', label: 'Privacidad' },
-  { id: 'maestro-ia', label: 'El Maestro IA' },
+  { id: 'todas', label: 'TODAS' },
+  { id: 'experiencia', label: 'LA EXPERIENCIA' },
+  { id: 'reservas', label: 'RESERVAS' },
+  { id: 'seguridad', label: 'SEGURIDAD' },
+  { id: 'privacidad', label: 'PRIVACIDAD' },
+  { id: 'maestro-ia', label: 'EL MAESTRO IA' },
 ] as const
 
 const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
@@ -128,7 +128,7 @@ export function FaqPage({ className }: FaqPageProps) {
           initial={shouldReduceMotion ? false : 'hidden'}
           animate={shouldReduceMotion ? undefined : 'visible'}
         >
-          Si no encuentras lo que buscas, el Maestro puede guiarte con calma — sin exponer nada que no quieras revelar.
+          Si no encontrás lo que buscás, el Maestro puede guiarte con calma — sin exponer nada que no quieras revelar.
         </motion.p>
       </section>
 
@@ -142,16 +142,13 @@ export function FaqPage({ className }: FaqPageProps) {
                 type="button"
                 onClick={() => setActiveCategory(cat.id)}
                 className={cn(
-                  'rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-[border-color,color,background-color,box-shadow] duration-300',
+                  'rounded-full px-5 py-2 text-xs font-semibold uppercase tracking-[0.18em] transition-[border-color,color,background-color,filter] duration-300',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)',
                   isActive
-                    ? 'text-(--color-bg)'
-                    : 'border text-(--color-text-secondary) hover:text-white',
+                    ? 'text-white'
+                    : 'border-(--border-subtle) text-(--color-text-muted) hover:text-white',
                 )}
-                style={{
-                  background: isActive ? 'var(--gradient-cta)' : undefined,
-                  borderColor: isActive ? 'transparent' : 'rgba(255,255,255,0.10)',
-                  boxShadow: isActive ? '0 0 18px rgba(185,48,158,0.28)' : undefined,
-                }}
+                style={isActive ? { background: 'var(--gradient-cta)' } : undefined}
                 aria-pressed={isActive}
               >
                 {cat.label}
@@ -170,8 +167,10 @@ export function FaqPage({ className }: FaqPageProps) {
           return (
             <motion.div
               key={item.id}
-              className="overflow-hidden rounded-2xl border bg-[color-mix(in_srgb,var(--color-bg-elevated)_70%,transparent)]"
-              style={{ borderColor: 'rgba(255,255,255,0.08)' }}
+              className={cn(
+                'overflow-hidden rounded-xl border-(--border-subtle) bg-(--color-bg-elevated)',
+                expanded && 'border-l-2 border-l-(--color-magenta)',
+              )}
               variants={cardVariants}
               initial={shouldReduceMotion ? false : 'hidden'}
               whileInView={shouldReduceMotion ? undefined : 'visible'}
@@ -180,18 +179,22 @@ export function FaqPage({ className }: FaqPageProps) {
               <button
                 id={triggerId}
                 type="button"
-                className="flex w-full items-center justify-between gap-6 px-6 py-6 text-left sm:px-8"
+                className="flex w-full items-center justify-between gap-6 px-5 py-4 text-left transition-colors hover:bg-(--color-magenta)/5"
                 onClick={() => setOpenId((current) => (current === item.id ? null : item.id))}
                 aria-expanded={expanded}
                 aria-controls={panelId}
               >
-                <span className="text-lg font-semibold text-white sm:text-xl">{item.question}</span>
-                <ChevronDown
-                  className={cn(
-                    'h-5 w-5 flex-none transition-transform duration-300',
-                    expanded ? 'rotate-180 text-(--color-gold)' : 'text-(--color-text-secondary)',
-                  )}
-                />
+                <span className="font-(--font-inter) text-sm font-medium text-(--color-text-primary)">
+                  {item.question}
+                </span>
+                <motion.span
+                  className="flex-none text-(--color-text-muted)"
+                  animate={shouldReduceMotion ? undefined : { rotate: expanded ? 180 : 0 }}
+                  transition={shouldReduceMotion ? undefined : { duration: 0.25, ease: SENSUAL_EASE }}
+                  aria-hidden="true"
+                >
+                  <ChevronDown className="h-5 w-5" strokeWidth={1.35} />
+                </motion.span>
               </button>
 
               <AnimatePresence initial={false}>
@@ -204,9 +207,10 @@ export function FaqPage({ className }: FaqPageProps) {
                     animate={shouldReduceMotion ? undefined : { height: 'auto', opacity: 1 }}
                     exit={shouldReduceMotion ? undefined : { height: 0, opacity: 0 }}
                     transition={{ duration: 0.3, ease: SENSUAL_EASE }}
-                    className="px-6 pb-6 sm:px-8"
+                    className="px-5 pb-4"
+                    style={{ overflow: 'hidden' }}
                   >
-                    <p className="text-pretty text-sm leading-relaxed text-(--color-text-secondary) sm:text-base">
+                    <p className="text-pretty font-(--font-inter) text-sm leading-relaxed text-(--color-text-secondary)">
                       {item.answer}
                     </p>
                   </motion.div>
@@ -218,41 +222,27 @@ export function FaqPage({ className }: FaqPageProps) {
       </section>
 
       <section className="mx-auto mt-16 max-w-5xl px-4 sm:px-6">
-        <div
-          className="relative overflow-hidden rounded-3xl border p-10 text-center sm:p-14"
-          style={{
-            borderColor: 'rgba(255,255,255,0.08)',
-            background: 'color-mix(in_srgb,var(--color-bg-elevated)_72%,transparent)',
-          }}
-        >
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{ background: 'linear-gradient(135deg, rgba(185,48,158,0.10), transparent 55%)' }}
-            aria-hidden="true"
-          />
-          <div className="relative">
-            <h2 className="text-balance font-(--font-cormorant) text-3xl italic text-white sm:text-4xl">
-              ¿Aún te queda una duda en la garganta?
-            </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-pretty text-sm leading-relaxed text-(--color-text-secondary) sm:text-base">
-              Escríbenos con calma. Tu privacidad es parte del ritual: no pedimos más de lo necesario.
-            </p>
-            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-              <a
-                href="/la-sociedad/seguridad"
-                className="rounded-full border px-8 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-white/5"
-                style={{ borderColor: 'rgba(255,255,255,0.14)' }}
-              >
-                Ver consentimiento
-              </a>
-              <a
-                href="/la-sociedad"
-                className="rounded-full px-8 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white"
-                style={{ background: 'var(--gradient-cta)' }}
-              >
-                Contactar
-              </a>
-            </div>
+        <div className="tocador-glass mx-auto max-w-2xl rounded-2xl p-8 text-center">
+          <h3 className="font-(--font-cormorant) text-2xl italic text-white">
+            ¿Aún te queda una duda en la garganta?
+          </h3>
+          <p className="mx-auto mt-3 max-w-xl text-pretty font-(--font-inter) text-sm leading-relaxed text-(--color-text-secondary)">
+            Escribinos con calma. Tu privacidad es parte del ritual: no pedimos más de lo necesario.
+          </p>
+          <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+            <a
+              href="/la-sociedad/seguridad"
+              className="rounded-full border-(--border-subtle) px-8 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-white/5"
+            >
+              VER CONSENTIMIENTO
+            </a>
+            <a
+              href="/contacto"
+              className="rounded-full px-8 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white"
+              style={{ background: 'var(--gradient-cta)' }}
+            >
+              CONTACTAR
+            </a>
           </div>
         </div>
       </section>

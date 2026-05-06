@@ -3,29 +3,22 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
-import { useParallax } from '@/hooks/useParallax'
 import { useScrollTrigger } from '@/hooks/useScrollTrigger'
-import { useTextScramble } from '@/hooks/useTextScramble'
 import { cn } from '@/lib/utils'
 import { ParticleField } from '@/components/ui/ParticleField'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
-const titleVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: SENSUAL_EASE, delay: 0.5 } },
+const containerVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.05 } },
 }
 
-const sublineVariants = {
-  hidden: { opacity: 0, y: 8 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: SENSUAL_EASE } },
-}
-
-const ctaContainerVariants = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: SENSUAL_EASE, delay: 2.5 } },
+const itemVariants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: SENSUAL_EASE } },
 }
 
 const toastVariants = {
@@ -34,110 +27,188 @@ const toastVariants = {
   exit: { opacity: 0, y: -12, transition: { duration: 0.2, ease: SENSUAL_EASE } },
 }
 
-export function HeroSection() {
+export interface HeroSectionProps {
+  isReturningUser?: boolean
+}
+
+function isDesktopParallaxEnabled(): boolean {
+  if (typeof window === 'undefined') return false
+  return window.innerWidth >= 768
+}
+
+function clamp(n: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, n))
+}
+
+function useParallaxEngine(isEnabled: boolean) {
+  const target = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
+  const smooth = useRef<{ x: number; y: number }>({ x: 0, y: 0 })
+  const rafRef = useRef<number | null>(null)
+  const [pos, setPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
+
+  useEffect(() => {
+    if (!isEnabled) return
+
+    const handleMove = (e: MouseEvent) => {
+      const cx = window.innerWidth / 2
+      const cy = window.innerHeight / 2
+      const nx = cx === 0 ? 0 : (e.clientX - cx) / cx
+      const ny = cy === 0 ? 0 : (e.clientY - cy) / cy
+      target.current = { x: clamp(nx, -1, 1), y: clamp(ny, -1, 1) }
+    }
+
+    const tick = () => {
+      smooth.current.x += (target.current.x - smooth.current.x) * 0.08
+      smooth.current.y += (target.current.y - smooth.current.y) * 0.08
+      setPos({ x: smooth.current.x, y: smooth.current.y })
+      rafRef.current = window.requestAnimationFrame(tick)
+    }
+
+    window.addEventListener('mousemove', handleMove, { passive: true })
+    rafRef.current = window.requestAnimationFrame(tick)
+
+    return () => {
+      window.removeEventListener('mousemove', handleMove)
+      if (rafRef.current) window.cancelAnimationFrame(rafRef.current)
+    }
+  }, [isEnabled])
+
+  return pos
+}
+
+export function HeroSection({ isReturningUser }: HeroSectionProps) {
   const shouldReduceMotion = useReducedMotion()
-  const { mouseX, mouseY } = useParallax()
   const { isScrolled } = useScrollTrigger({ threshold: 1 })
 
-  const [showToast, setShowToast] = useState(false)
-  const [replayKey, setReplayKey] = useState(0)
+  const parallaxEnabled = !shouldReduceMotion && isDesktopParallaxEnabled()
+  const { x: mouseX, y: mouseY } = useParallaxEngine(parallaxEnabled)
 
-  const isReturning = useMemo(() => {
+  const computedReturning = useMemo(() => {
     if (typeof window === 'undefined') return false
-    return window.localStorage.getItem('eroscape_agent_visited') === 'true'
+    return window.localStorage.getItem('eroscape_visited') === 'true'
   }, [])
 
-  const { displayText: taglineText } = useTextScramble({
-    text: 'El primer Escape Room Erótico del mundo',
-    trigger: !shouldReduceMotion,
-    speed: 40,
-    scrambleDuration: 800,
-    replayToken: replayKey,
-  })
+  const isReturning = isReturningUser ?? computedReturning
+
+  const [showToast, setShowToast] = useState(false)
+  const [showScrollCue, setShowScrollCue] = useState(true)
+  const [typedTitle, setTypedTitle] = useState(shouldReduceMotion ? 'El primer Escape Room Erótico del mundo' : '')
+  const [showCursor, setShowCursor] = useState(!shouldReduceMotion)
+  const [terminalLineCount, setTerminalLineCount] = useState(shouldReduceMotion ? 3 : 0)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
+    if (shouldReduceMotion) return
 
+    const full = 'El primer Escape Room Erótico del mundo'
+    const startDelayMs = 600
+    const perCharMs = 50
+    const cursorHideAtMs = 3000
+
+    let rafId: number | null = null
+    const t0 = window.performance.now()
+    const tick = (now: number) => {
+      const elapsed = now - t0
+      const afterDelay = Math.max(0, elapsed - startDelayMs)
+      const nextCount = clamp(Math.floor(afterDelay / perCharMs), 0, full.length)
+      setTypedTitle(full.slice(0, nextCount))
+      setShowCursor(elapsed < cursorHideAtMs)
+      rafId = window.requestAnimationFrame(tick)
+    }
+
+    rafId = window.requestAnimationFrame(tick)
+    return () => {
+      if (rafId) window.cancelAnimationFrame(rafId)
+    }
+  }, [shouldReduceMotion])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (shouldReduceMotion) return
+
+    const lines = [
+      '> Acceso nivel +18. Verificando...',
+      '> Consentimiento: REQUERIDO',
+      '> Iniciando protocolo de inmersión...',
+    ] as const
+
+    let rafId: number | null = null
+    const t0 = window.performance.now()
+    const tick = (now: number) => {
+      const elapsed = now - t0
+      const nextCount = clamp(Math.floor(elapsed / 400), 0, lines.length)
+      setTerminalLineCount(nextCount)
+      rafId = window.requestAnimationFrame(tick)
+    }
+
+    rafId = window.requestAnimationFrame(tick)
+    return () => {
+      if (rafId) window.cancelAnimationFrame(rafId)
+    }
+  }, [shouldReduceMotion])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
     if (isReturning) {
-      const t0 = window.setTimeout(() => setShowToast(true), 0)
-      const t1 = window.setTimeout(() => setShowToast(false), 3000)
+      let rafId: number | null = null
+      const t0 = window.performance.now()
+      const tick = (now: number) => {
+        const elapsed = now - t0
+        setShowToast(elapsed >= 1200 && elapsed < 5200)
+        rafId = window.requestAnimationFrame(tick)
+      }
+      rafId = window.requestAnimationFrame(tick)
       return () => {
-        window.clearTimeout(t0)
-        window.clearTimeout(t1)
+        if (rafId) window.cancelAnimationFrame(rafId)
       }
     }
 
     const t = window.setTimeout(() => {
       try {
-        window.localStorage.setItem('eroscape_agent_visited', 'true')
-        document.cookie = 'eroscape_agent_visited=true; path=/; max-age=31536000'
+        window.localStorage.setItem('eroscape_visited', 'true')
+        document.cookie = 'eroscape_visited=true; path=/; max-age=31536000'
       } catch {
         // ignore
       }
     }, 5000)
 
     return () => window.clearTimeout(t)
-  }, [isReturning])
+  }, [isReturning, shouldReduceMotion])
 
-  // When navigating back to "/", the Hero can remain mounted and Framer Motion won't
-  // replay `initial` animations. Force a remount when the page becomes visible again.
   useEffect(() => {
     if (typeof window === 'undefined') return
 
-    const bump = () => setReplayKey((k) => k + 1)
-
-    const handleVisibility = () => {
-      if (document.visibilityState === 'visible') bump()
-    }
-
-    window.addEventListener('pageshow', bump)
-    document.addEventListener('visibilitychange', handleVisibility)
+    const handleScroll = () => setShowScrollCue(false)
+    window.addEventListener('scroll', handleScroll, { passive: true })
 
     return () => {
-      window.removeEventListener('pageshow', bump)
-      document.removeEventListener('visibilitychange', handleVisibility)
+      window.removeEventListener('scroll', handleScroll)
     }
   }, [])
 
-  const fogMotionStyle = shouldReduceMotion
-    ? undefined
-    : {
-        x: mouseX * 15,
-        y: mouseY * 10,
-      }
-
-  const contentMotionStyle = shouldReduceMotion
-    ? undefined
-    : {
-        x: mouseX * 8,
-        y: mouseY * 6,
-      }
-
-  const scrollCueHidden = isScrolled
+  const fogMotionStyle = parallaxEnabled ? { x: mouseX * 15, y: mouseY * 10 } : undefined
+  const particlesMotionStyle = parallaxEnabled ? { x: mouseX * 6, y: mouseY * 4 } : undefined
+  const contentMotionStyle = parallaxEnabled ? { x: mouseX * 10, y: mouseY * 7 } : undefined
 
   return (
-    <section className="relative h-svh overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <Image
-          src="/heroImage.png"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-          aria-hidden="true"
-        />
-      </div>
+    <section className="relative h-svh overflow-hidden bg-(--color-bg-base)">
       <div
         className="absolute inset-0 z-0"
         aria-hidden="true"
         style={{
           background:
-            'radial-gradient(circle at 30% 20%, rgba(159,52,155,0.25), rgba(8,0,8,0.88) 60%), linear-gradient(180deg, rgba(8,0,8,0.80) 0%, rgba(8,0,8,0.04) 55%, rgba(8,0,8,0.96) 100%)',
+            'radial-gradient(ellipse 120% 85% at 50% -20%, color-mix(in srgb, var(--color-magenta) 26%, transparent) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 20% 30%, color-mix(in srgb, var(--color-purple-mid) 24%, transparent) 0%, transparent 60%), linear-gradient(180deg, rgba(8,0,8,0.20) 0%, rgba(8,0,8,0.05) 55%, rgba(8,0,8,1) 100%)',
         }}
       />
 
-      <ParticleField count={60} className="z-1" />
+      <motion.div
+        className="absolute inset-0 z-1"
+        aria-hidden="true"
+        animate={shouldReduceMotion ? undefined : particlesMotionStyle}
+        transition={shouldReduceMotion ? undefined : { duration: 0.6, ease: SENSUAL_EASE }}
+      >
+        <ParticleField count={60} />
+      </motion.div>
 
       <motion.div
         className="absolute inset-0 z-2"
@@ -150,113 +221,122 @@ export function HeroSection() {
         transition={shouldReduceMotion ? undefined : { duration: 0.6, ease: SENSUAL_EASE }}
       />
 
-      <div key={replayKey} className="relative z-3 flex h-full items-center justify-center px-4">
+      <div className="relative z-3 flex h-full items-center justify-center px-4">
         <motion.div
           className="flex w-full max-w-3xl flex-col items-center text-center"
           animate={shouldReduceMotion ? undefined : contentMotionStyle}
           transition={shouldReduceMotion ? undefined : { duration: 0.6, ease: SENSUAL_EASE }}
         >
           <motion.div
-            className="mb-3 sm:mb-4"
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
-            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-            transition={shouldReduceMotion ? undefined : { duration: 0.6, ease: SENSUAL_EASE, delay: 0.35 }}
-          >
-            <Image
-              src="/eros-logo-ico.png"
-              alt="Eroscape"
-              width={200}
-              height={88}
-              priority
-              className="mx-auto h-auto w-[150px] sm:w-[170px] lg:w-[200px]"
-            />
-          </motion.div>
-          <motion.svg
-            width="260"
-            height="24"
-            viewBox="0 0 260 24"
-            className="mb-4 sm:mb-6"
-            aria-hidden="true"
-          >
-            <motion.path
-              d="M4 12h252"
-              stroke="rgba(232,160,64,0.9)"
-              strokeWidth="2"
-              strokeLinecap="round"
-              initial={shouldReduceMotion ? false : { pathLength: 0 }}
-              animate={shouldReduceMotion ? undefined : { pathLength: 1 }}
-              transition={shouldReduceMotion ? undefined : { duration: 1, delay: 0.2, ease: SENSUAL_EASE }}
-            />
-          </motion.svg>
-          <motion.h1
-            className="font-(--font-playfair) text-white leading-none tracking-[0.22em] sm:tracking-[0.25em]"
-            style={{ fontSize: 'clamp(38px, 7vw, 72px)' }}
-            variants={titleVariants}
+            variants={shouldReduceMotion ? undefined : containerVariants}
             initial={shouldReduceMotion ? false : 'hidden'}
             animate={shouldReduceMotion ? undefined : 'visible'}
+            className="flex flex-col items-center"
           >
-            EROSCAPE
-          </motion.h1>
-
-          <div
-            className={cn('mt-4 sm:mt-6 font-(--font-playfair) italic')}
-            style={{ color: 'var(--color-text-secondary)', fontSize: 'clamp(18px, 3.2vw, 28px)' }}
-          >
-            {shouldReduceMotion ? 'El primer Escape Room Erótico del mundo' : taglineText}
-          </div>
+            <motion.div variants={shouldReduceMotion ? undefined : itemVariants} className="mb-4 flex flex-col items-center">
+              <Image
+                src="/eros-logo-ico.png"
+                alt="Eroscape"
+                width={100}
+                height={100}
+                priority
+                className="h-28 w-28 select-none"
+              />
+              <span className=" [font-family:var(--font-playfair)] uppercase leading-none tracking-[0.12em] mt-3 text-xl sm:text-5xl">
+                Eroscape  
+              </span>
+            </motion.div>
 
           <motion.p
-            className="mt-3 sm:mt-4 font-(--font-jetbrains) text-xs sm:text-base"
-            style={{ color: 'var(--color-purple-muted)' }}
-            variants={sublineVariants}
-            initial={shouldReduceMotion ? false : 'hidden'}
-            animate={shouldReduceMotion ? undefined : 'visible'}
-            transition={shouldReduceMotion ? undefined : { ...sublineVariants.visible.transition, delay: 2.2 }}
+            variants={shouldReduceMotion ? undefined : itemVariants}
+            className="font-(--font-jetbrains) text-[10px] uppercase tracking-[0.22em] text-(--color-text-muted) sm:text-[11px]"
           >
-            +18 · Erotismo sin límites innecesarios · Tu placer, tus reglas
+            TECNOLOGÍA DEL PLACER
           </motion.p>
 
+          <motion.h1
+            variants={shouldReduceMotion ? undefined : itemVariants}
+            className="mt-4 font-bold italic leading-[1.02] tracking-[0.02em] text-(--color-text-primary) [font-family:var(--font-playfair)]"
+            style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)' }}
+          >
+            <span>{typedTitle}</span>
+            {showCursor ? (
+              <span
+                className="ml-1 inline-block text-(--color-magenta-glow)"
+                style={{ opacity: shouldReduceMotion ? 0 : undefined }}
+              >
+                |
+              </span>
+            ) : null}
+          </motion.h1>
+
+          <motion.div variants={shouldReduceMotion ? undefined : itemVariants} className="mt-6 w-full max-w-xl flex justify-center">
+            <div className="rounded-2xl w-fit border border-white/10 bg-white/4 px-5 py-4 text-left [box-shadow:var(--glow-card)]">
+              <p className="font-(--font-jetbrains) text-[11px] uppercase tracking-[0.18em] text-(--color-purple-muted)">
+                {terminalLineCount >= 1 ? '> Acceso nivel +18. Verificando...' : '\u00A0'}
+              </p>
+              <p className="mt-1 font-(--font-jetbrains) text-[11px] uppercase tracking-[0.18em] text-(--color-purple-muted)">
+                {terminalLineCount >= 2 ? '> Consentimiento: REQUERIDO' : '\u00A0'}
+              </p>
+              <p className="mt-1 font-(--font-jetbrains) text-[11px] uppercase tracking-[0.18em] text-(--color-purple-muted)">
+                {terminalLineCount >= 3 ? '> Iniciando protocolo de inmersión...' : '\u00A0'}
+              </p>
+            </div>
+          </motion.div>
+
           <motion.div
-            className="mt-7 sm:mt-10 flex w-full flex-col gap-2.5 sm:gap-3 sm:flex-row sm:justify-center"
-            variants={ctaContainerVariants}
-            initial={shouldReduceMotion ? false : 'hidden'}
-            animate={shouldReduceMotion ? undefined : 'visible'}
+            variants={shouldReduceMotion ? undefined : itemVariants}
+            className="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:flex-row sm:justify-center"
+            style={{ transitionDelay: shouldReduceMotion ? undefined : '2.5s' }}
           >
             <Link
               href="/reservar"
-              className="w-full rounded-full px-5 py-2.5 text-center text-white sm:w-auto sm:px-6 sm:py-3"
+              className={cn(
+                'w-full rounded-full px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.18em] text-white sm:w-auto',
+                'transition-[filter,transform] duration-200 hover:brightness-110 active:translate-y-px',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+              )}
               style={{ background: 'var(--gradient-cta)' }}
             >
-              <span className="font-(--font-playfair) tracking-[0.12em]">RENDIRSE AL DESEO</span>
+              <span className="font-(--font-jetbrains)">RENDIRSE AL DESEO</span>
             </Link>
-            <Link
-              href="/experiencias"
-              className="w-full rounded-full px-5 py-2.5 text-center sm:w-auto sm:px-6 sm:py-3"
-              style={{ border: '1px solid rgba(255,255,255,0.7)', color: 'white' }}
+
+            <button
+              type="button"
+              className={cn(
+                'w-full rounded-full border px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.18em] sm:w-auto',
+                'border-[color-mix(in_srgb,var(--color-magenta-dim)_70%,transparent)] text-(--color-text-secondary)',
+                'transition-[border-color,color,background-color,transform] duration-200 hover:border-(--color-magenta) hover:text-white active:translate-y-px',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+              )}
+              onClick={() => {
+                const el = document.getElementById('experiencias-destacadas')
+                el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+              }}
             >
-              <span className="font-(--font-playfair) tracking-[0.12em]">ELIGE TU NOCHE</span>
-            </Link>
+              <span className="font-(--font-jetbrains)">ELEGÍ TU NOCHE</span>
+            </button>
           </motion.div>
 
-          <motion.div
-            className="mt-10 sm:mt-14 font-(--font-jetbrains) text-xs sm:text-sm"
-            style={{ color: 'var(--color-text-muted)' }}
-            initial={shouldReduceMotion ? false : { opacity: 0 }}
-            animate={
-              shouldReduceMotion
-                ? undefined
-                : scrollCueHidden
-                  ? { opacity: 0, transition: { duration: 0.2 } }
-                  : { opacity: 1, transition: { duration: 0.3, delay: 3 } }
-            }
-          >
-            <motion.span
-              initial={shouldReduceMotion ? false : { y: 0 }}
-              animate={shouldReduceMotion ? undefined : { y: [0, 6, 0] }}
-              transition={shouldReduceMotion ? undefined : { duration: 1.2, repeat: Infinity, ease: SENSUAL_EASE }}
-            >
-              {'> déjate caer...'}
-            </motion.span>
+          <AnimatePresence>
+            {!isScrolled && showScrollCue ? (
+              <motion.div
+                variants={toastVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="mt-10 font-(--font-jetbrains) text-[10px] uppercase tracking-[0.18em] text-(--color-text-muted) sm:mt-14"
+              >
+                <motion.span
+                  initial={shouldReduceMotion ? false : { y: 0 }}
+                  animate={shouldReduceMotion ? undefined : { y: [0, 8, 0] }}
+                  transition={shouldReduceMotion ? undefined : { duration: 1.5, repeat: Infinity, ease: SENSUAL_EASE }}
+                >
+                  {'> scroll_para_continuar()'}
+                </motion.span>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
           </motion.div>
         </motion.div>
       </div>
@@ -264,14 +344,8 @@ export function HeroSection() {
       <AnimatePresence>
         {showToast ? (
           <motion.div
-            className="fixed right-4 top-20 z-70 rounded-xl px-4 py-3 text-sm"
-            style={{
-              background: 'rgba(17,0,17,0.9)',
-              border: 'var(--border-subtle)',
-              color: 'var(--color-text-primary)',
-              boxShadow: 'var(--glow-card)',
-              backdropFilter: 'blur(10px)',
-            }}
+            className="fixed right-4 top-20 z-70 rounded-xl border px-4 py-2 font-(--font-jetbrains) text-xs tracking-[0.14em]"
+            style={{ background: 'var(--color-bg-elevated)', borderColor: 'var(--color-magenta-dim)', color: 'var(--color-text-primary)' }}
             variants={toastVariants}
             initial="hidden"
             animate="visible"

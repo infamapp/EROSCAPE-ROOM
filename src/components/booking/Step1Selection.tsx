@@ -2,10 +2,17 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { CITIES, EXPERIENCES_TEMPLATE } from '@/lib/constants'
+import {
+  formatMonthTitleEsUpper,
+  getDaysInMonth,
+  getMonthStart,
+  getWeekdayIndexMon0,
+  isExperienceCalendarDayAvailable,
+} from '@/lib/experience-calendar'
 import { cn, formatCurrency } from '@/lib/utils'
 import { useBookingFlow } from '@/hooks/useBookingFlow'
 import { StepHeader } from '@/components/booking/StepHeader'
@@ -26,26 +33,6 @@ const gridFade = {
 
 const TIME_SLOTS = ['19:00', '21:00', '23:00'] as const
 
-function getMonthStart(d: Date): Date {
-  return new Date(d.getFullYear(), d.getMonth(), 1)
-}
-
-function getDaysInMonth(d: Date): number {
-  return new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate()
-}
-
-function getWeekdayIndexMon0(d: Date): number {
-  const js = d.getDay()
-  return (js + 6) % 7
-}
-
-function isAvailableDay(date: Date): boolean {
-  const day = date.getDay()
-  const weekend = day === 0 || day === 6
-  const someWeekdays = date.getDate() % 3 === 0
-  return weekend || someWeekdays
-}
-
 function isTimeSlotAvailable(dateIso: string | undefined, slot: (typeof TIME_SLOTS)[number]): boolean {
   if (!dateIso) return false
   const day = Number(dateIso.slice(-2))
@@ -56,6 +43,19 @@ function isTimeSlotAvailable(dateIso: string | undefined, slot: (typeof TIME_SLO
 
 type CitySlug = (typeof CITIES)[number]['slug']
 type ExperienceSlug = (typeof EXPERIENCES_TEMPLATE)[number]['slug']
+
+interface PrefillPayload {
+  citySlug?: unknown
+  experienceSlug?: unknown
+}
+
+function isCitySlug(value: unknown): value is CitySlug {
+  return typeof value === 'string' && CITIES.some((c) => c.slug === value)
+}
+
+function isExperienceSlug(value: unknown): value is ExperienceSlug {
+  return typeof value === 'string' && EXPERIENCES_TEMPLATE.some((e) => e.slug === value)
+}
 
 export function Step1Selection() {
   const shouldReduceMotion = useReducedMotion()
@@ -71,16 +71,34 @@ export function Step1Selection() {
 
   const cityData = useMemo(() => CITIES.find((c) => c.slug === selectedCity) ?? CITIES[0], [selectedCity])
 
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem('eroscape_booking_prefill')
+      if (!raw) return
+      const parsed: unknown = JSON.parse(raw)
+      const payload = parsed as PrefillPayload
+
+      const nextCity = isCitySlug(payload.citySlug) ? payload.citySlug : null
+      const nextExp = isExperienceSlug(payload.experienceSlug) ? payload.experienceSlug : null
+
+      if (nextCity || nextExp) {
+        updateStep1({
+          citySlug: nextCity ?? selectedCity,
+          experienceSlug: nextExp ?? selectedExp,
+        })
+      }
+      sessionStorage.removeItem('eroscape_booking_prefill')
+    } catch {
+      // ignore
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const monthDays = useMemo(() => {
     const days = getDaysInMonth(monthCursor)
     const start = getWeekdayIndexMon0(monthCursor)
     return { days, start }
   }, [monthCursor])
-
-  const selectedExpData = useMemo(
-    () => EXPERIENCES_TEMPLATE.find((e) => e.slug === selectedExp) ?? null,
-    [selectedExp],
-  )
 
   const canContinue = isStepValid(1)
 
@@ -95,7 +113,7 @@ export function Step1Selection() {
 
   const handlePickDate = (day: number) => {
     const date = new Date(monthCursor.getFullYear(), monthCursor.getMonth(), day)
-    if (!isAvailableDay(date)) return
+    if (!isExperienceCalendarDayAvailable(date)) return
     const iso = date.toISOString().slice(0, 10)
     updateStep1({ date: iso, timeSlot: undefined })
   }
@@ -114,45 +132,75 @@ export function Step1Selection() {
     <div className="mx-auto max-w-6xl px-4 pb-20 sm:px-6 sm:pb-24">
       <StepHeader actLabel="I" title="¿DÓNDE QUIERES QUE OCURRA?" />
 
-      {/* City map (same interaction as home selector) */}
-      <div className="mt-6 sm:mt-8">
-        <div className="flex w-full justify-center">
-          <CityMap
-            className="w-full"
-            cities={CITIES}
-            activeCitySlug={selectedCity}
-            onSelectCity={(slug) => handleSelectCity(slug as CitySlug)}
-          />
+      {/* Top: mapa (izq) + selector de ciudad (der) */}
+      <section className="mt-6 grid gap-5 sm:mt-8 lg:grid-cols-12 lg:gap-8">
+        <div className="lg:col-span-7">
+          <div
+            className="rounded-3xl border-(--border-subtle) bg-(--color-bg-elevated) px-3 py-4 [box-shadow:var(--glow-card)] sm:px-4 sm:py-5"
+            style={{
+              background:
+                'radial-gradient(ellipse 90% 70% at 50% 30%, color-mix(in srgb, var(--color-magenta) 10%, transparent) 0%, transparent 55%), var(--color-bg-elevated)',
+            }}
+          >
+            <div className="mx-auto w-full max-w-[520px] lg:max-w-none">
+              <CityMap
+                className="w-full"
+                cities={CITIES}
+                activeCitySlug={selectedCity}
+                onSelectCity={(slug) => handleSelectCity(slug as CitySlug)}
+              />
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* City pills */}
-      <div className="mt-6 flex gap-2.5 overflow-x-auto pb-2 sm:mt-8 sm:gap-3 md:justify-center">
-        {CITIES.map((c) => {
-          const isActive = c.slug === selectedCity
-          return (
-            <motion.button
-              key={c.slug}
-              type="button"
-              variants={pillPulse}
-              whileTap={shouldReduceMotion ? undefined : 'tap'}
-              onClick={() => handleSelectCity(c.slug)}
-              className={cn('shrink-0 rounded-full px-4 py-1.5 text-xs transition-colors sm:px-5 sm:py-2 sm:text-sm')}
-              style={{
-                background: isActive ? 'var(--gradient-cta)' : 'var(--color-bg-elevated)',
-                color: isActive ? 'white' : 'var(--color-text-muted)',
-                boxShadow: isActive ? 'var(--glow-magenta)' : 'none',
-                border: isActive ? '1px solid rgba(185,48,158,0.35)' : '1px solid rgba(255,255,255,0.06)',
-              }}
-            >
-              {c.displayName}
-            </motion.button>
-          )
-        })}
-      </div>
+        <div className="lg:col-span-5">
+          <div className="rounded-3xl border-(--border-subtle) bg-(--color-bg-elevated) p-5 [box-shadow:var(--glow-card)] sm:p-6">
+            <div className="text-center">
+              <p className="font-(--font-jetbrains) text-[10px] uppercase tracking-[0.22em] text-(--color-text-muted) sm:text-[11px]">
+                CIUDAD
+              </p>
+              <p className="mt-3 text-2xl font-bold tracking-[0.06em] text-(--color-text-primary) [font-family:var(--font-playfair)] sm:text-3xl">
+                {cityData.displayName}
+              </p>
+              <p className="mt-3 font-(--font-inter) text-sm leading-relaxed text-(--color-text-secondary)">
+                Elegí el escenario. El resto se revela cuando estés listo.
+              </p>
+            </div>
 
-      {/* Experiences */}
-      <div className="mt-8 sm:mt-10">
+            <div className="mt-5 flex gap-2.5 overflow-x-auto pb-2 sm:mt-6 sm:gap-3 lg:flex-wrap lg:justify-center">
+              {CITIES.map((c) => {
+                const isActive = c.slug === selectedCity
+                return (
+                  <motion.button
+                    key={c.slug}
+                    type="button"
+                    variants={pillPulse}
+                    whileTap={shouldReduceMotion ? undefined : 'tap'}
+                    onClick={() => handleSelectCity(c.slug)}
+                    className={cn(
+                      'shrink-0 rounded-full px-4 py-1.5 text-xs transition-colors sm:px-5 sm:py-2 sm:text-sm',
+                      'focus:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)',
+                    )}
+                    style={{
+                      background: isActive ? 'var(--gradient-cta)' : 'var(--color-bg-elevated)',
+                      color: isActive ? 'white' : 'var(--color-text-muted)',
+                      boxShadow: isActive ? 'var(--glow-magenta)' : 'none',
+                      border: isActive
+                        ? '1px solid color-mix(in srgb, var(--color-magenta) 55%, transparent)'
+                        : '1px solid rgba(255,255,255,0.06)',
+                    }}
+                  >
+                    {c.displayName}
+                  </motion.button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Abajo: cards de salas */}
+      <section className="mt-8 sm:mt-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedCity}
@@ -176,7 +224,7 @@ export function Step1Selection() {
                   key={exp.slug}
                   type="button"
                   onClick={() => handleSelectExperience(exp.slug)}
-                  className="relative text-left"
+                  className="relative text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
                 >
                   <div
                     className={cn('rounded-2xl p-4 transition-transform sm:p-5')}
@@ -187,8 +235,8 @@ export function Step1Selection() {
                     }}
                   >
                     {isSelected ? (
-                      <div className="absolute left-4 top-2">
-                        <CheckCircle2 className="h-5 w-5 text-white" aria-hidden="true" />
+                      <div className="absolute right-4 top-3">
+                        <CheckCircle2 className="h-5 w-5 text-(--color-magenta-glow)" aria-hidden="true" />
                       </div>
                     ) : null}
 
@@ -200,16 +248,19 @@ export function Step1Selection() {
                       <div
                         className="shrink-0 rounded-full px-2.5 py-1 font-(--font-jetbrains) text-[9px] tracking-[0.16em] sm:px-3 sm:text-[10px]"
                         style={{
-                          color: exp.missionLevel === 'OMEGA' ? '#FDA4AF' : 'var(--color-text-secondary)',
+                          color:
+                            exp.missionLevel === 'OMEGA'
+                              ? 'var(--color-omega-badge, var(--color-text-secondary))'
+                              : 'var(--color-text-secondary)',
                           background:
                             exp.missionLevel === 'ALPHA'
-                              ? 'rgba(6,95,70,0.35)'
+                              ? 'color-mix(in srgb, var(--color-intensity-alpha) 18%, transparent)'
                               : exp.missionLevel === 'BETA'
-                                ? 'rgba(120,53,15,0.35)'
-                                : 'rgba(159,18,57,0.35)',
+                                ? 'color-mix(in srgb, var(--color-intensity-beta) 18%, transparent)'
+                                : 'color-mix(in srgb, var(--color-intensity-omega) 18%, transparent)',
                           border:
                             exp.missionLevel === 'OMEGA'
-                              ? '1px solid rgba(244,63,94,0.45)'
+                              ? '1px solid color-mix(in srgb, var(--color-intensity-omega) 45%, transparent)'
                               : '1px solid rgba(255,255,255,0.08)',
                         }}
                       >
@@ -237,129 +288,120 @@ export function Step1Selection() {
             })}
           </motion.div>
         </AnimatePresence>
-      </div>
+      </section>
 
-      {/* Calendar */}
-      <div className="mt-10 sm:mt-12">
-        <div className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
-          ELIGE TU NOCHE
-        </div>
-
-        <div className="mt-4 rounded-2xl p-3 sm:p-4" style={{ background: 'var(--color-bg-elevated)', border: 'var(--border-subtle)' }}>
-          <div className="flex items-center justify-between">
-            <button
-              type="button"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full"
-              style={{ border: 'var(--border-subtle)' }}
-              aria-label="Mes anterior"
-              onClick={() => setMonthCursor((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1))}
-            >
-              <ChevronLeft className="h-4 w-4" style={{ color: 'var(--color-text-secondary)' }} />
-            </button>
-            <div className="font-(--font-jetbrains) text-xs tracking-[0.18em]" style={{ color: 'var(--color-text-secondary)' }}>
-              {new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(monthCursor).toUpperCase()}
-            </div>
-            <button
-              type="button"
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full"
-              style={{ border: 'var(--border-subtle)' }}
-              aria-label="Mes siguiente"
-              onClick={() => setMonthCursor((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1))}
-            >
-              <ChevronRight className="h-4 w-4" style={{ color: 'var(--color-text-secondary)' }} />
-            </button>
+      {/* Abajo: calendario y horario */}
+      <section className="mt-10 grid gap-8 sm:mt-12 lg:grid-cols-12 lg:gap-10">
+        <div className="lg:col-span-7">
+          <div className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
+            AGENDA
           </div>
 
-          <div className="mt-4 grid grid-cols-7 gap-2">
-            {Array.from({ length: monthDays.start }).map((_, i) => (
-              <div key={`sp-${i}`} />
-            ))}
-            {Array.from({ length: monthDays.days }).map((_, i) => {
-              const day = i + 1
-              const date = new Date(monthCursor.getFullYear(), monthCursor.getMonth(), day)
-              const available = isAvailableDay(date)
-              const iso = date.toISOString().slice(0, 10)
-              const isSelected = selectedDate === iso
-
-              return (
-                <button
-                  key={day}
-                  type="button"
-                  onClick={() => handlePickDate(day)}
-                  disabled={!available}
-                  className="relative flex h-9 w-9 items-center justify-center rounded-lg text-sm sm:h-10 sm:w-10"
-                  style={{
-                    color: available ? 'var(--color-text-primary)' : 'var(--color-text-muted)',
-                    border: available ? '1px solid rgba(185,48,158,0.25)' : '1px solid rgba(255,255,255,0.06)',
-                    background: isSelected
-                      ? 'var(--color-magenta)'
-                      : available
-                        ? 'rgba(185,48,158,0.08)'
-                        : 'rgba(255,255,255,0.02)',
-                    cursor: available ? 'pointer' : 'not-allowed',
-                    fontWeight: isSelected ? 700 : 400,
-                  }}
-                >
-                  {day}
-                  {available && !isSelected ? (
-                    <span className="absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full" style={{ background: 'var(--color-magenta)' }} />
-                  ) : null}
-                </button>
-              )
-            })}
-          </div>
-        </div>
-      </div>
-
-      {/* Time slots */}
-      <div className="mt-8 sm:mt-10">
-        <div className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
-          ¿A QUÉ HORA EMPIEZA TODO?
-        </div>
-
-        <div className="mt-4 grid grid-cols-3 gap-3">
-          {TIME_SLOTS.map((slot) => {
-            const available = isTimeSlotAvailable(selectedDate, slot)
-            const isSelected = selectedTime === slot
-
-            return (
+          <div
+            className="mt-4 rounded-2xl p-3 sm:p-4"
+            style={{ background: 'var(--color-bg-elevated)', border: 'var(--border-subtle)', boxShadow: 'var(--glow-card)' }}
+          >
+            <div className="flex items-center justify-between">
               <button
-                key={slot}
                 type="button"
-                disabled={!available}
-                onClick={() => handlePickTime(slot)}
-                className="rounded-full px-3 py-2.5 text-center font-(--font-jetbrains) text-[11px] tracking-[0.18em] sm:px-4 sm:py-3 sm:text-xs"
-                style={{
-                  background: isSelected ? 'var(--color-magenta)' : 'transparent',
-                  color: available ? (isSelected ? 'white' : 'var(--color-text-secondary)') : 'var(--color-text-muted)',
-                  border: isSelected ? '1px solid rgba(185,48,158,0.85)' : '1px solid rgba(185,48,158,0.35)',
-                  textDecoration: available ? 'none' : 'line-through',
-                  cursor: available ? 'pointer' : 'not-allowed',
-                }}
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full"
+                style={{ border: 'var(--border-subtle)' }}
+                aria-label="Mes anterior"
+                onClick={() => setMonthCursor((d) => new Date(d.getFullYear(), d.getMonth() - 1, 1))}
               >
-                {slot}
+                <ChevronLeft className="h-4 w-4" style={{ color: 'var(--color-text-secondary)' }} />
               </button>
-            )
-          })}
+              <div className="font-(--font-jetbrains) text-xs tracking-[0.18em]" style={{ color: 'var(--color-text-secondary)' }}>
+                {formatMonthTitleEsUpper(monthCursor)}
+              </div>
+              <button
+                type="button"
+                className="inline-flex h-9 w-9 items-center justify-center rounded-full"
+                style={{ border: 'var(--border-subtle)' }}
+                aria-label="Mes siguiente"
+                onClick={() => setMonthCursor((d) => new Date(d.getFullYear(), d.getMonth() + 1, 1))}
+              >
+                <ChevronRight className="h-4 w-4" style={{ color: 'var(--color-text-secondary)' }} />
+              </button>
+            </div>
+
+            <div className="mt-4 grid grid-cols-7 gap-2">
+              {Array.from({ length: monthDays.start }).map((_, i) => (
+                <div key={`sp-${i}`} />
+              ))}
+              {Array.from({ length: monthDays.days }).map((_, i) => {
+                const day = i + 1
+                const date = new Date(monthCursor.getFullYear(), monthCursor.getMonth(), day)
+                const available = isExperienceCalendarDayAvailable(date)
+                const iso = date.toISOString().slice(0, 10)
+                const isSelected = selectedDate === iso
+
+                return (
+                  <button
+                    key={day}
+                    type="button"
+                    onClick={() => handlePickDate(day)}
+                    disabled={!available}
+                    className="relative flex h-9 w-9 items-center justify-center rounded-full text-sm sm:h-10 sm:w-10"
+                    style={{
+                      color: available ? 'var(--color-text-primary)' : 'var(--color-text-muted)',
+                      border: available ? '1px solid rgba(185,48,158,0.25)' : '1px solid rgba(255,255,255,0.06)',
+                      background: isSelected ? 'var(--gradient-cta)' : 'transparent',
+                      cursor: available ? 'pointer' : 'not-allowed',
+                      fontWeight: isSelected ? 700 : 400,
+                    }}
+                  >
+                    {day}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
         </div>
-      </div>
+
+        <div className="lg:col-span-5">
+          <div className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-text-muted)' }}>
+            ¿A QUÉ HORA EMPIEZA TODO?
+          </div>
+
+          <div className="mt-4 rounded-2xl p-4" style={{ background: 'var(--color-bg-elevated)', border: 'var(--border-subtle)', boxShadow: 'var(--glow-card)' }}>
+            <div className="grid grid-cols-3 gap-3">
+              {TIME_SLOTS.map((slot) => {
+                const available = isTimeSlotAvailable(selectedDate, slot)
+                const isSelected = selectedTime === slot
+
+                return (
+                  <button
+                    key={slot}
+                    type="button"
+                    disabled={!available}
+                    onClick={() => handlePickTime(slot)}
+                    className="rounded-full px-3 py-2.5 text-center font-(--font-jetbrains) text-[11px] tracking-[0.18em] sm:px-4 sm:py-3 sm:text-xs"
+                    style={{
+                      background: isSelected ? 'var(--color-magenta)' : 'transparent',
+                      color: available ? (isSelected ? 'white' : 'var(--color-text-secondary)') : 'var(--color-text-muted)',
+                      border: isSelected ? '1px solid rgba(185,48,158,0.85)' : '1px solid rgba(185,48,158,0.35)',
+                      cursor: available ? 'pointer' : 'not-allowed',
+                      opacity: available ? 1 : 0.5,
+                    }}
+                  >
+                    {available ? slot : 'COMPLETO'}
+                  </button>
+                )
+              })}
+            </div>
+            <p className="mt-4 text-center font-(--font-inter) text-xs text-(--color-text-muted)">
+              Elegí fecha y horario para sellar el inicio.
+            </p>
+          </div>
+        </div>
+      </section>
 
       <BookingBottomBar
-        summaryTitle="SELECCIÓN ACTIVA"
-        summary={
-          <>
-            {cityData.displayName}
-            {' · '}
-            {selectedExpData?.title ?? '—'}
-            {' · '}
-            {selectedDate ?? '—'}
-            {' · '}
-            {selectedTime ?? '—'}
-          </>
-        }
-        onPrimary={handleNext}
-        primaryLabel="ASÍ LO QUIERO →"
-        isPrimaryDisabled={!canContinue}
+        currentStep={1}
+        isValid={canContinue}
+        onBack={() => router.push('/')}
+        onNext={handleNext}
       />
     </div>
   )

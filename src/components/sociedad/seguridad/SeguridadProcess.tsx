@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import { Drama, Handshake, MessageCircle, Moon, type LucideIcon } from 'lucide-react'
+import { Eye, Heart, MessageSquare, Shield, type LucideIcon } from 'lucide-react'
 
 import { SEGURIDAD_PROCESS_STEPS, type SeguridadProcessStepId } from '@/lib/la-sociedad-seguridad'
 
@@ -10,13 +10,13 @@ const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 function stepIcon(id: SeguridadProcessStepId): LucideIcon {
   switch (id) {
     case 'consulta':
-      return MessageCircle
+      return MessageSquare
     case 'briefing':
-      return Handshake
+      return Shield
     case 'durante':
-      return Drama
+      return Eye
     case 'aftercare':
-      return Moon
+      return Heart
   }
 }
 

@@ -50,10 +50,11 @@ function PactSignatureBlock({ onSignedChange }: PactSignatureBlockProps) {
 
       const c = canvasRef.current
       const ratio = Math.max(typeof window !== 'undefined' ? window.devicePixelRatio : 1, 1)
-      const w = 300
-      const h = 120
-      c.width = w * ratio
-      c.height = h * ratio
+      const containerWidth = c.parentElement?.clientWidth ?? 320
+      const w = Math.max(260, Math.min(640, containerWidth))
+      const h = 140
+      c.width = Math.floor(w * ratio)
+      c.height = Math.floor(h * ratio)
       c.style.width = `${w}px`
       c.style.height = `${h}px`
       const ctx = c.getContext('2d')
@@ -112,14 +113,14 @@ function PactSignatureBlock({ onSignedChange }: PactSignatureBlockProps) {
         <button
           type="button"
           onClick={handleClear}
-          className="font-(--font-inter) text-xs underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-subtle)"
+          className="font-(--font-jetbrains) text-[10px] tracking-[0.18em] underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-subtle)"
           style={{ color: 'var(--color-text-muted)' }}
         >
-          Limpiar
+          BORRAR
         </button>
       </div>
-      <div className="relative mx-auto" style={{ width: 300, height: 120 }}>
-        <canvas ref={canvasRef} className="touch-none rounded-md border border-[rgba(185,48,158,0.15)] bg-(--color-bg-base)" />
+      <div className="relative mx-auto w-full" style={{ height: 140 }}>
+        <canvas ref={canvasRef} className="touch-none h-full w-full rounded-md border border-[rgba(185,48,158,0.15)] bg-(--color-bg-base)" />
         <AnimatePresence>
           {placeholderVisible ? (
             <motion.p
@@ -129,13 +130,13 @@ function PactSignatureBlock({ onSignedChange }: PactSignatureBlockProps) {
               className="pointer-events-none absolute inset-0 flex items-center justify-center px-4 text-center font-(--font-inter) text-sm"
               style={{ color: 'var(--color-text-muted)' }}
             >
-              Dibuja tu firma en el recuadro
+              Firma aquí
             </motion.p>
           ) : null}
         </AnimatePresence>
       </div>
       <p className="mt-3 text-center font-(--font-inter) text-xs italic" style={{ color: 'var(--color-text-muted)' }}>
-        Firma digital vinculante disponible en producción.
+        Firma digital completa en producción — para la demo, el checkbox es suficiente.
       </p>
     </div>
   )
@@ -194,14 +195,6 @@ export function Step4Legal() {
   const [chipFlash, setChipFlash] = useState<string | null>(null)
   const [buttonPhase, setButtonPhase] = useState<'idle' | 'pressed' | 'seal' | 'done'>('idle')
 
-  useEffect(() => {
-    if (state.step4.consent?.hasReadDocument) {
-      const t = window.setTimeout(() => setHasReadDocument(true), 0)
-      return () => window.clearTimeout(t)
-    }
-    return undefined
-  }, [state.step4.consent?.hasReadDocument])
-
   const handleScroll = useCallback(() => {
     const el = scrollRef.current
     if (!el) return
@@ -211,14 +204,7 @@ export function Step4Legal() {
     if (p >= 0.95) setHasReadDocument(true)
   }, [])
 
-  useEffect(() => {
-    const el = scrollRef.current
-    if (!el) return undefined
-    const t = window.requestAnimationFrame(() => handleScroll())
-    return () => window.cancelAnimationFrame(t)
-  }, [handleScroll])
-
-  const canSeal = hasReadDocument && safeWord.trim().length >= 3 && ageConfirmed && isSigned
+  const canSeal = hasReadDocument && safeWord.trim().length >= 2 && ageConfirmed && isSigned
 
   const handleChip = (word: string) => {
     setSafeWord(word)
@@ -355,10 +341,10 @@ export function Step4Legal() {
 
       <div className="mt-8 border-t pt-6 sm:mt-10 sm:pt-8" style={{ borderColor: 'var(--color-gold)' }}>
         <h3 className="font-(--font-playfair) text-lg italic sm:text-xl" style={{ color: 'var(--color-gold)' }}>
-          TU PALABRA MÁGICA
+          La Palabra que Para el Tiempo
         </h3>
         <p className="mt-2.5 font-(--font-inter) text-[13px] sm:mt-3 sm:text-sm" style={{ color: 'var(--color-text-muted)' }}>
-          Una sola palabra lo detiene todo. Inmediatamente. Sin preguntas. Sin consecuencias. Solo tú tienes ese poder.
+          Esta palabra detiene todo. Inmediatamente. Sin preguntas.
         </p>
 
         <input
@@ -367,7 +353,7 @@ export function Step4Legal() {
           onChange={(e) => setSafeWord(e.target.value)}
           placeholder="Elige tu palabra..."
           autoComplete="off"
-          className="mt-4 w-full rounded-xl border border-[rgba(185,48,158,0.25)] bg-(--color-bg-elevated) px-4 py-2.5 font-(--font-inter) text-[13px] text-(--color-text-primary) placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:py-3 sm:text-sm"
+          className="mt-4 w-full border-b border-(--border-subtle) bg-transparent px-0 py-2.5 text-lg italic text-(--color-text-primary) placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) [font-family:var(--font-playfair)]"
         />
 
         <motion.div
@@ -382,11 +368,8 @@ export function Step4Legal() {
               type="button"
               variants={chipItemVariants}
               onClick={() => handleChip(w)}
-              className="rounded-full border px-3 py-1.5 font-(--font-inter) text-[11px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:text-xs"
+              className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm backdrop-blur-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
               style={{
-                border: 'var(--border-subtle)',
-                background: 'rgba(185,48,158,0.1)',
-                backdropFilter: 'blur(8px)',
                 color: 'var(--color-text-secondary)',
               }}
               animate={chipFlash === w && !shouldReduceMotion ? { scale: [1, 1.1, 1] } : { scale: 1 }}
@@ -515,12 +498,10 @@ export function Step4Legal() {
       <div className="h-28" aria-hidden="true" />
 
       <BookingBottomBar
-        summaryTitle="EL JURAMENTO"
-        summary="Todo listo para sellarlo."
+        currentStep={4}
+        isValid={canSeal && buttonPhase === 'idle'}
         onBack={() => router.push('/reservar?step=3')}
-        onPrimary={handleSealPact}
-        primaryLabel="FIRMAR EL JURAMENTO"
-        isPrimaryDisabled={!canSeal || buttonPhase !== 'idle'}
+        onNext={handleSealPact}
       />
     </div>
   )

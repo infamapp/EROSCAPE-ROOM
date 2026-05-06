@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { CheckCircle, Lock } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 
-import { GameMasterChat } from '@/components/dashboard/GameMasterChat'
+import { GameMasterChat } from '@/components/ui/GameMasterChat'
 import { AGENT_QUESTIONS } from '@/lib/agent-questionnaire'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
@@ -123,8 +123,14 @@ export function AgentProfileTab({ bookingId }: AgentProfileTabProps) {
   return (
     <div className="space-y-10">
       <header>
-        <h2 className="font-[var(--font-playfair)] text-2xl text-white">CUÉNTANOS MÁS</h2>
-        <p className="mt-2 font-[var(--font-inter)] text-sm" style={{ color: 'var(--color-text-muted)' }}>
+        <p
+          className="[font-family:var(--font-jetbrains)] text-[10px] tracking-[0.25em]"
+          style={{ color: 'var(--color-magenta)' }}
+        >
+          PROGRESO
+        </p>
+        <h2 className="mt-2 [font-family:var(--font-playfair)] text-2xl text-white">TUS DESEOS DEFINIDOS</h2>
+        <p className="mt-2 [font-family:var(--font-inter)] text-sm" style={{ color: 'var(--color-text-muted)' }}>
           Completa estas confesiones para que El Maestro ajuste cada detalle a ti.
         </p>
       </header>
@@ -132,7 +138,14 @@ export function AgentProfileTab({ bookingId }: AgentProfileTabProps) {
       <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:gap-8">
         <div className="relative h-32 w-32 shrink-0">
           <svg width="128" height="128" viewBox="0 0 120 120" className="-rotate-90" aria-hidden="true">
-            <circle cx="60" cy="60" r={R} fill="none" stroke="rgba(185,48,158,0.15)" strokeWidth="10" />
+            <circle
+              cx="60"
+              cy="60"
+              r={R}
+              fill="none"
+              stroke="color-mix(in srgb, var(--color-magenta) 15%, transparent)"
+              strokeWidth="10"
+            />
             <circle
               cx="60"
               cy="60"
@@ -146,15 +159,33 @@ export function AgentProfileTab({ bookingId }: AgentProfileTabProps) {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="font-[var(--font-jetbrains)] text-lg text-white">{answeredCount}</span>
-            <span className="font-[var(--font-jetbrains)] text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
+            <span className="[font-family:var(--font-jetbrains)] text-lg text-white">{answeredCount}</span>
+            <span
+              className="[font-family:var(--font-jetbrains)] text-[10px]"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
               /{TOTAL}
             </span>
           </div>
         </div>
-        <p className="text-center font-[var(--font-jetbrains)] text-sm sm:text-left" style={{ color: 'var(--color-text-secondary)' }}>
-          [{answeredCount}/{TOTAL} confesiones completas]
-        </p>
+        <div className="space-y-3 text-center sm:text-left">
+          <p
+            className="[font-family:var(--font-jetbrains)] text-sm"
+            style={{ color: 'var(--color-text-secondary)' }}
+          >
+            [{answeredCount}/{TOTAL} confesiones completas]
+          </p>
+          {answeredCount === 0 ? (
+            <button
+              type="button"
+              onClick={scrollToQuestionnaire}
+              className="rounded-full px-5 py-2.5 [font-family:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.2em] text-white transition-[filter,transform] duration-200 hover:brightness-110 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+              style={{ background: 'var(--gradient-cta)' }}
+            >
+              Completar mis deseos
+            </button>
+          ) : null}
+        </div>
       </div>
 
       <ul className="grid gap-2 sm:grid-cols-2" aria-label="Estado del cuestionario">
@@ -165,8 +196,8 @@ export function AgentProfileTab({ bookingId }: AgentProfileTabProps) {
               key={q}
               className="flex items-start gap-2 rounded-lg border px-3 py-2 text-left"
               style={{
-                borderColor: i === index ? 'var(--color-magenta)' : 'rgba(185,48,158,0.15)',
-                background: i === index ? 'rgba(185,48,158,0.08)' : 'var(--color-bg-elevated)',
+                borderColor: i === index ? 'var(--color-magenta)' : 'color-mix(in srgb, var(--color-magenta) 15%, transparent)',
+                background: i === index ? 'color-mix(in srgb, var(--color-magenta) 8%, transparent)' : 'var(--color-bg-elevated)',
               }}
             >
               {done ? (
@@ -174,7 +205,10 @@ export function AgentProfileTab({ bookingId }: AgentProfileTabProps) {
               ) : (
                 <Lock className="mt-0.5 h-4 w-4 shrink-0" style={{ color: 'var(--color-text-muted)' }} aria-hidden="true" />
               )}
-              <span className="font-[var(--font-inter)] text-xs leading-snug" style={{ color: done ? 'var(--color-text-secondary)' : 'var(--color-text-muted)' }}>
+              <span
+                className="[font-family:var(--font-inter)] text-xs leading-snug"
+                style={{ color: done ? 'var(--color-text-secondary)' : 'var(--color-text-muted)' }}
+              >
                 {q}
               </span>
             </li>
@@ -185,16 +219,30 @@ export function AgentProfileTab({ bookingId }: AgentProfileTabProps) {
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         <GameMasterChat onStartQuestionnaire={scrollToQuestionnaire} />
 
-        <div id="agent-profile-questionnaire" className="rounded-2xl border p-5" style={{ borderColor: 'rgba(185,48,158,0.2)', background: 'var(--color-bg-elevated)', boxShadow: 'var(--glow-card)' }}>
-          <p className="font-[var(--font-jetbrains)] text-[10px] tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
+        <div
+          id="agent-profile-questionnaire"
+          className="rounded-2xl p-5"
+          style={{
+            border: 'var(--border-subtle)',
+            background: 'var(--color-bg-elevated)',
+            boxShadow: 'var(--glow-card)',
+          }}
+        >
+          <p
+            className="[font-family:var(--font-jetbrains)] text-[10px] tracking-widest"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
             PREGUNTA {index + 1} / {TOTAL}
           </p>
-          <p className="mt-3 font-[var(--font-inter)] text-sm leading-relaxed text-white">{AGENT_QUESTIONS[index]}</p>
+          <p className="mt-3 [font-family:var(--font-inter)] text-sm leading-relaxed text-white">
+            {AGENT_QUESTIONS[index]}
+          </p>
           <textarea
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             rows={4}
-            className="mt-4 w-full resize-none rounded-xl border border-[rgba(185,48,158,0.25)] bg-[var(--color-bg-base)] px-3 py-2 font-[var(--font-inter)] text-sm text-white placeholder:text-[var(--color-text-muted)] focus-visible:border-[var(--color-magenta)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-magenta)]"
+            className="mt-4 w-full resize-none rounded-xl border bg-(--color-bg-base) px-3 py-2 [font-family:var(--font-inter)] text-sm text-white placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta)"
+            style={{ borderColor: 'color-mix(in srgb, var(--color-magenta) 25%, transparent)' }}
             placeholder="Escribe tu respuesta..."
           />
           <div className="mt-4 flex flex-wrap gap-2">
@@ -203,8 +251,11 @@ export function AgentProfileTab({ bookingId }: AgentProfileTabProps) {
                 key={opt}
                 type="button"
                 onClick={() => setDraft(opt)}
-                className="rounded-full border px-3 py-1.5 font-[var(--font-inter)] text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-magenta)]"
-                style={{ borderColor: 'rgba(185,48,158,0.25)', color: 'var(--color-text-secondary)' }}
+                className="rounded-full border px-3 py-1.5 [font-family:var(--font-inter)] text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta)"
+                style={{
+                  borderColor: 'color-mix(in srgb, var(--color-magenta) 25%, transparent)',
+                  color: 'var(--color-text-secondary)',
+                }}
               >
                 {opt}
               </button>
@@ -214,7 +265,7 @@ export function AgentProfileTab({ bookingId }: AgentProfileTabProps) {
             type="button"
             onClick={handleNext}
             disabled={!draft.trim()}
-            className="mt-4 w-full rounded-full py-3 font-[var(--font-jetbrains)] text-xs tracking-wide text-white disabled:opacity-40"
+            className="mt-4 w-full rounded-full py-3 [font-family:var(--font-jetbrains)] text-xs tracking-wide text-white disabled:opacity-40"
             style={{ background: 'var(--gradient-cta)' }}
           >
             {index < TOTAL - 1 ? 'SEGUIR CONTANDO →' : 'GUARDAR ÚLTIMA CONFESIÓN'}
@@ -227,10 +278,11 @@ export function AgentProfileTab({ bookingId }: AgentProfileTabProps) {
                 animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
                 exit={shouldReduceMotion ? undefined : { opacity: 0, y: 8 }}
                 transition={{ duration: 0.3, ease: SENSUAL_EASE }}
-                className="mt-6 border-t border-[rgba(185,48,158,0.15)] pt-6"
+                className="mt-6 border-t pt-6"
+                style={{ borderColor: 'color-mix(in srgb, var(--color-magenta) 15%, transparent)' }}
               >
                 {submitted ? (
-                  <p className="font-[var(--font-inter)] text-sm" style={{ color: 'var(--color-gm-terminal)' }}>
+                  <p className="[font-family:var(--font-inter)] text-sm" style={{ color: 'var(--color-gm-terminal)' }}>
                     Tus deseos ya están con El Maestro.
                   </p>
                 ) : (
@@ -240,7 +292,7 @@ export function AgentProfileTab({ bookingId }: AgentProfileTabProps) {
                       type="button"
                       onClick={() => void handleSubmitGm()}
                       disabled={submitting}
-                      className="w-full rounded-full py-3 font-[var(--font-jetbrains)] text-xs tracking-wide text-white disabled:opacity-50"
+                      className="w-full rounded-full py-3 [font-family:var(--font-jetbrains)] text-xs tracking-wide text-white disabled:opacity-50"
                       style={{ background: 'var(--gradient-hero)' }}
                     >
                       {submitting ? 'ENVIANDO…' : 'ENVIAR MIS DESEOS AL MAESTRO'}

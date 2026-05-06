@@ -13,12 +13,11 @@ export function AppMovilPreviewStrip() {
             <article
               key={frame.id}
               className={cn(
-                'group relative w-[min(100%,280px)] overflow-hidden rounded-[2.25rem] border bg-[var(--color-bg-base)] shadow-xl transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] md:hover:-translate-y-3',
-                isCenter ? 'z-20 border-[6px] md:w-[min(100%,320px)] md:-translate-y-4' : 'z-10 border-[4px]',
+                'group relative w-[min(100%,280px)] overflow-hidden rounded-4xl border border-white/10 bg-(--color-bg-elevated) shadow-xl transition-transform duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] md:hover:-translate-y-3',
+                isCenter ? 'z-20 border-[6px] md:w-[min(100%,320px)] md:-translate-y-4' : 'z-10 border-4',
               )}
-              style={{ borderColor: 'color-mix(in srgb, var(--color-purple-mid) 55%, var(--color-bg-base))' }}
             >
-              <div className="relative aspect-[9/19] w-full">
+              <div className="relative aspect-9/19 w-full">
                 <Image
                   src={frame.imageSrc}
                   alt={frame.imageAlt}
@@ -28,7 +27,7 @@ export function AppMovilPreviewStrip() {
                 />
                 <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-black via-black/20 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-                  <p className="font-(--font-jetbrains) text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-magenta-glow)]">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-(--color-magenta-glow) [font-family:var(--font-jetbrains)]">
                     {frame.label}
                   </p>
                   <p
