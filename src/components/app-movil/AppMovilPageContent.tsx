@@ -1,3 +1,5 @@
+'use client'
+
 import { AppMovilArchitectureSection } from '@/components/app-movil/AppMovilArchitectureSection'
 import { AppMovilErosenseSection } from '@/components/app-movil/AppMovilErosenseSection'
 import { AppMovilLandingHero } from '@/components/app-movil/AppMovilLandingHero'

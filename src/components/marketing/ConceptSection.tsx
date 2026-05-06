@@ -2,9 +2,7 @@
 
 import { motion, useReducedMotion } from 'framer-motion'
 import type { LucideIcon } from 'lucide-react'
-import { Gem, Info, Lock, Shield, Shirt } from 'lucide-react'
-
-import { cn } from '@/lib/utils'
+import { BookOpen, Brain, EyeOff, Flame, Shield } from 'lucide-react'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
@@ -18,176 +16,199 @@ const headerVariants = {
 }
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (index: number) => ({
+  hidden: { opacity: 0, y: 40, rotate: 0 },
+  visible: (rotation: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.45, ease: SENSUAL_EASE, delay: index * 0.08 },
+    rotate: rotation * 0.5,
+    transition: { duration: 0.5, ease: SENSUAL_EASE },
   }),
 }
 
-type ValueIconId = 'shieldInfo' | 'lock' | 'gem' | 'shirt' | 'shield'
+const gridVariants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.1 } },
+}
 
-type ValueItem = {
-  id: string
-  iconId: ValueIconId
+interface DossierCardProps {
+  archiveNumber: string
+  icon: LucideIcon
   title: string
   description: string
-}
-
-const VALUE_ITEMS: readonly ValueItem[] = [
-  {
-    id: 'anonimato',
-    iconId: 'shieldInfo',
-    title: 'Anonimato Total',
-    description:
-      'Protocolos de entrada y salida diseñados para que nunca te cruces con otros huéspedes.',
-  },
-  {
-    id: 'sin-juicios',
-    iconId: 'lock',
-    title: 'Sin Juicios',
-    description: 'Un espacio seguro para explorar cada una de tus fantasías bajo tus propios términos.',
-  },
-  {
-    id: 'lujo-sensorial',
-    iconId: 'gem',
-    title: 'Lujo Sensorial',
-    description: 'Sábanas de 1000 hilos, aromas curados y tecnología de vanguardia en cada habitación.',
-  },
-  {
-    id: 'diseno-narrativo',
-    iconId: 'shirt',
-    title: 'Diseño Narrativo',
-    description: 'No es solo una habitación, es una historia donde tú eres el protagonista absoluto.',
-  },
-  {
-    id: 'seguridad',
-    iconId: 'shield',
-    title: 'Seguridad 360º',
-    description: 'Botones de pánico discretos y personal formado en consentimiento y mediación.',
-  },
-] as const
-
-const ICON_MAP: Record<Exclude<ValueIconId, 'shieldInfo'>, LucideIcon> = {
-  lock: Lock,
-  gem: Gem,
-  shirt: Shirt,
-  shield: Shield,
-}
-
-function ShieldWithInfoIcon() {
-  return (
-    <span className="relative inline-flex size-7 shrink-0 sm:size-8" aria-hidden="true">
-      <Shield className="size-full stroke-[1.25]" style={{ color: 'var(--color-gold-light)' }} />
-      <Info
-        className="pointer-events-none absolute left-1/2 top-[52%] size-3.5 -translate-x-1/2 -translate-y-1/2 sm:size-4"
-        strokeWidth={2.25}
-        style={{ color: 'var(--color-gold-light)' }}
-      />
-    </span>
-  )
-}
-
-interface ConceptValueCardProps {
-  item: ValueItem
-  index: number
+  initialRotation: number
   shouldAnimate: boolean
 }
 
-function ConceptLucideGlyph({ iconId }: { iconId: Exclude<ValueIconId, 'shieldInfo'> }) {
-  const Cmp = ICON_MAP[iconId]
-  return (
-    <Cmp
-      className="size-7 shrink-0 sm:size-8"
-      strokeWidth={1.25}
-      style={{ color: 'var(--color-gold-light)' }}
-      aria-hidden="true"
-    />
-  )
-}
-
-function ConceptValueCard({ item, index, shouldAnimate }: ConceptValueCardProps) {
-  const reduceMotion = useReducedMotion()
-
+function DossierCard({ archiveNumber, icon: Icon, title, description, initialRotation, shouldAnimate }: DossierCardProps) {
   return (
     <motion.article
-      custom={index}
+      custom={initialRotation}
       variants={shouldAnimate ? cardVariants : undefined}
-      initial={shouldAnimate ? 'hidden' : false}
+      initial={shouldAnimate ? { opacity: 0, rotate: initialRotation, y: 40 } : false}
       whileInView={shouldAnimate ? 'visible' : undefined}
-      viewport={{ once: true, margin: '-12% 0px' }}
-      className={cn(
-        'flex h-full flex-col rounded-xl  p-5 sm:p-6 lg:p-7',
-        'bg-(--color-bg-elevated) [box-shadow:var(--glow-card)]',
-        'transition-[box-shadow,transform,border-color] duration-300',
-        !reduceMotion && 'hover:-translate-y-0.5',
-        'hover:border-(--color-magenta)/35 hover:[box-shadow:var(--glow-magenta)]',
-      )}
+      viewport={{ once: true, margin: '-20%' }}
+      className="group relative h-full rounded-2xl border p-6 [box-shadow:var(--glow-card)]"
+      style={{ background: 'var(--color-bg-elevated)', borderColor: 'rgba(185,48,158,0.10)' }}
+      aria-label={`${archiveNumber} ${title}`}
     >
-      {item.iconId === 'shieldInfo' ? (
-        <ShieldWithInfoIcon />
-      ) : (
-        <ConceptLucideGlyph iconId={item.iconId} />
-      )}
-      <h3 className="mt-4 font-(--font-cormorant) text-xl font-medium leading-snug text-white sm:text-2xl">
-        {item.title}
-      </h3>
-      <p className="mt-3 font-(--font-inter) text-sm leading-relaxed text-(--color-text-muted) sm:text-[15px]">
-        {item.description}
+      <p className="font-(--font-jetbrains) text-[9px] uppercase tracking-[0.2em] text-(--color-text-muted)">
+        {archiveNumber}
       </p>
+
+      <Icon className="mt-4 size-6 text-(--color-magenta)" strokeWidth={1.5} aria-hidden="true" />
+
+      <h3 className="mt-3 [font-family:var(--font-playfair)] text-lg font-bold text-(--color-text-primary)">
+        {title}
+      </h3>
+
+      <p className="mt-3 font-(--font-inter) text-sm leading-relaxed text-(--color-text-secondary)">
+        {description}
+      </p>
+
+      <div
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+        aria-hidden="true"
+        style={{ border: '1px solid rgba(185,48,158,0.40)' }}
+      />
     </motion.article>
   )
 }
+
+const DOSSIERS = [
+  {
+    archiveNumber: 'ARCH-001',
+    icon: BookOpen,
+    title: 'Todo tiene una historia',
+    description: 'Cada sala es un universo narrativo construido a medida. No improvisamos — orquestamos.',
+    initialRotation: -1.2,
+  },
+  {
+    archiveNumber: 'ARCH-002',
+    icon: Flame,
+    title: 'Sin necesidad de ser explícito',
+    description: 'El erotismo más poderoso vive en la insinuación. La tensión es el juego.',
+    initialRotation: 1.4,
+  },
+  {
+    archiveNumber: 'ARCH-003',
+    icon: Brain,
+    title: 'El Maestro te conoce',
+    description: 'Nuestra IA procesa tus preferencias antes de que entres. La experiencia ya está calibrada para ti.',
+    initialRotation: -0.9,
+  },
+  {
+    archiveNumber: 'ARCH-004',
+    icon: Shield,
+    title: 'Tú tienes el control, siempre',
+    description: 'Una palabra detiene todo. Sin preguntas. Sin juicios. El control es tuyo, siempre.',
+    initialRotation: 0.8,
+  },
+  {
+    archiveNumber: 'ARCH-005',
+    icon: EyeOff,
+    title: 'Lo que pasa aquí, se queda aquí',
+    description: 'Sin grabaciones. Sin historial. Sin datos innecesarios. La discreción es parte del ritual.',
+    initialRotation: -1.5,
+  },
+] as const
 
 export function ConceptSection() {
   const shouldReduceMotion = useReducedMotion()
   const shouldAnimate = !shouldReduceMotion
 
   return (
-    <section
-      id="concepto"
-      className="relative w-full py-16 sm:py-24 lg:py-28"
-      style={{ background: 'var(--color-bg-base)' }}
-    >
+    <section id="concepto" className="relative w-full py-16 sm:py-24 lg:py-28" style={{ background: 'var(--color-bg-base)' }}>
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <motion.header
           variants={shouldAnimate ? headerVariants : undefined}
           initial={shouldAnimate ? 'hidden' : false}
           whileInView={shouldAnimate ? 'visible' : undefined}
-          viewport={{ once: true, margin: '-15% 0px' }}
+          viewport={{ once: true, margin: '-20%' }}
           className="mx-auto max-w-3xl text-center"
         >
-          <h2
-            className="font-(--font-cormorant) font-medium leading-tight tracking-[0.02em] text-white"
-            style={{ fontSize: 'clamp(1.75rem, 4.2vw, 2.75rem)' }}
-          >
-            Lo que nadie más te dice
+          <p className="font-(--font-jetbrains) text-[10px] uppercase tracking-[0.22em] text-(--color-text-muted) sm:text-[11px]">
+            LO QUE NADIE MÁS TE DICE
+          </p>
+          <h2 className="mt-4 font-(--font-cormorant) text-3xl italic text-(--color-text-primary) sm:text-4xl">
+            Cinco verdades sobre esta noche
           </h2>
-          <div
-            className="mx-auto mt-5 h-1 w-14 rounded-full sm:mt-6 sm:w-16"
-            style={{
-              background: 'var(--color-magenta)',
-              boxShadow: 'var(--glow-magenta)',
-            }}
-            aria-hidden="true"
-          />
+          <p className="mx-auto mt-4 max-w-2xl font-(--font-inter) text-sm leading-relaxed text-(--color-text-secondary) sm:text-base">
+            No hay que demostrar nada. Solo elegir el ritmo, el tono y el cuidado. Aquí, la tensión se diseña; la privacidad se protege.
+          </p>
         </motion.header>
 
-        <div className="mt-12 grid gap-5 sm:mt-16 sm:gap-6 md:grid-cols-6 lg:mt-20 lg:gap-8">
-          {VALUE_ITEMS.slice(0, 3).map((item, idx) => (
-            <div key={item.id} className="md:col-span-2">
-              <ConceptValueCard item={item} index={idx} shouldAnimate={shouldAnimate} />
-            </div>
-          ))}
+        <motion.div
+          variants={shouldAnimate ? gridVariants : undefined}
+          initial={shouldAnimate ? 'hidden' : false}
+          whileInView={shouldAnimate ? 'visible' : undefined}
+          viewport={{ once: true, margin: '-20%' }}
+          className="mt-12 grid gap-5 sm:mt-16 sm:gap-6 md:grid-cols-6 lg:mt-20 lg:gap-8"
+        >
+          {/* Pirámide invertida (desktop): 2 arriba centradas, 3 abajo */}
+          <div className="md:col-span-2 md:col-start-2">
+            <DossierCard
+              archiveNumber={DOSSIERS[0].archiveNumber}
+              icon={DOSSIERS[0].icon}
+              title={DOSSIERS[0].title}
+              description={DOSSIERS[0].description}
+              initialRotation={DOSSIERS[0].initialRotation}
+              shouldAnimate={shouldAnimate}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <DossierCard
+              archiveNumber={DOSSIERS[1].archiveNumber}
+              icon={DOSSIERS[1].icon}
+              title={DOSSIERS[1].title}
+              description={DOSSIERS[1].description}
+              initialRotation={DOSSIERS[1].initialRotation}
+              shouldAnimate={shouldAnimate}
+            />
+          </div>
 
-          <div className="hidden md:block md:col-span-1" aria-hidden="true" />
-          {VALUE_ITEMS.slice(3, 5).map((item, i) => (
-            <div key={item.id} className="md:col-span-2">
-              <ConceptValueCard item={item} index={i + 3} shouldAnimate={shouldAnimate} />
-            </div>
-          ))}
-          <div className="hidden md:block md:col-span-1" aria-hidden="true" />
+          <div className="md:col-span-2">
+            <DossierCard
+              archiveNumber={DOSSIERS[2].archiveNumber}
+              icon={DOSSIERS[2].icon}
+              title={DOSSIERS[2].title}
+              description={DOSSIERS[2].description}
+              initialRotation={DOSSIERS[2].initialRotation}
+              shouldAnimate={shouldAnimate}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <DossierCard
+              archiveNumber={DOSSIERS[3].archiveNumber}
+              icon={DOSSIERS[3].icon}
+              title={DOSSIERS[3].title}
+              description={DOSSIERS[3].description}
+              initialRotation={DOSSIERS[3].initialRotation}
+              shouldAnimate={shouldAnimate}
+            />
+          </div>
+          <div className="md:col-span-2">
+            <DossierCard
+              archiveNumber={DOSSIERS[4].archiveNumber}
+              icon={DOSSIERS[4].icon}
+              title={DOSSIERS[4].title}
+              description={DOSSIERS[4].description}
+              initialRotation={DOSSIERS[4].initialRotation}
+              shouldAnimate={shouldAnimate}
+            />
+          </div>
+        </motion.div>
+
+        <div className="mt-10 flex justify-center sm:mt-14">
+          <button
+            type="button"
+            className="inline-flex items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-magenta-dim)_70%,transparent)] px-6 py-2.5 font-(--font-jetbrains) text-[10px] uppercase tracking-[0.18em] text-(--color-text-secondary) transition-[border-color,color,background-color,transform] duration-200 hover:border-(--color-magenta) hover:text-white active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 sm:text-[11px]"
+            onClick={() => {
+              const el = document.getElementById('experiencias-destacadas')
+              el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+            }}
+          >
+            → Ver las experiencias
+          </button>
         </div>
       </div>
     </section>

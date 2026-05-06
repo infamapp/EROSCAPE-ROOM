@@ -1,8 +1,13 @@
 'use client'
 
+'use client'
+
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
-import { ChevronDown, Shield, Skull } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
+
+import { ParticleField } from '@/components/ui/ParticleField'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
@@ -28,8 +33,9 @@ export function LaSociedadHero() {
             'radial-gradient(circle at 50% 42%, color-mix(in srgb, var(--color-magenta) 22%, transparent) 0%, color-mix(in srgb, var(--color-bg-base) 88%, transparent) 52%, transparent 100%)',
         }}
       />
+      <ParticleField count={40} />
       <div
-        className="pointer-events-none absolute inset-0 z-[1] bg-linear-to-b from-[color-mix(in_srgb,var(--surface-experience)_92%,transparent)] via-transparent to-[var(--surface-experience)]"
+        className="pointer-events-none absolute inset-0 z-2 bg-linear-to-b from-[color-mix(in_srgb,var(--surface-experience)_92%,transparent)] via-transparent to-(--surface-experience)"
         aria-hidden="true"
       />
 
@@ -46,19 +52,10 @@ export function LaSociedadHero() {
               '0 0 28px color-mix(in srgb, var(--color-magenta-glow) 28%, transparent), inset 0 0 12px color-mix(in srgb, var(--color-magenta) 12%, transparent)',
           }}
         >
-          <Shield
-            className="pointer-events-none absolute inset-0 m-auto size-28 text-[color-mix(in_srgb,var(--color-magenta)_18%,transparent)]"
-            aria-hidden="true"
-            strokeWidth={0.9}
-          />
-          <Skull
-            className="relative z-10 mx-auto size-16 text-[var(--color-magenta-glow)] sm:h-[4.25rem] sm:w-[4.25rem]"
-            aria-hidden="true"
-            strokeWidth={1.15}
-          />
+          <Image src="/lasociedad-ico.png" alt="" width={160} height={160} className="h-40 w-40" priority />
         </div>
 
-        <h1 className="font-(--font-cormorant) text-5xl font-light tracking-[0.18em] text-white sm:text-7xl md:text-[5.25rem] md:leading-[0.95]">
+        <h1 className="text-5xl font-bold tracking-[0.3em] text-white [font-family:var(--font-playfair)] sm:text-7xl md:leading-[0.95]">
           LA SOCIEDAD
         </h1>
         <p className="mt-6 max-w-2xl font-(--font-cormorant) text-xl italic text-[var(--color-gold-light)] sm:text-2xl md:text-3xl">

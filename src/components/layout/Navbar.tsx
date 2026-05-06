@@ -68,7 +68,9 @@ function Logo({ href, src, alt, size, isVisible }: LogoProps) {
     >
       <Image src={src} alt={alt} width={imageSize} height={imageSize} quality={100} priority className={cn(className, 'select-none')} />
       {size === 'desktop' ? (
-        <span className="uppercase leading-none tracking-[0.12em] text-xl sm:text-2xl">Eroscape</span>
+        <span className="[font-family:var(--font-playfair)] uppercase leading-none tracking-[0.12em] text-xl sm:text-2xl">
+          Eroscape
+        </span>
       ) : (
         <span className="sr-only">Eroscape</span>
       )}
@@ -81,9 +83,10 @@ interface NavLinksProps {
   pathname: string
   onNavigate?: () => void
   variant: 'desktop' | 'mobile'
+  shouldReduceMotion: boolean | null
 }
 
-function NavLinks({ items, pathname, onNavigate, variant }: NavLinksProps) {
+function NavLinks({ items, pathname, onNavigate, variant, shouldReduceMotion }: NavLinksProps) {
   const baseLink = variant === 'desktop' ? 'text-sm' : 'text-base'
 
   return (
@@ -91,6 +94,7 @@ function NavLinks({ items, pathname, onNavigate, variant }: NavLinksProps) {
       {items.map((item) => {
         const active = isNavActive(pathname, item.href)
         const label = item.label
+        const isApp = item.href === '/app-movil'
 
         if (variant === 'desktop') {
           return (
@@ -103,15 +107,36 @@ function NavLinks({ items, pathname, onNavigate, variant }: NavLinksProps) {
                 active ? 'text-white' : 'text-(--color-text-secondary) hover:text-white',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 rounded-md px-1 py-1',
               )}
+              style={
+                isApp
+                  ? {
+                      paddingLeft: 10,
+                      paddingRight: 10,
+                      borderRadius: 999,
+                      border: '1px solid color-mix(in srgb, var(--color-gold) 40%, transparent)',
+                      background: 'color-mix(in srgb, var(--color-gold) 14%, transparent)',
+                      boxShadow: 'var(--glow-gold)',
+                    }
+                  : undefined
+              }
               aria-current={active ? 'page' : undefined}
             >
               <span
                 className={cn(
-                  'relative inline-flex pb-1',
+                  'relative inline-flex ',
                   active && 'border-b border-[color-mix(in_srgb,var(--color-magenta)_55%,transparent)]',
                 )}
               >
-                {label}
+                {isApp ? (
+                  <motion.span
+                    animate={shouldReduceMotion ? undefined : { opacity: [0.85, 1, 0.85] }}
+                    transition={shouldReduceMotion ? undefined : { duration: 2.2, repeat: Infinity, ease: SENSUAL_EASE }}
+                  >
+                    {label}
+                  </motion.span>
+                ) : (
+                  label
+                )}
               </span>
             </Link>
           )
@@ -127,11 +152,28 @@ function NavLinks({ items, pathname, onNavigate, variant }: NavLinksProps) {
               'transition-[border-color,background-color,color] duration-300',
               active ? 'text-white bg-white/5' : 'text-(--color-text-secondary) hover:text-white hover:bg-white/5',
             )}
-            style={{ border: 'var(--border-subtle)' }}
+            style={
+              isApp
+                ? {
+                    border: '1px solid color-mix(in srgb, var(--color-gold) 40%, transparent)',
+                    background: 'color-mix(in srgb, var(--color-gold) 14%, transparent)',
+                    boxShadow: 'var(--glow-gold)',
+                  }
+                : { border: 'var(--border-subtle)' }
+            }
             aria-current={active ? 'page' : undefined}
             onClick={onNavigate}
           >
-            {label}
+            {isApp ? (
+              <motion.span
+                animate={shouldReduceMotion ? undefined : { opacity: [0.85, 1, 0.85] }}
+                transition={shouldReduceMotion ? undefined : { duration: 2.2, repeat: Infinity, ease: SENSUAL_EASE }}
+              >
+                {label}
+              </motion.span>
+            ) : (
+              label
+            )}
           </Link>
         )
       })}
@@ -152,11 +194,10 @@ export function Navbar() {
   const navItems = useMemo<NavItem[]>(
     () => [
       { label: 'Experiencias', href: '/experiencias' },
-      { label: 'El Tocador', href: '/boutique' },
       { label: 'La Sociedad', href: '/la-sociedad' },
+      { label: 'El Tocador', href: '/boutique' },
       { label: 'Consentimiento', href: '/la-sociedad/seguridad' },
-      { label: 'FAQ', href: '/FAQ' },
-      { label: 'Inversores', href: '/inversores' },
+      { label: 'FAQ', href: '/faq' },
       { label: 'La App', href: '/app-movil' },
     ],
     [],
@@ -172,20 +213,20 @@ export function Navbar() {
         )}
         style={{
           backgroundColor: isScrolled ? 'rgba(8,0,8,0.95)' : 'transparent',
-          borderBottomColor: isScrolled ? 'rgba(185,48,158,0.2)' : 'transparent',
+          borderBottomColor: isScrolled ? 'color-mix(in srgb, var(--color-magenta) 20%, transparent)' : 'transparent',
         }}
         variants={navVariants}
         initial={shouldReduceMotion ? false : 'hidden'}
         animate={shouldReduceMotion ? undefined : 'visible'}
       >
-        <div className={cn('mx-auto flex h-16 items-center justify-between px-4 sm:px-6', NAV_MAX_WIDTH_CLASS)}>
+        <div className={cn('mx-auto flex h-16 items-center justify-between px-4 sm:px-6 gap', NAV_MAX_WIDTH_CLASS)}>
           <Logo href="/" src={desktopLogoSrc} alt="Eroscape" size="desktop" isVisible={isScrolled} />
 
           <nav className="hidden items-center gap-5 md:flex lg:gap-7">
-            <NavLinks items={navItems} pathname={pathname} variant="desktop" />
+            <NavLinks items={navItems} pathname={pathname} variant="desktop" shouldReduceMotion={shouldReduceMotion} />
           </nav>
 
-          <div className="hidden items-center gap-3 md:flex">
+          <div className="hidden items-center gap-3 md:flex pl-4">
             <Link
               href="/reservar"
               className={cn(
@@ -196,6 +237,20 @@ export function Navbar() {
               style={{ background: 'var(--gradient-cta)' }}
             >
               Rendirse al deseo
+            </Link>
+            <Link
+              href="/inversores"
+              className={cn(
+                'rounded-full px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.18em] text-white',
+                'transition-[filter,transform] duration-200 hover:brightness-110 active:translate-y-px',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+              )}
+              style={{
+                background: 'var(--color-gold)',
+                boxShadow: 'var(--glow-gold)',
+              }}
+            >
+              Inversores
             </Link>
           </div>
 
@@ -233,7 +288,7 @@ export function Navbar() {
 
             <motion.div
               className="absolute right-0 top-0 h-full w-[85%] max-w-sm border-l"
-              style={{ background: 'var(--color-bg-elevated)', borderLeftColor: 'rgba(185,48,158,0.2)' }}
+              style={{ background: 'var(--color-bg-elevated)', borderLeftColor: 'color-mix(in srgb, var(--color-magenta) 20%, transparent)' }}
               variants={mobileMenuVariants}
               initial={shouldReduceMotion ? false : 'hidden'}
               animate={shouldReduceMotion ? undefined : 'visible'}
@@ -253,7 +308,13 @@ export function Navbar() {
               </div>
 
               <div className="flex flex-col gap-2 px-4 pt-6">
-                <NavLinks items={navItems} pathname={pathname} variant="mobile" onNavigate={() => setIsMenuOpen(false)} />
+                <NavLinks
+                  items={navItems}
+                  pathname={pathname}
+                  variant="mobile"
+                  onNavigate={() => setIsMenuOpen(false)}
+                  shouldReduceMotion={shouldReduceMotion}
+                />
                 <Link
                   href="/reservar"
                   className={cn(
@@ -264,6 +325,17 @@ export function Navbar() {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Rendirse al deseo
+                </Link>
+                <Link
+                  href="/inversores"
+                  className={cn(
+                    'rounded-full px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.18em] text-white',
+                    'transition-[filter,transform] duration-200 hover:brightness-110 active:translate-y-px',
+                  )}
+                  style={{ background: 'var(--color-gold)', boxShadow: 'var(--glow-gold)' }}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Inversores
                 </Link>
               </div>
             </motion.div>

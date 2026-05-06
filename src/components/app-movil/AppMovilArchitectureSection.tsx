@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import { BookOpen, Brain, MessageCircle, Radio, Shield, Sparkles, type LucideIcon } from 'lucide-react'
+import { Bell, BookOpen, MessageSquare, Music, RefreshCw, ShieldCheck, type LucideIcon } from 'lucide-react'
 
 import { APP_MOVIL_FEATURES, type AppMovilFeatureId } from '@/lib/app-movil'
 
@@ -20,17 +20,17 @@ const gridItem = {
 function iconForFeature(id: AppMovilFeatureId): LucideIcon {
   switch (id) {
     case 'curacion':
-      return Brain
+      return RefreshCw
     case 'palabra':
-      return Shield
+      return ShieldCheck
     case 'preludio':
-      return Sparkles
+      return Bell
     case 'conserjeria':
-      return MessageCircle
+      return MessageSquare
     case 'diario':
       return BookOpen
     case 'erosense':
-      return Radio
+      return Music
   }
 }
 
@@ -41,10 +41,10 @@ export function AppMovilArchitectureSection() {
     <section className="px-4 py-20 sm:px-6 sm:py-28" style={{ background: 'var(--color-bg-elevated)' }}>
       <div className="mx-auto max-w-6xl">
         <header className="mb-14 space-y-3 text-center sm:mb-20">
-          <h2 className="font-(--font-cormorant) text-4xl font-semibold italic text-white sm:text-5xl">
+          <h2 className="text-4xl font-semibold text-white [font-family:var(--font-playfair)] sm:text-5xl">
             Arquitectura del placer
           </h2>
-          <p className="mx-auto max-w-xl font-(--font-inter) text-sm text-[var(--color-text-muted)] sm:text-base">
+          <p className="mx-auto max-w-xl font-(--font-inter) text-sm text-(--color-text-muted) sm:text-base">
             Funcionalidades pensadas para la inmersión total, sin ruido ni prisas.
           </p>
         </header>
@@ -60,16 +60,16 @@ export function AppMovilArchitectureSection() {
             const Icon = iconForFeature(f.id)
             return (
               <motion.li key={f.id} variants={reduceMotion ? undefined : gridItem}>
-                <article className="app-movil-feature-glass group flex h-full flex-col gap-4 rounded-3xl p-7 transition-colors hover:border-[color-mix(in_srgb,var(--color-magenta)_40%,transparent)] sm:p-8">
+                <article className="group flex h-full flex-col gap-4 rounded-2xl border-(--border-subtle) bg-(--color-bg-elevated) p-5 transition-[box-shadow,transform,border-color] duration-300 hover:-translate-y-1 hover:[box-shadow:var(--glow-card)] hover:border-[color-mix(in_srgb,var(--color-magenta)_40%,transparent)]">
                   <Icon
-                    className="size-9 text-[var(--color-magenta-glow)] transition-transform duration-300 group-hover:scale-110 sm:size-10"
+                    className="size-5 text-(--color-purple-muted)"
                     aria-hidden="true"
-                    strokeWidth={1.15}
+                    strokeWidth={1.6}
                   />
-                  <h3 className="font-(--font-cormorant) text-2xl text-[var(--color-gold-light)] sm:text-[1.65rem]">
+                  <h3 className="text-base font-bold text-(--color-gold-light) [font-family:var(--font-playfair)]">
                     {f.title}
                   </h3>
-                  <p className="font-(--font-inter) text-sm leading-relaxed text-[var(--color-text-secondary)]">{f.body}</p>
+                  <p className="font-(--font-inter) text-sm leading-relaxed text-(--color-text-secondary)">{f.body}</p>
                 </article>
               </motion.li>
             )

@@ -1,4 +1,4 @@
-import { Check, Minus } from 'lucide-react'
+import { CheckCircle2, X } from 'lucide-react'
 
 import { CLUB_FEATURE_ROWS, CLUB_TIERS } from '@/lib/el-club'
 
@@ -12,8 +12,7 @@ export function ElClubComparisonTable() {
         Qué incluye cada nivel en una sola vista.
       </p>
       <div
-        className="mt-8 overflow-x-auto rounded-2xl border border-[rgba(185,48,158,0.15)]"
-        style={{ background: 'var(--color-bg-elevated)', boxShadow: 'var(--glow-card)' }}
+        className="mt-8 overflow-x-auto rounded-2xl border-(--border-subtle) bg-(--color-bg-elevated) [box-shadow:var(--glow-card)]"
       >
         <div
           className="grid min-w-[640px] gap-0"
@@ -24,7 +23,7 @@ export function ElClubComparisonTable() {
           <div role="row" className="contents text-xs">
             <div
               role="columnheader"
-              className="border-b border-[rgba(185,48,158,0.12)] p-4 font-[var(--font-jetbrains)] tracking-wide"
+              className="border-b-(--border-subtle) bg-(--color-bg-subtle) p-4 font-[var(--font-jetbrains)] tracking-wide"
               style={{ color: 'var(--color-text-muted)' }}
             >
               Beneficio
@@ -33,7 +32,7 @@ export function ElClubComparisonTable() {
               <div
                 key={tier.id}
                 role="columnheader"
-                className="border-b border-l border-[rgba(185,48,158,0.12)] p-4 text-center font-[var(--font-jetbrains)] text-[10px] tracking-[0.2em]"
+                className="border-b-(--border-subtle) border-l-(--border-subtle) bg-(--color-bg-subtle) p-4 text-center font-[var(--font-jetbrains)] text-[10px] tracking-[0.2em]"
                 style={{ color: tier.accentVar }}
               >
                 {tier.name}
@@ -44,7 +43,7 @@ export function ElClubComparisonTable() {
             <div key={row.id} role="row" className="contents text-sm">
               <div
                 role="rowheader"
-                className="border-b border-[rgba(185,48,158,0.08)] p-4 font-[var(--font-inter)]"
+                className="border-b-(--border-subtle) p-4 font-[var(--font-inter)]"
                 style={{ color: 'var(--color-text-secondary)' }}
               >
                 {row.label}
@@ -55,12 +54,12 @@ export function ElClubComparisonTable() {
                   <div
                     key={`${row.id}-${tier.id}`}
                     role="gridcell"
-                    className="flex items-center justify-center border-b border-l border-[rgba(185,48,158,0.08)] p-4"
+                    className="flex items-center justify-center border-b-(--border-subtle) border-l-(--border-subtle) p-4"
                   >
                     {ok ? (
-                      <Check className="h-5 w-5" style={{ color: tier.accentVar }} aria-label="Incluido" />
+                      <CheckCircle2 className="h-5 w-5" style={{ color: 'var(--color-magenta)' }} aria-label="Incluido" />
                     ) : (
-                      <Minus className="h-5 w-5" style={{ color: 'var(--color-text-muted)' }} aria-label="No incluido" />
+                      <X className="h-5 w-5" style={{ color: 'var(--color-text-muted)' }} aria-label="No incluido" />
                     )}
                   </div>
                 )

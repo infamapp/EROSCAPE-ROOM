@@ -2,7 +2,7 @@
 
 import type { LucideIcon } from 'lucide-react'
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion'
-import { Clock, Clock3, Cpu, Crown, Gift, Package, Swords } from 'lucide-react'
+import { CheckCircle2, Clock, Clock3, Cpu, Crown, Gift, Package, PlusCircle, Swords } from 'lucide-react'
 import { createPortal } from 'react-dom'
 import type { RefObject } from 'react'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
@@ -156,13 +156,13 @@ function UpsellItemCard({ item, isSelected, selectionPulse, onToggle, hexRef }: 
       animate={isSelected ? { y: -4 } : { y: 0 }}
       transition={{ type: 'spring', stiffness: 380, damping: 26 }}
     >
-      {item.popular ? (
+      {item.rarity === 'epico' ? (
         <div
           className="absolute right-3 top-1 flex items-center gap-1 rounded-full px-2 py-0.5 font-(--font-jetbrains) text-[9px] tracking-wide"
           style={{ border: 'var(--border-gold)', color: 'var(--color-gold)', background: 'rgba(203,123,27,0.12)' }}
         >
           <Crown className="h-3 w-3" style={{ color: 'var(--color-gold)' }} aria-hidden="true" />
-          EL FAVORITO
+          MÁS POPULAR
         </div>
       ) : null}
 
@@ -188,14 +188,24 @@ function UpsellItemCard({ item, isSelected, selectionPulse, onToggle, hexRef }: 
           <button
             type="button"
             onClick={handleToggle}
-            className="rounded-full px-3.5 py-2 font-(--font-jetbrains) text-[11px] tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:px-4 sm:text-xs"
+            className="inline-flex items-center justify-center gap-2 rounded-full px-3.5 py-2 font-(--font-jetbrains) text-[11px] tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:px-4 sm:text-xs"
             style={
               isSelected
                 ? { background: 'transparent', border: `2px solid ${rarityColor}`, color: rarityColor }
                 : { background: 'var(--color-bg-subtle)', border: '2px solid rgba(185,48,158,0.25)', color: 'var(--color-text-primary)' }
             }
           >
-            {isSelected ? 'SACARLO' : 'LO QUIERO'}
+            {isSelected ? (
+              <>
+                <CheckCircle2 className="h-4 w-4" style={{ color: rarityColor }} aria-hidden="true" />
+                EQUIPADO
+              </>
+            ) : (
+              <>
+                <PlusCircle className="h-4 w-4" style={{ color: rarityColor }} aria-hidden="true" />
+                EQUIPAR
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -272,7 +282,7 @@ function ArsenalPanel({ selectedIds, panelDropRef, className }: ArsenalPanelProp
       <div className="min-h-[120px] flex-1 py-4">
         {rows.length === 0 ? (
           <p className="font-(--font-inter) text-sm italic" style={{ color: 'var(--color-text-muted)' }}>
-            El baúl está vacío. La noche también puede ser salvaje así.
+            Baúl vacío. Sutil también es válido.
           </p>
         ) : (
           <LayoutGroup>
@@ -392,7 +402,7 @@ export function Step3Upselling() {
       <div className="relative mx-auto max-w-6xl px-4 pt-8 sm:px-6 sm:pt-10 lg:max-w-[1200px]">
         <StepHeader actLabel="III" title="ABRE EL BAÚL" />
         <p className="-mt-4 mb-7 font-(--font-jetbrains) text-[11px] tracking-wide sm:mb-10 sm:text-xs" style={{ color: 'var(--color-text-muted)' }}>
-          Suma tentaciones a tu noche
+          Equipá tu noche
         </p>
 
         <div className="grid gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,35%)] lg:items-start">
@@ -419,17 +429,32 @@ export function Step3Upselling() {
           />
         </div>
 
+        {/* Mobile bottom sheet: TU BAÚL */}
+        <AnimatePresence>
+          {selected.length > 0 ? (
+            <motion.div
+              key="mobile-arsenal"
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+              animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+              exit={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
+              transition={shouldReduceMotion ? undefined : { duration: 0.3, ease: SENSUAL_EASE }}
+              className="fixed inset-x-0 bottom-24 z-110 px-3 sm:hidden"
+            >
+              <ArsenalPanel
+                selectedIds={selected}
+                panelDropRef={mobileLootTargetRef}
+                className="mx-auto max-w-md"
+              />
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+
         <BookingBottomBar
-          summaryTitle="EL VALOR DE TU NOCHE"
-          summary={
-            <span style={{ color: 'var(--color-gold)' }}>
-              {formatCurrency(total)}
-            </span>
-          }
+          currentStep={3}
+          isValid
           onBack={handlePrev}
-          onPrimary={handleNext}
-          primaryLabel="CONTINUAR →"
-          containerClassName="max-w-lg lg:max-w-6xl"
+          onNext={handleNext}
+          subtotal={total}
         />
       </div>
     </div>

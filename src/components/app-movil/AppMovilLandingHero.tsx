@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
-import { Brain, Send } from 'lucide-react'
+import { Send } from 'lucide-react'
 
 import { AppStoreBadgeSvg, GooglePlayBadgeSvg } from '@/components/marketing/AppMovilStoreBadges'
 import { APP_STORE_URL, GOOGLE_PLAY_URL } from '@/lib/app-movil'
@@ -17,40 +17,34 @@ const colVariants = {
 function AppMovilChatFrame() {
   return (
     <div
-      className="relative mx-auto flex w-[min(100%,300px)] flex-col overflow-hidden rounded-[2.75rem] border-[7px] bg-[color-mix(in_srgb,var(--color-bg-base)_94%,transparent)] shadow-2xl ring-1 ring-white/10 md:w-[min(100%,380px)]"
-      style={{ borderColor: 'color-mix(in srgb, var(--color-purple-mid) 55%, var(--color-bg-base))', aspectRatio: '9 / 19.2' }}
+      className="relative mx-auto flex w-[min(100%,300px)] flex-col overflow-hidden rounded-4xl border border-white/10 bg-(--color-bg-elevated) md:w-[min(100%,380px)]"
+      style={{ aspectRatio: '9 / 19.2' }}
     >
-      <div className="pointer-events-none absolute inset-0 z-0 bg-linear-to-b from-[color-mix(in_srgb,var(--color-purple-mid)_35%,transparent)] to-[var(--color-bg-base)]" aria-hidden="true" />
-      <div className="relative z-10 flex h-10 items-center justify-center">
-        <div className="h-6 w-24 rounded-b-2xl bg-[color-mix(in_srgb,var(--color-purple-mid)_70%,var(--color-bg-base))]" />
+      <div className="flex items-center justify-between border-b border-white/10 px-4 py-3">
+        <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]">
+          CHAT DEMO
+        </p>
+        <p className="text-[10px] uppercase tracking-[0.2em] text-(--color-gm-terminal) [font-family:var(--font-jetbrains)]">
+          Maestro IA
+        </p>
       </div>
-      <div className="relative z-10 flex flex-1 flex-col gap-3 px-3 pb-3 pt-1">
-        <div className="flex items-center gap-3 border-b border-white/10 pb-3">
-          <div className="flex size-10 items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-magenta)_45%,transparent)] bg-[color-mix(in_srgb,var(--color-magenta)_18%,transparent)]">
-            <Brain className="size-5 text-[var(--color-magenta-glow)]" aria-hidden="true" strokeWidth={1.25} />
-          </div>
-          <div>
-            <p className="font-(--font-jetbrains) text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--color-magenta-glow)]">
-              Guía digital
-            </p>
-            <p className="mt-0.5 flex items-center gap-1.5 font-(--font-inter) text-[10px] text-emerald-400/90">
-              <span className="size-1.5 animate-pulse rounded-full bg-emerald-400 motion-reduce:animate-none" aria-hidden="true" />
-              En línea
-            </p>
-          </div>
-        </div>
+      <div className="flex min-h-0 flex-1 flex-col gap-3 px-4 py-4">
         <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden">
-          <div className="rounded-2xl rounded-tl-none border border-white/10 bg-white/[0.06] p-3 font-(--font-inter) text-[11px] leading-relaxed text-[var(--color-text-secondary)]">
-            He guardado tus preferencias de la última visita. ¿Quieres que bajemos un punto la intensidad del ambiente esta noche?
+          <div className="max-w-[88%] rounded-2xl rounded-tl-none border border-white/10 bg-[color-mix(in_srgb,var(--color-gm-terminal)_10%,transparent)] p-3 font-(--font-inter) text-[11px] leading-relaxed text-white">
+            Te leo. ¿Qué necesitas para que esta noche empiece suave?
           </div>
           <div className="ml-auto max-w-[88%] rounded-2xl rounded-tr-none border border-[color-mix(in_srgb,var(--color-magenta)_35%,transparent)] bg-[color-mix(in_srgb,var(--color-magenta)_16%,transparent)] p-3 text-right font-(--font-inter) text-[11px] leading-relaxed text-white">
-            Sí, prefiero un inicio más suave.
+            Quiero claridad: límites simples y sin sorpresas.
           </div>
-          <div className="rounded-2xl rounded-tl-none border border-white/10 bg-white/[0.06] p-3 font-(--font-inter) text-[11px] leading-relaxed text-[var(--color-text-secondary)]">
-            Hecho. La atmósfera se adaptará a tu pulso. Nos vemos dentro.
+          <div className="max-w-[88%] rounded-2xl rounded-tl-none border border-white/10 bg-[color-mix(in_srgb,var(--color-gm-terminal)_10%,transparent)] p-3 font-(--font-inter) text-[11px] leading-relaxed text-white">
+            Perfecto. Tu palabra segura siempre manda. Y cada propuesta será opcional.
+          </div>
+          <div className="ml-auto max-w-[88%] rounded-2xl rounded-tr-none border border-[color-mix(in_srgb,var(--color-magenta)_35%,transparent)] bg-[color-mix(in_srgb,var(--color-magenta)_16%,transparent)] p-3 text-right font-(--font-inter) text-[11px] leading-relaxed text-white">
+            Entonces sí. Guíame.
           </div>
         </div>
-        <div className="relative mt-auto">
+      </div>
+      <div className="relative mt-auto border-t border-(--border-subtle) bg-(--color-bg-subtle) px-4 py-3">
           <label htmlFor="app-chat-demo" className="sr-only">
             Campo de mensaje (demostración)
           </label>
@@ -58,12 +52,11 @@ function AppMovilChatFrame() {
             id="app-chat-demo"
             readOnly
             placeholder="Escribe un mensaje…"
-            className="w-full rounded-xl border-0 border-b border-[color-mix(in_srgb,var(--color-magenta)_45%,transparent)] bg-[var(--color-bg-base)] px-3 py-2.5 font-(--font-inter) text-[11px] text-white placeholder:text-[var(--color-text-muted)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--color-magenta)_55%,transparent)]"
+            className="w-full rounded-xl border border-white/10 bg-transparent px-3 py-2.5 font-(--font-inter) text-[11px] text-white placeholder:text-(--color-text-muted) focus:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--color-magenta)_55%,transparent)]"
           />
-          <span className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--color-magenta-glow)]" aria-hidden="true">
+          <span className="pointer-events-none absolute right-6 top-1/2 -translate-y-1/2 text-(--color-magenta-glow)" aria-hidden="true">
             <Send className="size-4" strokeWidth={1.35} />
           </span>
-        </div>
       </div>
     </div>
   )
@@ -86,13 +79,13 @@ export function AppMovilLandingHero() {
           initial={reduceMotion ? false : 'hidden'}
           animate={reduceMotion ? undefined : 'visible'}
         >
-          <span className="inline-block border-b border-[color-mix(in_srgb,var(--color-magenta)_35%,transparent)] pb-2 font-(--font-jetbrains) text-[10px] uppercase tracking-[0.38em] text-[var(--color-magenta-glow)] sm:text-[11px]">
-            Tecnología del placer
+          <span className="inline-block border-b border-[color-mix(in_srgb,var(--color-magenta)_35%,transparent)] pb-2 font-(--font-jetbrains) text-[10px] uppercase tracking-[0.38em] text-(--color-magenta-glow) sm:text-[11px]">
+            TECNOLOGÍA DEL PLACER
           </span>
-          <h1 className="font-(--font-cormorant) text-[clamp(2.4rem,5vw,4.25rem)] font-semibold italic leading-[1.05] tracking-tight text-white">
+          <h1 className="text-5xl font-semibold italic leading-[1.05] tracking-tight text-white [font-family:var(--font-cormorant)] sm:text-6xl">
             La app que te guía hacia el deseo
           </h1>
-          <p className="mx-auto max-w-lg font-(--font-inter) text-base leading-relaxed text-[var(--color-text-muted)] md:mx-0 md:text-lg">
+          <p className="mx-auto max-w-lg font-(--font-inter) text-base leading-relaxed text-(--color-text-muted) md:mx-0 md:text-lg">
             Mucho más que una utilidad: una extensión digital de la curación Eroscape. Orquesta cada detalle antes, durante y después de tu noche.
           </p>
           <div className="flex flex-wrap justify-center gap-3 pt-2 md:justify-start">
@@ -100,7 +93,7 @@ export function AppMovilLandingHero() {
               href={APP_STORE_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--color-magenta)_55%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-base)]"
+              className="inline-flex rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--color-magenta)_55%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
               aria-label="Descargar en App Store"
             >
               <AppStoreBadgeSvg className="h-11 w-auto sm:h-12" />
@@ -109,7 +102,7 @@ export function AppMovilLandingHero() {
               href={GOOGLE_PLAY_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--color-magenta)_55%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-bg-base)]"
+              className="inline-flex rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_srgb,var(--color-magenta)_55%,transparent)] focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
               aria-label="Descargar en Google Play"
             >
               <GooglePlayBadgeSvg className="h-11 w-auto sm:h-12" />

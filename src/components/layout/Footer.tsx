@@ -1,8 +1,14 @@
 import Link from 'next/link'
-import { Lock } from 'lucide-react'
+import { Lock, Music, Send, Sparkles } from 'lucide-react'
 
 import { CITIES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
+
+const SOCIAL_LINKS = [
+  { href: 'https://instagram.com/eroscape', label: 'Instagram', Icon: Sparkles },
+  { href: 'https://twitter.com/eroscape', label: 'Twitter', Icon: Send },
+  { href: 'https://tiktok.com/@eroscape', label: 'TikTok', Icon: Music },
+] as const
 
 export function Footer() {
   return (
@@ -16,7 +22,9 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-1">
-            <div className="font-[var(--font-playfair)] text-xl tracking-[0.25em] text-white">EROSCAPE</div>
+            <div className="[font-family:var(--font-playfair)] text-xl uppercase tracking-[0.2em] text-white">
+              EROSCAPE
+            </div>
             <p className="mt-3 text-sm" style={{ color: 'var(--color-text-secondary)' }}>
               El primer Escape Room Erótico del mundo
             </p>
@@ -102,6 +110,33 @@ export function Footer() {
             </ul>
           </div>
         </div>
+
+        <div className="mt-10 flex justify-center gap-5">
+          {SOCIAL_LINKS.map(({ href, label, Icon }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label}
+              className="rounded-full p-2 transition-colors hover:text-(--color-text-secondary) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+              style={{ color: 'var(--color-text-muted)' }}
+            >
+              <Icon className="h-5 w-5" aria-hidden="true" />
+            </a>
+          ))}
+        </div>
+
+        <p className="mt-6 text-center [font-family:var(--font-jetbrains)] text-[9px] tracking-[0.18em] uppercase">
+          <span style={{ color: 'var(--color-text-muted)' }}>¿Sos inversor? </span>
+          <Link
+            href="/inversores"
+            className="transition-colors hover:underline underline-offset-4"
+            style={{ color: 'var(--color-text-muted)' }}
+          >
+            → Conocé el proyecto
+          </Link>
+        </p>
 
         <div className="mt-12 flex flex-col gap-4 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="inline-flex items-center gap-2 text-xs" style={{ color: 'var(--color-text-muted)' }}>

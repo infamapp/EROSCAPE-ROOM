@@ -4,7 +4,7 @@ import { CardElement, Elements, PaymentRequestButtonElement, useElements, useStr
 import { loadStripe } from '@stripe/stripe-js'
 import type { PaymentRequest, PaymentRequestPaymentMethodEvent, StripeCardElementChangeEvent } from '@stripe/stripe-js'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { CalendarDays, ChevronDown, Clock, Clock3, Cpu, Gift, Headphones, Lock, Package, PenLine, Shield } from 'lucide-react'
+import { CalendarDays, ChevronDown, Clock, Clock3, Cpu, Gift, Headphones, LockKeyhole, Package, PenLine, Shield } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
@@ -15,7 +15,6 @@ import { getPlayerArchetype } from '@/lib/archetype'
 import { CITIES, EXPERIENCES_TEMPLATE, UPSELL_ITEMS } from '@/lib/constants'
 import { formatCurrency } from '@/lib/utils'
 import type { BookingState } from '@/types/booking'
-import { BookingBottomBar } from '@/components/booking/BookingBottomBar'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
@@ -92,28 +91,6 @@ interface AccessGrantedOverlayProps {
 
 function AccessGrantedOverlay({ onComplete }: AccessGrantedOverlayProps) {
   const shouldReduceMotion = useReducedMotion()
-  const [visibleLines, setVisibleLines] = useState(0)
-  const [fadeOut, setFadeOut] = useState(false)
-
-  useEffect(() => {
-    if (shouldReduceMotion) return undefined
-    const a = window.setTimeout(() => setVisibleLines(1), 200)
-    const b = window.setTimeout(() => setVisibleLines(2), 800)
-    const c = window.setTimeout(() => setVisibleLines(3), 1400)
-    const d = window.setTimeout(() => setFadeOut(true), 2000)
-    return () => {
-      window.clearTimeout(a)
-      window.clearTimeout(b)
-      window.clearTimeout(c)
-      window.clearTimeout(d)
-    }
-  }, [shouldReduceMotion])
-
-  useEffect(() => {
-    if (!fadeOut) return undefined
-    const t = window.setTimeout(() => onComplete(), 420)
-    return () => window.clearTimeout(t)
-  }, [fadeOut, onComplete])
 
   if (shouldReduceMotion) return null
 
@@ -122,16 +99,28 @@ function AccessGrantedOverlay({ onComplete }: AccessGrantedOverlayProps) {
       className="fixed inset-0 z-200 flex flex-col items-center justify-center px-6"
       style={{ background: 'var(--color-bg-base)' }}
       initial={{ opacity: 1 }}
-      animate={{ opacity: fadeOut ? 0 : 1 }}
-      transition={{ duration: 0.4, ease: SENSUAL_EASE }}
+      animate={{ opacity: 0 }}
+      transition={{ delay: 1.8, duration: 0.5, ease: SENSUAL_EASE }}
+      onAnimationComplete={onComplete}
     >
-      <div
-        className="w-full max-w-md space-y-3 font-(--font-jetbrains) text-sm"
-        style={{ color: 'var(--color-text-secondary)' }}
-      >
-        {visibleLines >= 1 ? <p>&gt; Preparando tu noche...</p> : null}
-        {visibleLines >= 2 ? <p>&gt; Confirmando tus deseos...</p> : null}
-        {visibleLines >= 3 ? <p>&gt; Todo listo. Bienvenido.</p> : null}
+      <div className="w-full max-w-md space-y-3 font-(--font-jetbrains)" style={{ color: 'var(--color-gm-terminal)' }}>
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.35, ease: SENSUAL_EASE }}
+          className="text-2xl tracking-[0.18em]"
+        >
+          ACCESO CONCEDIDO
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.35, ease: SENSUAL_EASE }}
+          className="text-sm tracking-[0.18em] text-(--color-text-muted)"
+          style={{ color: 'var(--color-text-muted)' }}
+        >
+          INICIANDO PROTOCOLO FINAL...
+        </motion.p>
       </div>
     </motion.div>
   )
@@ -445,7 +434,6 @@ export function Step5Checkout() {
   const { state, finalizeCheckout, getTotalPrice } = useBookingFlow()
 
   const [overlayDone, setOverlayDone] = useState(false)
-  const [showArchetype, setShowArchetype] = useState(false)
   const archetypeBurstRef = useRef(false)
   const payingRef = useRef(false)
 
@@ -483,21 +471,6 @@ export function Step5Checkout() {
 
   const [discountOpen, setDiscountOpen] = useState(false)
 
-  useEffect(() => {
-    if (!shouldReduceMotion) return undefined
-    const t = window.setTimeout(() => {
-      setOverlayDone(true)
-      setShowArchetype(true)
-    }, 0)
-    return () => window.clearTimeout(t)
-  }, [shouldReduceMotion])
-
-  useEffect(() => {
-    if (shouldReduceMotion) return undefined
-    const t = window.setTimeout(() => setShowArchetype(true), 2500)
-    return () => window.clearTimeout(t)
-  }, [shouldReduceMotion])
-
   const handleOverlayComplete = useCallback(() => {
     setOverlayDone(true)
   }, [])
@@ -513,11 +486,9 @@ export function Step5Checkout() {
     payingRef.current = true
     const id = state.bookingId
     fireConfettiBurst(0.55)
-    window.setTimeout(() => {
-      router.push(`/mi-reserva/${id}`)
-      finalizeCheckout(id)
-      payingRef.current = false
-    }, 450)
+    router.push(`/mi-reserva/${id}`)
+    finalizeCheckout(id)
+    payingRef.current = false
   }, [finalizeCheckout, router, state.bookingId])
 
   const handleCta = () => {
@@ -527,102 +498,115 @@ export function Step5Checkout() {
   }
 
   return (
-    <div className="relative mx-auto max-w-3xl px-4 pb-24 pt-8 sm:px-6 sm:pb-28">
+    <div className="relative mx-auto max-w-6xl px-4 pb-24 pt-8 sm:px-6 sm:pb-28">
       <AnimatePresence>{!overlayDone && !shouldReduceMotion ? <AccessGrantedOverlay key="overlay" onComplete={handleOverlayComplete} /> : null}</AnimatePresence>
 
-      <StepHeader actLabel="V" title="LAS PUERTAS SE ABREN" />
+      <StepHeader actLabel="V" title="ACCESO CONCEDIDO" />
       <p className="-mt-4 mb-6 font-(--font-inter) text-[13px] sm:mb-8 sm:text-sm" style={{ color: 'var(--color-text-secondary)' }}>
         El último paso. Después, todo empieza.
       </p>
 
-      <AnimatePresence>
-        {showArchetype ? (
-          <div key="archetype" className="mb-8 sm:mb-10">
-            <ArchetypeCard archetype={archetype} size="lg" onRevealAnimationComplete={handleArchetypeRevealDone} />
-          </div>
-        ) : null}
-      </AnimatePresence>
-
-      <section
-        className="mb-6 rounded-2xl border p-4 sm:mb-8 sm:p-6"
-        style={{ borderColor: 'rgba(185,48,158,0.2)', background: 'var(--color-bg-elevated)', boxShadow: 'var(--glow-card)' }}
-      >
-        <h3 className="font-(--font-jetbrains) text-xs tracking-[0.2em]" style={{ color: 'var(--color-text-muted)' }}>
-          TU NOCHE, EN DETALLE
-        </h3>
-        <div className="mt-4 flex flex-wrap items-center gap-2">
-          <h4 className="font-(--font-playfair) text-lg text-white sm:text-xl">{experience.title}</h4>
-        </div>
-        <p className="mt-2 font-(--font-jetbrains) text-xs tracking-wide" style={{ color: 'var(--color-text-secondary)' }}>
-          {dateLine}
+      <div className="mb-8 sm:mb-10">
+        <p className="mb-3 font-(--font-jetbrains) text-[10px] uppercase tracking-[0.22em] text-(--color-text-muted)">
+          TU PERFIL DE JUGADOR
         </p>
-
-        {selectedUpsells.length > 0 ? (
-          <div className="mt-5 sm:mt-6">
-            <p className="font-(--font-jetbrains) text-[10px] tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
-              TU BAÚL
-            </p>
-            <div className="mt-3 flex flex-wrap gap-2.5 sm:gap-3">
-              {selectedUpsells.map((u) => {
-                const Icon = UPS_ICON[u.icon] ?? Package
-                return (
-                  <div key={u.id} className="flex items-center gap-2 rounded-lg border border-[rgba(185,48,158,0.15)] px-2 py-1.5" style={{ background: 'rgba(0,0,0,0.2)' }}>
-                    <Icon className="h-4 w-4 shrink-0" style={{ color: 'var(--color-magenta)' }} aria-hidden="true" />
-                    <span className="font-(--font-inter) text-[11px] text-white sm:text-xs">{u.name}</span>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        ) : null}
-
-        <div className="mt-5">
-          <ArchetypeCard archetype={archetype} size="sm" />
-        </div>
-
-        <div className="mt-6 border-t border-[rgba(185,48,158,0.15)] pt-4 font-(--font-inter) text-[13px] sm:mt-8 sm:text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-          <div className="flex justify-between">
-            <span>Base</span>
-            <span>{formatCurrency(basePrice)}</span>
-          </div>
-          <div className="mt-2 flex justify-between">
-            <span>Baúl</span>
-            <span>{formatCurrency(arsenalTotal)}</span>
-          </div>
-          <div className="mt-3 flex justify-between border-t border-[rgba(185,48,158,0.15)] pt-3 font-(--font-playfair) text-base sm:text-lg" style={{ color: 'var(--color-gold)' }}>
-            <span>Total</span>
-            <span>{formatCurrency(total)}</span>
-          </div>
-        </div>
-      </section>
-
-      <div
-        className="mb-6 rounded-2xl border p-4 sm:mb-8 sm:p-5"
-        style={{ borderColor: 'var(--border-gold)', background: 'color-mix(in srgb, var(--color-bg-elevated) 92%, transparent)' }}
-      >
-        <div className="flex items-start gap-3">
-          <Lock className="h-5 w-5 shrink-0" style={{ color: 'var(--color-gold)' }} aria-hidden="true" />
-          <div>
-            <p className="font-(--font-jetbrains) text-[10px] tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
-              EN TU EXTRACTO BANCARIO APARECERÁ COMO:
-            </p>
-            <p className="mt-2 font-(--font-jetbrains) text-[13px] text-white sm:text-base">Ocio y Eventos SL</p>
-            <p className="mt-2 font-(--font-inter) text-xs italic" style={{ color: 'var(--color-text-muted)' }}>
-              Tu privacidad protegida. Nadie sabrá lo que viviste aquí.
-            </p>
-          </div>
-        </div>
+        <ArchetypeCard archetype={archetype} size="lg" onRevealAnimationComplete={handleArchetypeRevealDone} />
       </div>
 
-      <section className="mb-6 sm:mb-8" id="checkout-payment">
-        <h3 className="font-(--font-jetbrains) text-xs tracking-[0.2em]" style={{ color: 'var(--color-text-muted)' }}>
-          EL ÚLTIMO PASO
-        </h3>
-        <div className="mt-4">
-          <PaymentShell bookingId={state.bookingId} totalEur={total} onPaid={handlePaid} />
-        </div>
+      <div className="grid gap-6 lg:grid-cols-2 lg:items-start lg:gap-8">
+        <section
+          className="rounded-2xl border p-4 sm:p-6"
+          style={{ borderColor: 'rgba(185,48,158,0.2)', background: 'var(--color-bg-elevated)', boxShadow: 'var(--glow-card)' }}
+        >
+          <h3 className="font-(--font-jetbrains) text-xs tracking-[0.2em]" style={{ color: 'var(--color-text-muted)' }}>
+            TU NOCHE
+          </h3>
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <h4 className="font-(--font-playfair) text-lg text-white sm:text-xl">{experience.title}</h4>
+          </div>
+          <p className="mt-2 font-(--font-jetbrains) text-xs tracking-wide" style={{ color: 'var(--color-text-secondary)' }}>
+            {dateLine}
+          </p>
 
-        <div className="mt-5 sm:mt-6">
+          {selectedUpsells.length > 0 ? (
+            <div className="mt-5 sm:mt-6">
+              <p className="font-(--font-jetbrains) text-[10px] tracking-widest" style={{ color: 'var(--color-text-muted)' }}>
+                TU BAÚL
+              </p>
+              <div className="mt-3 flex flex-col gap-2.5">
+                {selectedUpsells.map((u) => {
+                  const Icon = UPS_ICON[u.icon] ?? Package
+                  return (
+                    <div
+                      key={u.id}
+                      className="flex items-center justify-between gap-3 rounded-xl border border-[rgba(185,48,158,0.15)] px-3 py-2"
+                      style={{ background: 'rgba(0,0,0,0.2)' }}
+                    >
+                      <div className="flex min-w-0 items-center gap-2">
+                        <Icon className="h-4 w-4 shrink-0" style={{ color: 'var(--color-magenta)' }} aria-hidden="true" />
+                        <span className="truncate font-(--font-inter) text-[12px] text-white">{u.name}</span>
+                      </div>
+                      <span className="shrink-0 font-(--font-jetbrains) text-[11px] text-(--color-text-muted)">
+                        {formatCurrency(u.price)}
+                      </span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          ) : (
+            <p className="mt-5 font-(--font-inter) text-sm italic text-(--color-text-muted)">Sin extras · El ritual puro</p>
+          )}
+
+          <div
+            className="mt-6 rounded-xl border p-3 text-xs"
+            style={{
+              background: 'var(--color-bg-subtle)',
+              borderColor: 'color-mix(in srgb, var(--color-gold) 30%, transparent)',
+            }}
+          >
+            <div className="flex items-start gap-2">
+              <LockKeyhole className="mt-0.5 h-4 w-4 shrink-0 text-(--color-gold-light)" aria-hidden="true" />
+              <p className="font-(--font-inter) text-(--color-text-muted)">
+                Tu reserva aparecerá en tu extracto como: <span className="text-white">Ocio y Eventos SL</span>
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-6 border-t border-[rgba(185,48,158,0.15)] pt-4 font-(--font-inter) text-[13px] sm:text-sm" style={{ color: 'var(--color-text-secondary)' }}>
+            <div className="flex justify-between">
+              <span>Base</span>
+              <span>{formatCurrency(basePrice)}</span>
+            </div>
+            <div className="mt-2 flex justify-between">
+              <span>Baúl</span>
+              <span>{formatCurrency(arsenalTotal)}</span>
+            </div>
+            <div className="mt-3 flex justify-between border-t border-[rgba(185,48,158,0.15)] pt-3 font-(--font-playfair) text-base sm:text-lg" style={{ color: 'var(--color-gold)' }}>
+              <span>Total</span>
+              <span>{formatCurrency(total)}</span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleCta}
+            className="mt-6 inline-flex w-full items-center justify-center rounded-full px-6 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-[filter,transform] duration-200 hover:brightness-110 active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+            style={{ background: 'var(--gradient-cta)', boxShadow: 'var(--glow-magenta)' }}
+          >
+            [ CONFIRMAR MI NOCHE ]
+          </button>
+        </section>
+
+        <section className="lg:sticky lg:top-24" id="checkout-payment">
+          <h3 className="font-(--font-jetbrains) text-xs tracking-[0.2em]" style={{ color: 'var(--color-text-muted)' }}>
+            EL ÚLTIMO PASO
+          </h3>
+          <div className="mt-4 rounded-2xl border border-[rgba(185,48,158,0.2)] p-4 [box-shadow:var(--glow-card)]" style={{ background: 'var(--color-bg-elevated)' }}>
+            <PaymentShell bookingId={state.bookingId} totalEur={total} onPaid={handlePaid} />
+          </div>
+
+          <div className="mt-5 sm:mt-6">
           <button
             type="button"
             onClick={() => setDiscountOpen((o) => !o)}
@@ -654,7 +638,7 @@ export function Step5Checkout() {
           </AnimatePresence>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-(--font-inter) text-[11px]" style={{ color: 'var(--color-text-muted)' }}>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-(--font-inter) text-[11px]" style={{ color: 'var(--color-text-muted)' }}>
           <span className="flex items-center gap-1">
             <CalendarDays className="h-4 w-4" style={{ color: 'var(--color-gold)' }} aria-hidden="true" />
             Cancelación libre 48h antes
@@ -670,17 +654,10 @@ export function Step5Checkout() {
             Siempre hay alguien para ti
           </span>
         </div>
-      </section>
+        </section>
+      </div>
 
       <div className="h-28" aria-hidden="true" />
-
-      <BookingBottomBar
-        summaryTitle="TOTAL"
-        summary={<span style={{ color: 'var(--color-gold)' }}>{formatCurrency(total)}</span>}
-        onBack={() => router.push('/reservar?step=4')}
-        onPrimary={handleCta}
-        primaryLabel="[ CONFIRMAR MI NOCHE ]"
-      />
     </div>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useReducedMotion } from 'framer-motion'
-import { Check, Crown } from 'lucide-react'
+import { CheckCircle2, Crown } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 import { CLUB_TIERS, type ClubTierDefinition, type ClubTierId } from '@/lib/el-club'
@@ -63,12 +63,16 @@ export function ElClubTierGrid({ hoveredTier, onHoverTier, onActivate }: ElClubT
             <motion.article
               key={tier.id}
               variants={staggerItem}
-              className={cn('relative flex flex-col rounded-2xl border border-[rgba(185,48,158,0.12)] p-6', isFeatured && 'md:z-10')}
+              className={cn(
+                'relative flex flex-col rounded-2xl border border-(--border-subtle) p-6',
+                isFeatured && 'md:z-10',
+              )}
               style={{
                 background: 'var(--color-bg-elevated)',
-                boxShadow: isFeatured ? 'var(--glow-intense), var(--glow-card)' : 'var(--glow-card)',
+                boxShadow: isFeatured ? 'var(--glow-gold), var(--glow-card)' : 'var(--glow-card)',
                 borderTopWidth: 4,
-                borderTopColor: tier.accentVar,
+                borderTopColor: isFeatured ? 'var(--color-gold)' : tier.accentVar,
+                borderColor: isFeatured ? 'var(--border-gold)' : 'var(--border-subtle)',
               }}
               animate={shouldReduceMotion ? undefined : { opacity: dimOthers ? 0.52 : 1, scale: 1 }}
               transition={tierDimTransition}
@@ -78,18 +82,20 @@ export function ElClubTierGrid({ hoveredTier, onHoverTier, onActivate }: ElClubT
               {isFeatured ? (
                 <div
                   className="absolute -top-3 left-1/2 flex -translate-x-1/2 items-center gap-1 rounded-full px-3 py-1 font-[var(--font-jetbrains)] text-[9px] tracking-[0.2em] text-white"
-                  style={{ background: 'var(--gradient-cta)', boxShadow: 'var(--glow-magenta)' }}
+                  style={{ background: 'var(--gradient-cta)', boxShadow: 'var(--glow-gold)' }}
                 >
                   <Crown className="h-3 w-3" aria-hidden="true" />
                   MÁS POPULAR
                 </div>
               ) : null}
-              <div className={cn('flex flex-1 flex-col', isFeatured && 'md:scale-105 md:pt-4')}>
+              <div className={cn('flex flex-1 flex-col', isFeatured && 'md:z-10 md:scale-105 md:pt-4')}>
                 <p className="font-[var(--font-jetbrains)] text-xs tracking-[0.25em]" style={{ color: tier.accentVar }}>
                   {tier.name}
                 </p>
                 <div className="mt-4 flex items-baseline gap-2">
-                  <span className="font-[var(--font-playfair)] text-5xl font-bold text-white sm:text-6xl">{tier.price}€</span>
+                  <span className="font-[var(--font-playfair)] text-5xl font-bold sm:text-6xl" style={{ color: 'var(--color-gold-light)' }}>
+                    {tier.price}€
+                  </span>
                   <span className="font-[var(--font-jetbrains)] text-sm" style={{ color: 'var(--color-text-muted)' }}>
                     / {tier.period}
                   </span>
@@ -97,7 +103,7 @@ export function ElClubTierGrid({ hoveredTier, onHoverTier, onActivate }: ElClubT
                 <ul className="mt-6 flex flex-1 flex-col gap-3 font-[var(--font-inter)] text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                   {tier.benefits.map((b) => (
                     <li key={b} className="flex gap-2">
-                      <Check className="mt-0.5 h-4 w-4 shrink-0" style={{ color: tier.accentVar }} aria-hidden="true" />
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" style={{ color: 'var(--color-magenta)' }} aria-hidden="true" />
                       <span>{b}</span>
                     </li>
                   ))}

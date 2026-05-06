@@ -3,16 +3,14 @@
 import type { LucideIcon } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Flame, Heart, Infinity as InfinityIcon, Sparkles, Swords, Users, X, Zap } from 'lucide-react'
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { StepHeader } from '@/components/booking/StepHeader'
 import { useBookingFlow } from '@/hooks/useBookingFlow'
-import { useTextScramble } from '@/hooks/useTextScramble'
-import { getPlayerArchetype } from '@/lib/archetype'
 import { COMPANY_TYPES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
-import type { BookingState, BookingStep2, CompanyType, IntensityLevel, MissionLevel } from '@/types/booking'
+import type { BookingStep2, CompanyType, IntensityLevel, MissionLevel } from '@/types/booking'
 import { BookingBottomBar } from '@/components/booking/BookingBottomBar'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
@@ -23,23 +21,24 @@ const gmCardVariants = {
   exit: { opacity: 0, height: 0, transition: { duration: 0.35, ease: SENSUAL_EASE } },
 } as const
 
-const archetypePreviewVariants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: SENSUAL_EASE } },
-  exit: { opacity: 0, y: 12, transition: { duration: 0.25, ease: SENSUAL_EASE } },
-} as const
-
-const archetypeNameVariants = {
-  initial: { opacity: 0 },
-  animate: { opacity: 1, transition: { duration: 0.25, ease: SENSUAL_EASE } },
-  exit: { opacity: 0, transition: { duration: 0.2, ease: SENSUAL_EASE } },
-} as const
+const TYPEWRITER_MS_PER_CHAR = 30
 
 const COMPANY_ICON_MAP: Record<CompanyType, LucideIcon> = {
   pareja: Heart,
   rollete: Zap,
   'plan-golfo': Users,
   swinger: InfinityIcon,
+}
+
+const COMPANY_HOVER_DETAILS: Record<CompanyType, string> = {
+  pareja:
+    'Para dos personas que quieren volver a mirarse distinto. Ritmo cuidado, tensión suave y un final que se queda en la piel.',
+  rollete:
+    'Para encuentros sin guion. Directo, lúdico, sin promesas: solo química, elección y un espacio que acompaña lo que pasa.',
+  'plan-golfo':
+    'Para cuando la risa también aprieta. Dinámica de grupo, decisiones rápidas y ese momento en que alguien por fin dice “sí”.',
+  swinger:
+    'Para quienes ya conocen sus acuerdos. Libertad, cuidado y discreción: el placer se expande sin perder el control.',
 }
 
 interface OmegaGmMessageProps {
@@ -49,42 +48,45 @@ interface OmegaGmMessageProps {
 }
 
 function OmegaGmMessage({ text, shouldReduceMotion, replayToken }: OmegaGmMessageProps) {
-  const { displayText, isComplete } = useTextScramble({
-    text,
-    trigger: true,
-    speed: 35,
-    scrambleDuration: 900,
-    replayToken,
-  })
+  if (shouldReduceMotion) return <>{text}</>
+
+  const durationMs = Math.min(2000, Math.max(450, text.length * TYPEWRITER_MS_PER_CHAR))
 
   return (
     <>
-      {shouldReduceMotion ? text : displayText}
-      {!shouldReduceMotion && isComplete ? (
-        <motion.span
-          className="inline-block"
-          animate={{ opacity: [1, 0, 1] }}
-          transition={{ duration: 0.9, repeat: Infinity, ease: SENSUAL_EASE }}
-          aria-hidden="true"
-        >
-          _
-        </motion.span>
-      ) : null}
+      <motion.span
+        key={replayToken}
+        className="inline-block overflow-hidden whitespace-nowrap align-bottom"
+        initial={{ width: '0ch' }}
+        animate={{ width: `${Math.max(0, text.length)}ch` }}
+        transition={{ duration: durationMs / 1000, ease: 'linear' }}
+      >
+        {text}
+      </motion.span>
+      <motion.span
+        className="inline-block"
+        animate={{ opacity: [1, 0, 1] }}
+        transition={{ duration: 0.9, repeat: Infinity, ease: SENSUAL_EASE }}
+        aria-hidden="true"
+      >
+        _
+      </motion.span>
     </>
   )
 }
 
-function getIntensityGradient(level: IntensityLevel | null): string {
+function intensityBgColor(level: IntensityLevel | null): string {
+  if (level === 'bajo') return 'hsl(260, 60%, 5%)'
+  if (level === 'medio') return 'hsl(35, 50%, 6%)'
+  if (level === 'turbio') return 'hsl(340, 60%, 5%)'
+  return 'var(--color-bg-base)'
+}
+
+function intensityOverlay(level: IntensityLevel | null): string {
   if (level === 'bajo') return 'var(--gradient-alpha)'
   if (level === 'medio') return 'var(--gradient-beta)'
   if (level === 'turbio') return 'var(--gradient-omega)'
   return 'transparent'
-}
-
-function intensityDotLeft(level: IntensityLevel | null): string {
-  if (level === 'medio') return '50%'
-  if (level === 'turbio') return '84%'
-  return '16%'
 }
 
 interface CompanyTypeCardProps {
@@ -99,6 +101,7 @@ interface CompanyTypeCardProps {
 function CompanyTypeCard({ id, label, icon: Icon, description, isSelected, onSelect }: CompanyTypeCardProps) {
   const shouldReduceMotion = useReducedMotion()
   const [isHover, setIsHover] = useState(false)
+  const detail = COMPANY_HOVER_DETAILS[id]
 
   return (
     <motion.button
@@ -106,6 +109,8 @@ function CompanyTypeCard({ id, label, icon: Icon, description, isSelected, onSel
       onClick={() => onSelect(id)}
       onPointerEnter={() => setIsHover(true)}
       onPointerLeave={() => setIsHover(false)}
+      onFocus={() => setIsHover(true)}
+      onBlur={() => setIsHover(false)}
       className={cn(
         'relative overflow-hidden rounded-2xl p-6 text-center',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)',
@@ -134,12 +139,24 @@ function CompanyTypeCard({ id, label, icon: Icon, description, isSelected, onSel
       <div className="relative">
         <Icon className="mx-auto h-10 w-10" style={{ color: 'var(--color-magenta)' }} aria-hidden="true" />
         <div className="mt-4 font-(--font-playfair) text-lg text-white">{label}</div>
+        <p className="mt-2 text-center font-(--font-inter) text-xs leading-5" style={{ color: 'var(--color-text-muted)' }}>
+          {description}
+        </p>
 
-        <motion.div className="overflow-hidden" initial={false} animate={{ height: shouldReduceMotion ? 'auto' : isHover ? 'auto' : 0 }} transition={{ duration: 0.25, ease: SENSUAL_EASE }}>
-          <p className="pt-3 text-center font-(--font-inter) text-xs leading-5" style={{ color: 'var(--color-text-muted)' }}>
-            {description}
-          </p>
-        </motion.div>
+        <AnimatePresence initial={false}>
+          {isHover ? (
+            <motion.div
+              key="detail"
+              initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
+              animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+              exit={shouldReduceMotion ? undefined : { opacity: 0, y: 6 }}
+              transition={shouldReduceMotion ? undefined : { duration: 0.25, ease: SENSUAL_EASE }}
+              className="mx-auto mt-4 max-w-xs rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left backdrop-blur-md"
+            >
+              <p className="font-(--font-inter) text-xs leading-5 text-(--color-text-secondary)">{detail}</p>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       </div>
     </motion.button>
   )
@@ -190,21 +207,37 @@ function IntensityOption({ level, missionLevel, isSelected, onSelect, title, des
       </div>
 
       <div className="mt-4 flex justify-center">
-        <svg width="120" height="56" viewBox="0 0 120 56" aria-hidden="true">
-          <path
-            d="M60 6 L86 14 L86 34 Q86 48 60 52 Q34 48 34 34 L34 14 Z"
-            fill="none"
-            stroke="rgba(255,255,255,0.22)"
-            strokeWidth="2"
-          />
-          <motion.path
-            d="M60 6 L86 14 L86 34 Q86 48 60 52 Q34 48 34 34 L34 14 Z"
-            fill={accentVar}
+        <div className="relative h-[56px] w-[120px]" aria-hidden="true">
+          <motion.div
+            className="absolute inset-0 rounded-2xl"
             initial={false}
-            animate={shouldReduceMotion ? undefined : { fillOpacity: isSelected ? 0.45 : 0 }}
+            animate={shouldReduceMotion ? undefined : { opacity: isSelected ? 1 : 0 }}
             transition={{ duration: 0.35, ease: SENSUAL_EASE }}
+            style={{
+              background: `radial-gradient(circle at 50% 50%, color-mix(in srgb, ${accentVar} 45%, transparent) 0%, transparent 62%)`,
+              filter: 'blur(10px)',
+            }}
           />
-        </svg>
+          <div className="absolute inset-0 " aria-hidden="true" />
+          <div
+            className="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2"
+            style={{
+              backgroundColor: isSelected ? accentVar : 'white',
+              WebkitMaskImage: "url('/fire-svgrepo-com.svg')",
+              WebkitMaskRepeat: 'no-repeat',
+              WebkitMaskPosition: 'center',
+              WebkitMaskSize: 'contain',
+              maskImage: "url('/fire-svgrepo-com.svg')",
+              maskRepeat: 'no-repeat',
+              maskPosition: 'center',
+              maskSize: 'contain',
+              opacity: 0.95,
+              filter: isSelected
+                ? `drop-shadow(0 0 10px color-mix(in srgb, ${accentVar} 65%, transparent))`
+                : 'none',
+            }}
+          />
+        </div>
       </div>
     </motion.button>
   )
@@ -220,44 +253,12 @@ export function Step2Configurator() {
   const language: BookingStep2['language'] = state.step2.language ?? 'es'
   const names = state.step2.names ?? []
 
-  const [intensityBg, setIntensityBg] = useState(() => getIntensityGradient(intensityLevel))
   const [gmDismissed, setGmDismissed] = useState(false)
-  const [gmReplayKey, setGmReplayKey] = useState(0)
-
-  useEffect(() => {
-    const t = window.setTimeout(() => setIntensityBg(getIntensityGradient(intensityLevel)), 0)
-    return () => window.clearTimeout(t)
-  }, [intensityLevel])
-
-  useEffect(() => {
-    if (intensityLevel !== 'turbio') {
-      const t = window.setTimeout(() => setGmDismissed(false), 0)
-      return () => window.clearTimeout(t)
-    }
-    return undefined
-  }, [intensityLevel])
+  const [gmReplayKey, setGmReplayKey] = useState(() => (intensityLevel === 'turbio' ? 1 : 0))
 
   const showGm = intensityLevel === 'turbio' && !gmDismissed
   const gmText =
-    'Has elegido la experiencia sin filtros. La intensidad será total. Define tu Palabra Mágica en el siguiente paso — es tu control absoluto.'
-
-  // Re-play scramble when the Omega GM card appears (SPA back/forward, step revisit, etc.).
-  useEffect(() => {
-    if (!showGm) return
-    const t = window.setTimeout(() => setGmReplayKey((k) => k + 1), 0)
-    return () => window.clearTimeout(t)
-  }, [showGm])
-
-  const bookingForArchetype = useMemo<BookingState>(
-    () => ({
-      ...state,
-      step3: state.step3,
-      step4: state.step4,
-    }),
-    [state],
-  )
-  const archetype = useMemo(() => getPlayerArchetype(bookingForArchetype), [bookingForArchetype])
-  const hasPreview = Boolean(companyType || intensityLevel)
+    '> Sin límites iniciado. La experiencia será directa e intensa. Elegí tu palabra mágica en el siguiente acto.'
 
   const nameFieldCount = !companyType ? 0 : companyType === 'plan-golfo' || companyType === 'swinger' ? 2 : 1
 
@@ -278,7 +279,9 @@ export function Step2Configurator() {
     if (level === 'turbio') {
       setGmDismissed(false)
       setGmReplayKey((k) => k + 1)
+      return
     }
+    setGmDismissed(false)
   }
 
   const handleNameChange = (index: number, value: string) => {
@@ -299,8 +302,8 @@ export function Step2Configurator() {
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background: intensityBg,
-          transition: 'background 1s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+          background: intensityBgColor(intensityLevel),
+          transition: 'background 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
         }}
       />
 
@@ -309,7 +312,7 @@ export function Step2Configurator() {
           <motion.div
             key={intensityLevel}
             className="pointer-events-none absolute inset-0"
-            style={{ background: getIntensityGradient(intensityLevel) }}
+            style={{ background: intensityOverlay(intensityLevel) }}
             initial={shouldReduceMotion ? false : { opacity: 0 }}
             animate={shouldReduceMotion ? undefined : { opacity: 1 }}
             exit={shouldReduceMotion ? undefined : { opacity: 0 }}
@@ -345,16 +348,6 @@ export function Step2Configurator() {
           </p>
 
           <div className="relative mt-4 sm:mt-6">
-            <div className="relative mb-3 hidden h-3 md:block">
-              <div className="absolute left-[10%] right-[10%] top-1/2 h-px -translate-y-1/2" style={{ background: 'rgba(255,255,255,0.08)' }} />
-              <motion.div
-                className="absolute top-1/2 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full"
-                style={{ background: 'var(--color-magenta)' }}
-                animate={shouldReduceMotion ? undefined : { left: intensityDotLeft(intensityLevel) }}
-                transition={shouldReduceMotion ? undefined : { duration: 0.35, ease: SENSUAL_EASE }}
-              />
-            </div>
-
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <IntensityOption
                 level="bajo"
@@ -387,6 +380,39 @@ export function Step2Configurator() {
                 onSelect={handleIntensitySelect}
               />
             </div>
+
+            <div className="relative mt-6 hidden md:block" aria-hidden="true">
+              <div className="absolute inset-x-8 top-1/2 h-px -translate-y-1/2 bg-white/10" />
+              <div className="relative mx-8 grid grid-cols-3">
+                <div className="relative flex justify-center">
+                  {intensityLevel === 'bajo' ? (
+                    <motion.div
+                      layoutId="intensity-dot"
+                      className="absolute top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-(--color-magenta)"
+                      transition={shouldReduceMotion ? undefined : { duration: 0.35, ease: SENSUAL_EASE }}
+                    />
+                  ) : null}
+                </div>
+                <div className="relative flex justify-center">
+                  {intensityLevel === 'medio' ? (
+                    <motion.div
+                      layoutId="intensity-dot"
+                      className="absolute top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-(--color-magenta)"
+                      transition={shouldReduceMotion ? undefined : { duration: 0.35, ease: SENSUAL_EASE }}
+                    />
+                  ) : null}
+                </div>
+                <div className="relative flex justify-center">
+                  {intensityLevel === 'turbio' ? (
+                    <motion.div
+                      layoutId="intensity-dot"
+                      className="absolute top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-(--color-magenta)"
+                      transition={shouldReduceMotion ? undefined : { duration: 0.35, ease: SENSUAL_EASE }}
+                    />
+                  ) : null}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -413,7 +439,7 @@ export function Step2Configurator() {
                 </button>
 
                 <div className="flex items-center gap-1 font-(--font-jetbrains) text-xs" style={{ color: 'var(--color-gm-terminal)' }}>
-                  <span>EL MAESTRO &gt;</span>
+                  <span>GAME_MASTER_IA &gt;</span>
                   {shouldReduceMotion ? null : (
                     <motion.span animate={{ opacity: [1, 0, 1] }} transition={{ duration: 0.9, repeat: Infinity, ease: SENSUAL_EASE }} aria-hidden="true">
                       _
@@ -436,7 +462,7 @@ export function Step2Configurator() {
 
           {nameFieldCount === 0 ? (
             <p className="mt-3 sm:mt-4 font-(--font-inter) text-[13px] sm:text-sm" style={{ color: 'var(--color-text-muted)' }}>
-              Selecciona un tipo de operativo para continuar.
+              Elegí con quién venís para continuar.
             </p>
           ) : (
             <div className="mt-4 grid gap-3 md:grid-cols-2">
@@ -446,7 +472,7 @@ export function Step2Configurator() {
                   value={names[idx] ?? ''}
                   onChange={(e) => handleNameChange(idx, e.target.value)}
                   placeholder="Tu nombre, un apodo, lo que prefieras..."
-                  className="w-full rounded-xl border border-[rgba(185,48,158,0.2)] bg-(--color-bg-elevated) px-4 py-2.5 font-(--font-inter) text-[13px] text-(--color-text-primary) placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:py-3 sm:text-sm"
+                  className="w-full border-b border-(--border-subtle) bg-transparent px-0 py-2.5 font-(--font-inter) text-[13px] text-(--color-text-primary) placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:py-3 sm:text-sm"
                 />
               ))}
             </div>
@@ -472,69 +498,14 @@ export function Step2Configurator() {
           </select>
         </div>
 
-        <AnimatePresence>
-          {hasPreview ? (
-            <motion.div
-              key="archetype-preview"
-              variants={archetypePreviewVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              className="z-90 mt-10 w-full md:fixed md:bottom-10 md:right-6 md:mt-0 md:w-[min(92vw,360px)]"
-              title="Tu perfil de placer se revelará cuando completes tu reserva."
-            >
-              <div
-                className="rounded-2xl border p-4"
-                style={{
-                  background: 'color-mix(in srgb, var(--color-bg-elevated) 92%, transparent)',
-                  borderColor: 'rgba(185,48,158,0.2)',
-                  boxShadow: 'var(--glow-card)',
-                  backdropFilter: 'blur(10px)',
-                }}
-              >
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl leading-none" aria-hidden="true">
-                    {archetype.icon}
-                  </span>
-                  <div className="min-w-0">
-                    <p className="font-(--font-jetbrains) text-[10px] tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
-                      Empezamos a conocerte:
-                    </p>
-                    <AnimatePresence mode="wait">
-                      <motion.p
-                        key={archetype.id}
-                        variants={archetypeNameVariants}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                        className="mt-1 font-(--font-playfair) text-lg italic text-white"
-                      >
-                        {archetype.name}
-                      </motion.p>
-                    </AnimatePresence>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
-
         <div className="h-28" aria-hidden="true" />
       </div>
 
       <BookingBottomBar
-        summaryTitle="TU ELECCIÓN"
-        summary={
-          <>
-            {companyType ?? '—'}
-            {' · '}
-            {intensityLevel ?? '—'}
-          </>
-        }
+        currentStep={2}
+        isValid={canContinue}
         onBack={handlePrev}
-        onPrimary={handleNext}
-        primaryLabel="CONTINUAR →"
-        isPrimaryDisabled={!canContinue}
+        onNext={handleNext}
       />
     </div>
   )

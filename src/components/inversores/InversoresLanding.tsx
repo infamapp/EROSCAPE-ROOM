@@ -1,468 +1,473 @@
-'use client'
-
-import Image from 'next/image'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { BarChart3, FileText, LineChart, Lock, Mail } from 'lucide-react'
-import { useMemo, useState } from 'react'
-
-import { cn } from '@/lib/utils'
-
-const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
-
-const heroVariants = {
-  hidden: { opacity: 0, y: 18 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: SENSUAL_EASE } },
-}
-
-const panelVariants = {
-  hidden: { opacity: 0, y: 14 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: SENSUAL_EASE } },
-}
-
-type InvestorProfile = 'vc' | 'family-office' | 'angel' | 'strategic' | 'otro'
-
-type Metric = { value: string; label: string }
-
-const METRICS: ReadonlyArray<Metric> = [
-  { value: '5 ciudades', label: 'Presencia' },
-  { value: '25 experiencias', label: 'IPs únicas' },
-  { value: '€180 ticket medio', label: 'Margen alto' },
-] as const
-
-const MODEL_CARDS: ReadonlyArray<{ title: string; description: string; icon: 'ticket' | 'upsell' | 'membership' | 'licensing' }> =
-  [
-    {
-      title: 'Reservas (Base)',
-      description: 'Ticket premium con demanda dinámica y control de disponibilidad.',
-      icon: 'ticket',
-    },
-    {
-      title: 'El Baúl (Upsell)',
-      description: 'Curaduría de complementos in-situ para elevar la noche con intención.',
-      icon: 'upsell',
-    },
-    {
-      title: 'El Tocador (Membresía)',
-      description: 'Acceso recurrente a privilegios discretos y agenda prioritaria.',
-      icon: 'membership',
-    },
-    {
-      title: 'Licencias (Expansión)',
-      description: 'Crecimiento mediante acuerdos operativos con estándares de marca.',
-      icon: 'licensing',
-    },
-  ] as const
-
-function getModelIcon(kind: (typeof MODEL_CARDS)[number]['icon']) {
-  switch (kind) {
-    case 'ticket':
-      return BarChart3
-    case 'upsell':
-      return LineChart
-    case 'membership':
-      return FileText
-    case 'licensing':
-      return Lock
-  }
-}
-
-export interface InversoresLandingProps {
-  className?: string
-}
-
-export function InversoresLanding({ className }: InversoresLandingProps) {
-  const shouldReduceMotion = useReducedMotion()
-  const [profile, setProfile] = useState<InvestorProfile>('vc')
-
-  const profileLabel = useMemo(() => {
-    switch (profile) {
-      case 'vc':
-        return 'VC'
-      case 'family-office':
-        return 'Family Office'
-      case 'angel':
-        return 'Business Angel'
-      case 'strategic':
-        return 'Partner estratégico'
-      case 'otro':
-        return 'Otro'
-    }
-  }, [profile])
-
-  return (
-    <main className={cn('min-h-screen pb-24 ', className)}>
-      <section className="relative isolate">
-        <div className="absolute inset-0 -z-10 overflow-hidden">
-          <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(to bottom, rgba(0,0,0,0.0), color-mix(in_srgb,var(--color-bg)_82%,transparent) 55%, var(--color-bg))',
-            }}
-          />
-          <Image
-            src="/inversores-placeholder.png"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover opacity-35"
-          />
-          <div
-            className="absolute inset-0 -z-10"
-            style={{ background: 'radial-gradient(60% 60% at 50% 25%, rgba(207,156,43,0.12), transparent 60%)' }}
-            aria-hidden="true"
-          />
-        </div>
-
-        <div className="mx-auto flex min-h-[92vh] max-w-6xl flex-col items-center justify-center px-4 py-14 text-center sm:px-6">
-          <motion.div
-            className="mb-5"
-            variants={heroVariants}
-            initial={shouldReduceMotion ? false : 'hidden'}
-            animate={shouldReduceMotion ? undefined : 'visible'}
-          >
-            <Image
-              src="/erosGold.png"
-              alt="Eroscape"
-              width={150}
-              height={150}
-              priority
-              className="h-56 w-56 select-none drop-shadow-[0_0_28px_rgba(207,156,43,0.25)] sm:h-56 sm:w-56"
-            />
-          </motion.div>
-          <motion.p
-            className="text-xs font-semibold uppercase tracking-[0.42em] text-(--color-gold)"
-            variants={heroVariants}
-            initial={shouldReduceMotion ? false : 'hidden'}
-            animate={shouldReduceMotion ? undefined : 'visible'}
-          >
-            Inversión discreta
-          </motion.p>
-          <motion.h1
-            className="mt-5 text-balance text-5xl font-bold uppercase leading-[0.95] text-white [font-family:var(--font-playfair)] sm:text-6xl md:text-7xl"
-            variants={heroVariants}
-            initial={shouldReduceMotion ? false : 'hidden'}
-            animate={shouldReduceMotion ? undefined : 'visible'}
-          >
-            Una categoría nueva.
-            <br />
-            Una oportunidad única.
-          </motion.h1>
-          <motion.p
-            className="mx-auto mt-6 max-w-2xl text-pretty text-base leading-relaxed text-(--color-text-secondary) sm:text-lg"
-            variants={heroVariants}
-            initial={shouldReduceMotion ? false : 'hidden'}
-            animate={shouldReduceMotion ? undefined : 'visible'}
-          >
-            Eroscape es una plataforma de experiencias inmersivas premium, construida sobre narrativa, tecnología y privacidad. Una propuesta
-            elegante, adulta y cuidada — sin lo explícito, con lo memorable.
-          </motion.p>
-
-          <motion.div
-            className="mt-10 flex flex-wrap justify-center gap-10 sm:gap-14"
-            variants={heroVariants}
-            initial={shouldReduceMotion ? false : 'hidden'}
-            animate={shouldReduceMotion ? undefined : 'visible'}
-          >
-            {METRICS.map((m) => (
-              <div key={m.label} className="text-center">
-                <div className="text-4xl font-semibold tracking-tight text-(--color-gold) sm:text-5xl">{m.value}</div>
-                <div className="mt-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40">{m.label}</div>
-              </div>
-            ))}
-          </motion.div>
-
-          <motion.div
-            className="mt-12"
-            variants={heroVariants}
-            initial={shouldReduceMotion ? false : 'hidden'}
-            animate={shouldReduceMotion ? undefined : 'visible'}
-          >
-            <a
-              href="#contacto"
-              className="inline-flex items-center justify-center rounded-full px-9 py-4 text-xs font-semibold uppercase tracking-[0.22em] text-black bg-(--color-gold)"
-            >
-              Solicitar información
-            </a>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-(--color-gold)">Potencial</p>
-            <h2 className="mt-4 text-balance text-3xl font-semibold text-white sm:text-4xl">
-              La economía de la experiencia sigue creciendo.
-            </h2>
-            <p className="mt-6 text-pretty text-sm leading-relaxed text-(--color-text-secondary) sm:text-base">
-              En un mercado saturado de lo predecible, las experiencias inmersivas premium ganan terreno. Eroscape toma esa tendencia y la
-              traduce en una propuesta con alto valor percibido, repetición y expansión controlada.
-            </p>
-
-            <div className="mt-8 space-y-4">
-              <div className="flex items-baseline gap-4">
-                <span className="text-xl font-semibold text-(--color-gold)">+42%</span>
-                <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40">
-                  crecimiento interanual estimado
-                </span>
-              </div>
-              <div className="flex items-baseline gap-4">
-                <span className="text-xl font-semibold text-(--color-gold)">€2.4B</span>
-                <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40">mercado experiencial (TAM)</span>
-              </div>
-            </div>
-          </div>
-
-          <motion.div
-            className="rounded-2xl border p-7 sm:p-8"
-            style={{
-              borderColor: 'rgba(255,255,255,0.10)',
-              background: 'color-mix(in_srgb,var(--color-bg-elevated)_70%,transparent)',
-            }}
-            variants={panelVariants}
-            initial={shouldReduceMotion ? false : 'hidden'}
-            whileInView={shouldReduceMotion ? undefined : 'visible'}
-            viewport={{ once: true, margin: '-15% 0px -15% 0px' }}
-          >
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40">Crecimiento (referencial)</span>
-              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-(--color-gold)">Señal</span>
-            </div>
-
-            <div className="mt-6 flex h-48 items-end gap-2">
-              {['25%', '33%', '40%', '50%', '75%', '100%'].map((h, idx) => (
-                <div
-                  key={h}
-                  className="flex-1 rounded-sm"
-                  style={{
-                    height: h,
-                    background:
-                      idx === 5
-                        ? 'linear-gradient(180deg, rgba(207,156,43,0.95), rgba(207,156,43,0.30))'
-                        : 'rgba(207,156,43,0.18)',
-                    boxShadow: idx === 5 ? '0 0 22px rgba(207,156,43,0.25)' : undefined,
-                  }}
-                  aria-hidden="true"
-                />
-              ))}
-            </div>
-
-            <div className="mt-6 flex justify-between text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40">
-              <span>2018</span>
-              <span>2020</span>
-              <span>2022</span>
-              <span>2024</span>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
-        <div className="text-center">
-          <h2 className="text-3xl font-semibold uppercase tracking-[0.14em] text-white sm:text-4xl">Modelo</h2>
-          <div className="mx-auto mt-4 h-px w-24" style={{ backgroundColor: 'rgba(207,156,43,0.65)' }} />
-        </div>
-
-        <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {MODEL_CARDS.map((card) => {
-            const Icon = getModelIcon(card.icon)
-            return (
-              <motion.div
-                key={card.title}
-                className="group rounded-2xl border p-7 transition-[border-color,box-shadow] duration-500"
-                style={{
-                  borderColor: 'rgba(255,255,255,0.10)',
-                  background: 'color-mix(in_srgb,var(--color-bg-elevated)_72%,transparent)',
-                }}
-                variants={panelVariants}
-                initial={shouldReduceMotion ? false : 'hidden'}
-                whileInView={shouldReduceMotion ? undefined : 'visible'}
-                viewport={{ once: true, margin: '-15% 0px -15% 0px' }}
-              >
-                <Icon className="h-8 w-8 text-(--color-gold)" />
-                <h3 className="mt-5 text-lg font-semibold text-white">{card.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-(--color-text-secondary)">{card.description}</p>
-              </motion.div>
-            )
-          })}
-        </div>
-      </section>
-
-      <section
-        className="border-y py-20"
-        style={{
-          borderColor: 'rgba(255,255,255,0.06)',
-          background: 'linear-gradient(180deg, rgba(255,255,255,0.02), transparent)',
-        }}
-      >
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 sm:px-6 md:grid-cols-3">
-          {[
-            {
-              n: '01',
-              title: 'Cambio cultural',
-              body: 'Auge de la sexualidad positiva y de la búsqueda de intimidad cuidada, sin vulgaridad.',
-            },
-            {
-              n: '02',
-              title: 'Economía de la experiencia',
-              body: 'El gasto se desplaza de objetos a vivencias con historia, diseño y exclusividad.',
-            },
-            {
-              n: '03',
-              title: 'Ventaja de categoría',
-              body: 'Una propuesta diferenciada, premium y escalable por estándares y tecnología.',
-            },
-          ].map((item) => (
-            <div key={item.n} className="text-center md:px-6">
-              <div className="text-3xl font-semibold text-(--color-gold)">{item.n}</div>
-              <div className="mt-4 text-sm font-semibold uppercase tracking-[0.18em] text-white">{item.title}</div>
-              <p className="mx-auto mt-3 max-w-sm text-pretty text-sm leading-relaxed text-white/40">{item.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-4xl px-4 py-20 sm:px-6" id="contacto">
-        <div className="text-center">
-          <h2 className="text-3xl font-semibold text-white sm:text-4xl">Contacto</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-pretty text-sm leading-relaxed text-(--color-text-secondary) sm:text-base">
-            Acceso solo para inversores acreditados. Sin sobreexposición: lo mínimo necesario, con la máxima discreción.
-          </p>
-        </div>
-
-        <div
-          className="mt-10 rounded-3xl border p-8 sm:p-10"
-          style={{
-            borderColor: 'rgba(255,255,255,0.10)',
-            background: 'color-mix(in_srgb,var(--color-bg-elevated)_72%,transparent)',
-          }}
-        >
-          <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              <div className="space-y-2">
-                <label className="ml-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40" htmlFor="nombre">
-                  Nombre completo
-                </label>
-                <input
-                  id="nombre"
-                  type="text"
-                  className={cn(
-                    'w-full rounded-xl border px-4 py-4 text-sm text-white outline-none transition-[border-color,box-shadow] duration-300',
-                    'bg-transparent',
-                  )}
-                  style={{
-                    borderColor: 'rgba(255,255,255,0.10)',
-                    boxShadow: 'none',
-                  }}
-                  placeholder="Tu nombre"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="ml-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40" htmlFor="email">
-                  Email profesional
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  className={cn(
-                    'w-full rounded-xl border px-4 py-4 text-sm text-white outline-none transition-[border-color,box-shadow] duration-300',
-                    'bg-transparent',
-                  )}
-                  style={{ borderColor: 'rgba(255,255,255,0.10)' }}
-                  placeholder="nombre@firma.com"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="ml-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40" htmlFor="perfil">
-                Perfil de inversor
-              </label>
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
-                {(
-                  [
-                    { id: 'vc', label: 'VC' },
-                    { id: 'family-office', label: 'Family Office' },
-                    { id: 'angel', label: 'Angel' },
-                    { id: 'strategic', label: 'Estratégico' },
-                    { id: 'otro', label: 'Otro' },
-                  ] as const
-                ).map((opt) => {
-                  const active = opt.id === profile
-                  return (
-                    <button
-                      key={opt.id}
-                      type="button"
-                      onClick={() => setProfile(opt.id)}
-                      className={cn(
-                        'rounded-full border px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] transition-[border-color,background-color,color] duration-300',
-                        active ? 'text-black' : 'text-white/60 hover:text-white',
-                      )}
-                      style={{
-                        borderColor: active ? 'transparent' : 'rgba(255,255,255,0.12)',
-                        background: active
-                          ? 'linear-gradient(135deg, color-mix(in_srgb,var(--color-gold)_88%,white), var(--color-gold))'
-                          : 'transparent',
-                      }}
-                      aria-pressed={active}
-                    >
-                      {opt.label}
-                    </button>
-                  )
-                })}
-              </div>
-              <p className="text-[11px] text-white/35">Seleccionado: {profileLabel}</p>
-            </div>
-
-            <div className="space-y-2">
-              <label className="ml-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/40" htmlFor="mensaje">
-                Mensaje
-              </label>
-              <textarea
-                id="mensaje"
-                rows={4}
-                className={cn(
-                  'w-full rounded-2xl border px-4 py-4 text-sm text-white outline-none transition-[border-color,box-shadow] duration-300',
-                  'bg-transparent',
-                )}
-                style={{ borderColor: 'rgba(255,255,255,0.10)' }}
-                placeholder="Qué te interesa conocer"
-              />
-            </div>
-
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div className="inline-flex items-center gap-2 text-[11px] text-white/40">
-                <Mail className="h-4 w-4 text-(--color-gold)" />
-                Respondemos con discreción.
-              </div>
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 rounded-full px-7 py-3 text-xs font-semibold uppercase tracking-[0.22em] text-black"
-                style={{
-                  background: 'linear-gradient(135deg, color-mix(in_srgb,var(--color-gold)_88%,white), var(--color-gold))',
-                }}
-              >
-                Enviar solicitud
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <AnimatePresence>
-          <motion.p
-            className="mx-auto mt-8 flex max-w-2xl items-center justify-center gap-2 text-center text-[10px] font-semibold uppercase tracking-[0.22em] text-white/30"
-            initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
-            whileInView={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, ease: SENSUAL_EASE }}
-          >
-            <Lock className="h-4 w-4 text-(--color-gold)" /> Confidencial • Compartimos material solo bajo solicitud
-          </motion.p>
-        </AnimatePresence>
-      </section>
-    </main>
-  )
-}
+ 'use client'
+ 
+ import Image from 'next/image'
+ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { BarChart2, Building2, CheckCircle2, Crown, LockKeyhole, TrendingUp } from 'lucide-react'
+import { useState, type FormEvent } from 'react'
+ 
+ import { cn } from '@/lib/utils'
+ 
+ const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
+ 
+ const heroVariants = {
+   hidden: { opacity: 0, y: 18 },
+   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: SENSUAL_EASE } },
+ } as const
+ 
+ const panelVariants = {
+   hidden: { opacity: 0, y: 14 },
+   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: SENSUAL_EASE } },
+ } as const
+ 
+ type InvestorProfile = 'family-office' | 'angel' | 'strategic' | 'otro'
+ 
+ interface InversorFormState {
+   nombre: string
+   email: string
+   profile: InvestorProfile
+   mensaje: string
+ }
+ 
+ type Metric = { value: string; label: string }
+ 
+ const METRICS: ReadonlyArray<Metric> = [
+   { value: '5 ciudades', label: 'PRESENCIA' },
+   { value: '25 experiencias', label: 'IPS ÚNICAS' },
+   { value: '€180 ticket medio', label: 'MARGEN ALTO' },
+ ] as const
+ 
+ const MODEL_CARDS = [
+   {
+     id: 'base',
+     icon: BarChart2,
+     title: 'Reservas (Base)',
+     description: 'Ticket premium con demanda dinámica y control de disponibilidad.',
+   },
+   {
+     id: 'upsell',
+     icon: TrendingUp,
+     title: 'El Baúl (Upsell)',
+     description: 'Inventario en-sala para elevar la noche con intención.',
+   },
+   {
+     id: 'membership',
+     icon: Crown,
+     title: 'El Tocador (Membresía)',
+     description: 'Acceso recurrente no intrusivo: discreción y agenda prioritaria.',
+   },
+   {
+     id: 'licensing',
+     icon: Building2,
+     title: 'Licencias (Expansión)',
+     description: 'Crecimiento mediante acuerdos operativos con estándares de marca.',
+   },
+ ] as const
+ 
+ export interface InversoresLandingProps {
+   className?: string
+ }
+ 
+ export function InversoresLanding({ className }: InversoresLandingProps) {
+   const shouldReduceMotion = useReducedMotion()
+   const [submitted, setSubmitted] = useState(false)
+   const [formState, setFormState] = useState<InversorFormState>({
+     nombre: '',
+     email: '',
+     profile: 'family-office',
+     mensaje: '',
+   })
+ 
+   const handleSubmit = (e: FormEvent) => {
+     e.preventDefault()
+     // TODO: conectar con Resend/SendGrid en producción
+     setSubmitted(true)
+   }
+ 
+   return (
+     <main className={cn('min-h-screen pb-24', className)}>
+       {/* SECCIÓN 1 — Hero Inversor */}
+       <section className="relative isolate overflow-hidden">
+         <div
+           className="pointer-events-none absolute inset-0"
+           aria-hidden="true"
+           style={{
+             background:
+               'repeating-linear-gradient(90deg, color-mix(in_srgb, var(--color-gold) 8%, transparent) 0, color-mix(in_srgb, var(--color-gold) 8%, transparent) 1px, transparent 1px, transparent 64px), repeating-linear-gradient(0deg, color-mix(in_srgb, var(--color-gold) 6%, transparent) 0, color-mix(in_srgb, var(--color-gold) 6%, transparent) 1px, transparent 1px, transparent 72px)',
+             opacity: 0.55,
+           }}
+         />
+         <div
+           className="pointer-events-none absolute inset-0 opacity-[0.07]"
+           style={{ backgroundImage: 'var(--texture-parchment-noise)' }}
+           aria-hidden="true"
+         />
+ 
+         <div className="mx-auto flex min-h-[92vh] max-w-6xl flex-col items-center justify-center px-4 py-14 text-center sm:px-6">
+           <motion.div variants={heroVariants} initial={shouldReduceMotion ? false : 'hidden'} animate={shouldReduceMotion ? undefined : 'visible'}>
+             <Image src="/erosGold.png" alt="Eroscape" width={80} height={80} priority className="h-20 w-20 select-none" />
+           </motion.div>
+ 
+           <motion.p
+             className="mt-6 inline-flex items-center rounded-full border px-4 py-1 text-[10px] uppercase tracking-[0.28em] text-(--color-gold) [font-family:var(--font-jetbrains)]"
+             style={{ borderColor: 'color-mix(in srgb, var(--color-gold) 30%, transparent)' }}
+             variants={heroVariants}
+             initial={shouldReduceMotion ? false : 'hidden'}
+             animate={shouldReduceMotion ? undefined : 'visible'}
+           >
+             INVERSIÓN DISCRETA
+           </motion.p>
+ 
+           <motion.h1
+             className="mt-6 text-balance text-5xl font-bold uppercase tracking-[0.06em] text-(--color-text-primary) [font-family:var(--font-playfair)] sm:text-7xl"
+             variants={heroVariants}
+             initial={shouldReduceMotion ? false : 'hidden'}
+             animate={shouldReduceMotion ? undefined : 'visible'}
+           >
+             UNA CATEGORÍA NUEVA.
+             <br />
+             UNA OPORTUNIDAD ÚNICA.
+           </motion.h1>
+ 
+           <motion.p
+             className="mx-auto mt-6 max-w-xl text-pretty text-sm leading-relaxed text-(--color-text-secondary) [font-family:var(--font-inter)] sm:text-base"
+             variants={heroVariants}
+             initial={shouldReduceMotion ? false : 'hidden'}
+             animate={shouldReduceMotion ? undefined : 'visible'}
+           >
+             Propuesta premium construida sobre narrativa, tecnología y privacidad. DNA visual consistente, tono ejecutivo.
+           </motion.p>
+ 
+           <motion.div
+             className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-5"
+             variants={heroVariants}
+             initial={shouldReduceMotion ? false : 'hidden'}
+             animate={shouldReduceMotion ? undefined : 'visible'}
+           >
+             {METRICS.map((m, idx) => (
+               <div key={m.label} className="flex items-center gap-7">
+                 <div className="text-center">
+                   <div className="text-4xl font-bold text-(--color-gold-light) [font-family:var(--font-playfair)]">
+                     {m.value}
+                   </div>
+                   <div className="mt-2 text-[9px] uppercase tracking-[0.22em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]">
+                     {m.label}
+                   </div>
+                 </div>
+                 {idx < METRICS.length - 1 ? (
+                   <span className="text-(--color-text-muted) [font-family:var(--font-jetbrains)]" aria-hidden="true">
+                     |
+                   </span>
+                 ) : null}
+               </div>
+             ))}
+           </motion.div>
+ 
+           <motion.div className="mt-12" variants={heroVariants} initial={shouldReduceMotion ? false : 'hidden'} animate={shouldReduceMotion ? undefined : 'visible'}>
+             <a
+               href="#contacto"
+               className="inline-flex items-center justify-center rounded-full border px-7 py-3 text-[11px] font-bold uppercase tracking-[0.22em] text-(--color-gold-light) transition-[background-color,border-color,color] [font-family:var(--font-jetbrains)] hover:bg-(--color-gold)/10"
+               style={{ borderColor: 'var(--border-gold)' }}
+             >
+               SOLICITAR INFORMACIÓN
+             </a>
+           </motion.div>
+         </div>
+       </section>
+ 
+       {/* SECCIÓN 2 — Potencial de mercado */}
+       <section className="mx-auto max-w-6xl px-4 py-20 sm:px-6">
+         <div className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
+           <div>
+             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-(--color-gold) [font-family:var(--font-jetbrains)]">
+               POTENCIAL
+             </p>
+             <h2 className="mt-4 text-balance text-3xl font-semibold text-white [font-family:var(--font-playfair)] sm:text-4xl">
+               La economía de la experiencia sigue creciendo.
+             </h2>
+             <p className="mt-6 text-pretty text-sm leading-relaxed text-(--color-text-secondary) [font-family:var(--font-inter)] sm:text-base">
+               Mercado en expansión: experiencias premium, repetición y estandarización operativa como base para crecimiento controlado.
+             </p>
+ 
+             <div className="mt-8 space-y-3">
+               <p className="text-sm font-bold text-(--color-gold-light) [font-family:var(--font-jetbrains)]">
+                 +42% CRECIMIENTO INTERANUAL ESTIMADO
+               </p>
+               <p className="text-sm font-bold text-(--color-gold-light) [font-family:var(--font-jetbrains)]">
+                 €2.4B MERCADO EXPERIENCIAL (TAM)
+               </p>
+             </div>
+           </div>
+ 
+           <motion.div
+             className="rounded-2xl border p-7 sm:p-8"
+             style={{
+               borderColor: 'color-mix(in srgb, var(--color-gold) 20%, transparent)',
+               background: 'var(--color-bg-elevated)',
+             }}
+             variants={panelVariants}
+             initial={shouldReduceMotion ? false : 'hidden'}
+             whileInView={shouldReduceMotion ? undefined : 'visible'}
+             viewport={{ once: true, margin: '-15% 0px -15% 0px' }}
+           >
+             <div className="flex items-center justify-between">
+               <span className="text-[10px] uppercase tracking-[0.22em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]">
+                 Crecimiento (referencial)
+               </span>
+               <span className="text-[10px] uppercase tracking-[0.22em] text-(--color-gold) [font-family:var(--font-jetbrains)]">
+                 SEÑAL
+               </span>
+             </div>
+ 
+             <div className="mt-6 flex h-48 items-end gap-3">
+               {(
+                 [
+                   { year: '2019', h: '32%' },
+                   { year: '2020', h: '38%' },
+                   { year: '2021', h: '46%' },
+                   { year: '2026', h: '100%', signal: true },
+                 ] as const
+               ).map((b) => {
+                 const isSignal = 'signal' in b && b.signal === true
+                 return (
+                 <div key={b.year} className="flex flex-1 flex-col items-center gap-3">
+                   <div
+                     className="relative w-full rounded-sm"
+                     style={{
+                       height: b.h,
+                       background: isSignal ? 'var(--color-gold)' : 'var(--color-gold-light)',
+                       opacity: isSignal ? 0.95 : 0.22,
+                     }}
+                     aria-hidden="true"
+                   >
+                     {isSignal ? (
+                       <span
+                         className="absolute -top-3 right-0 rounded-full border px-2 py-0.5 text-[9px] uppercase tracking-[0.2em] text-(--color-gold-light) [font-family:var(--font-jetbrains)]"
+                         style={{
+                           borderColor: 'color-mix(in srgb, var(--color-gold) 45%, transparent)',
+                           background: 'color-mix(in srgb, var(--color-bg-elevated) 75%, transparent)',
+                         }}
+                       >
+                         SEÑAL
+                       </span>
+                     ) : null}
+                   </div>
+                   <span className="text-[10px] uppercase tracking-[0.22em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]">
+                     {b.year}
+                   </span>
+                 </div>
+                 )
+               })}
+             </div>
+           </motion.div>
+         </div>
+       </section>
+ 
+       {/* SECCIÓN 3 — Modelo de negocio */}
+       <section className="mx-auto max-w-6xl px-4 pb-20 sm:px-6">
+         <div className="text-center">
+           <h2 className="text-3xl font-semibold uppercase tracking-[0.3em] text-white [font-family:var(--font-playfair)] sm:text-4xl">
+             MODELO
+           </h2>
+         </div>
+ 
+         <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2">
+           {MODEL_CARDS.map((card) => {
+             const Icon = card.icon
+             return (
+               <motion.div
+                 key={card.id}
+                 className="rounded-2xl border p-6"
+                 style={{
+                   background: 'var(--color-bg-elevated)',
+                   borderColor: 'color-mix(in srgb, var(--color-gold) 20%, transparent)',
+                 }}
+                 variants={panelVariants}
+                 initial={shouldReduceMotion ? false : 'hidden'}
+                 whileInView={shouldReduceMotion ? undefined : 'visible'}
+                 viewport={{ once: true, margin: '-15% 0px -15% 0px' }}
+               >
+                 <Icon className="h-6 w-6 text-(--color-gold)" aria-hidden="true" strokeWidth={1.6} />
+                 <h3 className="mt-5 text-base font-bold text-(--color-gold-light) [font-family:var(--font-playfair)]">
+                   {card.title}
+                 </h3>
+                 <p className="mt-3 text-sm leading-relaxed text-(--color-text-secondary) [font-family:var(--font-inter)]">
+                   {card.description}
+                 </p>
+               </motion.div>
+             )
+           })}
+         </div>
+       </section>
+ 
+       {/* SECCIÓN 4 — Drivers */}
+       <section
+         className="border-y py-20"
+         style={{
+           borderColor: 'color-mix(in srgb, var(--color-gold) 12%, transparent)',
+           background: 'linear-gradient(180deg, color-mix(in srgb, var(--color-gold) 5%, transparent), transparent)',
+         }}
+       >
+         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-4 sm:px-6 md:grid-cols-3">
+           {[
+             { n: '01', title: 'CAMBIO CULTURAL', body: 'Mayor demanda de experiencias discretas, premium y orientadas a bienestar.' },
+             { n: '02', title: 'ECONOMÍA DE LA EXPERIENCIA', body: 'Preferencia por vivencias con diseño, narrativa y exclusividad.' },
+             { n: '03', title: 'VENTAJA DE CATEGORÍA', body: 'Propuesta diferenciada con potencial de estandarización y expansión.' },
+           ].map((item) => (
+             <div key={item.n} className="text-center md:px-6">
+               <div className="text-4xl text-(--color-gold)/40 [font-family:var(--font-playfair)]">{item.n}</div>
+               <div className="mt-4 text-[10px] font-semibold uppercase tracking-[0.22em] text-white [font-family:var(--font-jetbrains)]">
+                 {item.title}
+               </div>
+               <p className="mx-auto mt-3 max-w-sm text-pretty text-sm leading-relaxed text-(--color-text-secondary) [font-family:var(--font-inter)]">
+                 {item.body}
+               </p>
+             </div>
+           ))}
+         </div>
+       </section>
+ 
+       {/* SECCIÓN 5 — Formulario de contacto */}
+       <section className="mx-auto max-w-4xl px-4 py-20 sm:px-6" id="contacto">
+         <div className="text-center">
+           <h2 className="text-3xl font-semibold text-white [font-family:var(--font-playfair)] sm:text-4xl">Contacto</h2>
+           <p className="mx-auto mt-4 max-w-2xl text-pretty text-sm leading-relaxed text-(--color-text-secondary) [font-family:var(--font-inter)] sm:text-base">
+             Acceso solo para inversores acreditados. Sin sobreexposición: lo mínimo necesario, con la máxima discreción.
+           </p>
+         </div>
+ 
+         <div
+           className="mt-10 rounded-3xl border p-8 sm:p-10"
+           style={{
+             borderColor: 'color-mix(in srgb, var(--color-gold) 20%, transparent)',
+             background: 'var(--color-bg-elevated)',
+           }}
+         >
+           <AnimatePresence mode="wait">
+             {submitted ? (
+               <motion.div
+                 key="submitted"
+                 variants={panelVariants}
+                 initial={shouldReduceMotion ? false : 'hidden'}
+                 animate={shouldReduceMotion ? undefined : 'visible'}
+                 className="flex flex-col items-center justify-center gap-3 py-12 text-center"
+               >
+                 <CheckCircle2 className="h-10 w-10 text-(--color-gold-light)" aria-hidden="true" />
+                 <p className="text-sm font-semibold text-white [font-family:var(--font-playfair)]">Responderemos con discreción.</p>
+                 <p className="max-w-md text-sm text-(--color-text-secondary) [font-family:var(--font-inter)]">
+                   Gracias. Compartimos material únicamente bajo solicitud.
+                 </p>
+               </motion.div>
+             ) : (
+               <motion.form
+                 key="form"
+                 className="space-y-6"
+                 onSubmit={handleSubmit}
+                 variants={panelVariants}
+                 initial={shouldReduceMotion ? false : 'hidden'}
+                 animate={shouldReduceMotion ? undefined : 'visible'}
+               >
+                 <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                   <div>
+                     <label className="mb-1 block text-[9px] uppercase tracking-[0.22em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]" htmlFor="nombre">
+                       Nombre completo
+                     </label>
+                     <input
+                       id="nombre"
+                       value={formState.nombre}
+                       onChange={(e) => setFormState((s) => ({ ...s, nombre: e.target.value }))}
+                       type="text"
+                       required
+                       className="w-full bg-transparent py-2 text-sm text-white outline-none [font-family:var(--font-inter)]"
+                       style={{ borderBottom: '1px solid color-mix(in srgb, var(--color-gold) 30%, transparent)' }}
+                     />
+                   </div>
+                   <div>
+                     <label className="mb-1 block text-[9px] uppercase tracking-[0.22em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]" htmlFor="email">
+                       Email profesional
+                     </label>
+                     <input
+                       id="email"
+                       value={formState.email}
+                       onChange={(e) => setFormState((s) => ({ ...s, email: e.target.value }))}
+                       type="email"
+                       required
+                       className="w-full bg-transparent py-2 text-sm text-white outline-none [font-family:var(--font-inter)]"
+                       style={{ borderBottom: '1px solid color-mix(in srgb, var(--color-gold) 30%, transparent)' }}
+                     />
+                   </div>
+                 </div>
+ 
+                 <div className='flex flex-col gap-4'>
+                   <label className="mb-1 block text-[9px] uppercase tracking-[0.22em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]">
+                     Perfil de inversor
+                   </label>
+                   <div className="flex flex-wrap gap-2">
+                     {(
+                       [
+                         { id: 'family-office', label: 'FAMILY OFFICE' },
+                         { id: 'angel', label: 'ÁNGEL' },
+                         { id: 'strategic', label: 'ESTRATÉGICO' },
+                         { id: 'otro', label: 'OTRO' },
+                       ] as const
+                     ).map((opt) => {
+                       const active = opt.id === formState.profile
+                       return (
+                         <button
+                           key={opt.id}
+                           type="button"
+                           onClick={() => setFormState((s) => ({ ...s, profile: opt.id }))}
+                           className={cn(
+                             'rounded-full border px-3 py-1 text-[10px] uppercase tracking-[0.22em] transition-[border-color,background-color,color] [font-family:var(--font-jetbrains)]',
+                             active ? 'text-(--color-gold-light)' : 'text-(--color-text-muted) hover:text-white',
+                           )}
+                           style={{
+                             borderColor: active ? 'var(--color-gold)' : 'color-mix(in srgb, var(--color-gold) 30%, transparent)',
+                             background: active ? 'color-mix(in srgb, var(--color-gold) 10%, transparent)' : 'transparent',
+                           }}
+                           aria-pressed={active}
+                         >
+                           {opt.label}
+                         </button>
+                       )
+                     })}
+                   </div>
+                   {/* <p className="mt-2 text-[10px] uppercase tracking-[0.2em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]">
+                     {profileLabel}
+                   </p> */}
+                 </div>
+ 
+                 <div>
+                   <label className="mb-1 block text-[9px] uppercase tracking-[0.22em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]" htmlFor="mensaje">
+                     Mensaje
+                   </label>
+                   <textarea
+                     id="mensaje"
+                     value={formState.mensaje}
+                     onChange={(e) => setFormState((s) => ({ ...s, mensaje: e.target.value }))}
+                     rows={4}
+                     className="w-full bg-transparent py-2 text-sm text-white outline-none [font-family:var(--font-inter)]"
+                     style={{ borderBottom: '1px solid color-mix(in srgb, var(--color-gold) 30%, transparent)' }}
+                   />
+                 </div>
+ 
+                 <button
+                   type="submit"
+                   className="inline-flex w-full items-center justify-center rounded-full border px-7 py-3 text-[11px] font-bold uppercase tracking-[0.22em] text-(--color-gold-light) [font-family:var(--font-jetbrains)] sm:w-auto"
+                   style={{ borderColor: 'var(--color-gold)' }}
+                 >
+                   INICIAR CONVERSACIÓN
+                 </button>
+  
+                 <p className="flex items-center gap-2 text-[9px] uppercase tracking-[0.22em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]">
+                   <LockKeyhole className="h-4 w-4 text-(--color-gold)" aria-hidden="true" />
+                   CONFIDENCIAL · COMPARTIMOS MATERIAL SOLO BAJO SOLICITUD
+                 </p>
+               </motion.form>
+             )}
+           </AnimatePresence>
+         </div>
+       </section>
+     </main>
+   )
+ }
 

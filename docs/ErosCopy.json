@@ -1,0 +1,863 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "generated_at": "2026-05-06",
+    "scope": "Strings hardcodeados en componentes TSX y page.tsx. NO incluye public/eros.json (ese es source of truth aparte para boutique y futuras expansiones).",
+    "tone_rules": "Ver .cursorrules — tono dark luxury, no militar, gamificado v2. Tabla 'prohibido / correcto' resumida en DESIGN_SYSTEM_COMPACT.md.",
+    "extraction_rules": [
+      "Solo strings visibles al usuario final.",
+      "Incluye: titles, headlines, eyebrows, CTAs, body copy, badges, ribbons, labels, placeholders, error messages, microcopy, aria-labels descriptivos.",
+      "Excluye: nombres de variables, props, slugs, console.error, comentarios, valores cargados desde public/eros.json.",
+      "Convención de claves: snake_case sin acentos.",
+      "Listas repetidas se usan como array de objetos."
+    ]
+  },
+
+  "global": {
+    "navbar": {
+      "links": {
+        "experiencias": "Experiencias",
+        "el_tocador": "El Tocador",
+        "la_sociedad": "La Sociedad",
+        "consentimiento": "Consentimiento",
+        "faq": "FAQ",
+        "inversores": "Inversores",
+        "la_app": "La App"
+      },
+      "cta": "Rendirse al deseo",
+      "mobile_drawer": {
+        "close_button": "Cerrar"
+      },
+      "aria_labels": {
+        "logo_home": "Ir al inicio",
+        "menu_open": "Abrir menú",
+        "menu_close": "Cerrar menú",
+        "overlay_close": "Cerrar menú"
+      },
+      "brand": {
+        "logo_text": "Eroscape",
+        "sr_only_mobile": "Eroscape"
+      }
+    },
+
+    "footer": {
+      "tagline": "El primer Escape Room Erótico del mundo",
+      "columns": [
+        { "title": "Experiencias", "links_source": "dynamic_from_CITIES" },
+        { "title": "Legal", "links": ["Privacidad", "Consentimiento", "Aviso legal"] },
+        { "title": "Contacto", "links": ["Contacto", "FAQ"] }
+      ],
+      "bottom_bar": {
+        "disclaimer": "Transacciones procesadas con total discreción · Ocio y Eventos SL",
+        "copyright_prefix": "©",
+        "brand": "Eroscape"
+      }
+    },
+
+    "panic_mode": {
+      "panic_title": "InfoDiario - Últimas Noticias",
+      "floating_button": {
+        "tooltip": "Modo privado",
+        "aria_label": "Activar modo privado"
+      },
+      "fake_site": {
+        "fake_brand": "InfoDiario",
+        "nav_aria_label": "Secciones",
+        "nav_links": ["Inicio", "Nacional", "Internacional", "Economía", "Deportes", "Cultura"],
+        "hero_title": "Los mercados europeos cierran con alzas moderadas",
+        "hero_meta_suffix": "· Redacción Económica",
+        "paragraphs": [
+          "Los principales índices del Viejo Continente han registrado avances contenidos al cierre de la sesión, en un contexto de menor volatilidad en los tipos de interés de referencia. Los inversores mantienen la cautela ante las próximas reuniones de bancos centrales.",
+          "En la zona euro, el tono dominante ha sido el de consolidación tras las últimas semanas de fluctuaciones acotadas en los mercados de renta variable, con volumen de negocio en línea con la media del trimestre."
+        ],
+        "chart_box": "Evolución del IBEX-35",
+        "cards": [
+          {
+            "title": "El Congreso debate los presupuestos para el próximo ejercicio",
+            "body": "La cámara baja retoma el trámite parlamentario con enmiendas presentadas por varios grupos."
+          },
+          {
+            "title": "Previsiones meteorológicas para el fin de semana en toda España",
+            "body": "Anticiclón débil en el norte y posibles chubascos localizados en el litoral mediterráneo."
+          },
+          {
+            "title": "La selección española de fútbol prepara su próximo encuentro",
+            "body": "El cuerpo técnico ultima la convocatoria de cara al partido amistoso previsto para las próximas fechas FIFA."
+          }
+        ],
+        "footer_text": "© InfoDiario 2025 · Todos los derechos reservados ·",
+        "footer_links": ["Aviso legal", "Privacidad"],
+        "emoji": "📰"
+      }
+    },
+
+    "route_transition_loader": {
+      "brand_alt": "Eroscape",
+      "tagline": "bienvenido al lugar de tus fantasias"
+    },
+
+    "shared_ctas": {
+      "rendirse_al_deseo": "Rendirse al deseo",
+      "quiero_esta_noche": "QUIERO ESTA NOCHE",
+      "confirmar_mi_noche": "[ CONFIRMAR MI NOCHE ]",
+      "firmar_el_juramento": "FIRMAR EL JURAMENTO",
+      "ayudame_a_elegir": "AYÚDAME A ELEGIR →"
+    }
+  },
+
+  "home": {
+    "hero": {
+      "logo_alt": "Eroscape",
+      "brand_wordmark": "EROSCAPE",
+      "tagline": "El primer Escape Room Erótico del mundo",
+      "subline": "+18 · Erotismo sin límites innecesarios · Tu placer, tus reglas",
+      "cta_primary": "RENDIRSE AL DESEO",
+      "cta_secondary": "ELIGE TU NOCHE",
+      "scroll_cue": "> déjate caer...",
+      "returning_toast": "Ya te esperábamos."
+    },
+    "concept": {
+      "headline": "Lo que nadie más te dice",
+      "value_cards": [
+        { "title": "Anonimato Total", "desc": "Protocolos de entrada y salida diseñados para que nunca te cruces con otros huéspedes." },
+        { "title": "Sin Juicios", "desc": "Un espacio seguro para explorar cada una de tus fantasías bajo tus propios términos." },
+        { "title": "Lujo Sensorial", "desc": "Sábanas de 1000 hilos, aromas curados y tecnología de vanguardia en cada habitación." },
+        { "title": "Diseño Narrativo", "desc": "No es solo una habitación, es una historia donde tú eres el protagonista absoluto." },
+        { "title": "Seguridad 360º", "desc": "Botones de pánico discretos y personal formado en consentimiento y mediación." }
+      ]
+    },
+    "map": {
+      "headline": "¿DÓNDE QUIERES QUE OCURRA?",
+      "subhead": "5 ciudades · 6 experiencias por ciudad · Plazas limitadas"
+    },
+    "how_it_works": {
+      "headline": "Cómo Funciona",
+      "subhead": "Cinco pasos hacia lo desconocido",
+      "steps": [
+        { "name": "El Encuentro", "desc": "Reserva tu cita de forma discreta y anónima a través de nuestro portal." },
+        { "name": "Tus Deseos", "desc": "Rellena el test de afinidad para que personalicemos la habitación." },
+        { "name": "El Baúl", "desc": "Recibe tu caja de herramientas y accesorios antes de entrar." },
+        { "name": "El Juramento", "desc": "Aceptación de las normas de seguridad y consentimiento mutuo." },
+        { "name": "Las Puertas se Abren", "desc": "Entra en tu fantasía. Tienes 90 minutos para escapar... o quedarte." }
+      ]
+    },
+    "cta_section": {
+      "title": "¿No sabes cuál elegir?",
+      "description": "Cuéntanos un poco sobre ti y te recomendamos la experiencia perfecta para tu noche.",
+      "cta_label": "AYÚDAME A ELEGIR →"
+    }
+  },
+
+  "experiencias": {
+    "header": {
+      "eyebrow": "Catálogo",
+      "headline": "ELEGÍ TU NOCHE",
+      "body": "Dos decisiones te separan del deseo. Primero, elegí cómo jugás. Después, elegí dónde."
+    },
+    "modes": {
+      "card_eyebrow": "Las reglas del juego",
+      "section_eyebrow": "La intensidad",
+      "section_headline": "Las reglas del juego",
+      "section_body": "Elegí el modo que mejor define tu noche. Todo sucede con discreción, cuidado y consentimiento.",
+      "items_fallback": [
+        { "name": "Lovers", "desc": "Para parejas que quieren reconectar, jugar y volver a mirarse distinto. Complicidad, tensión suave y un final cuidado." },
+        { "name": "Plan Golfo", "desc": "Para amigos con tensión, rolletes o parejas aventureras. Risas nerviosas, adrenalina y decisiones rápidas." },
+        { "name": "Libertino", "desc": "Para mentes muy abiertas. Tres niveles de intensidad hacia una exploración total, siempre consensuada." },
+        { "name": "El Secreto", "desc": "No desvelamos pruebas ni recorrido. El misterio es parte del placer: entrás sin mapa, salís con historia." }
+      ]
+    },
+    "escenario": {
+      "eyebrow": "Ahora elegí tu escenario",
+      "headline": "EL ESCENARIO.",
+      "body_prefix": "Cada sala es un universo irrepetible"
+    },
+    "catalogo": {
+      "city_label": "Ciudad",
+      "intensity_label": "Intensidad",
+      "intensity_filters": ["TODAS", "ALPHA", "BETA", "OMEGA"],
+      "empty_state": "No hay salas con este filtro en este momento."
+    },
+    "habitacion_final": {
+      "eyebrow": "El clímax",
+      "headline": "La Habitación Final",
+      "body": "Llegues por donde llegues, el destino siempre es el placer. Un espacio diseñado para cruzar tus propios límites.",
+      "cta_primary": "Confirmar mi noche",
+      "cta_secondary": "Consentimiento →"
+    },
+    "catalog_card": {
+      "cta": "VER ESTA EXPERIENCIA →",
+      "availability_aria_coming_soon_suffix": ": próximamente",
+      "capacity_singular": "persona",
+      "capacity_plural": "personas",
+      "price_prefix": "Desde"
+    }
+  },
+
+  "experiencia_detalle": {
+    "metadata": {
+      "description": "Antesala de tu noche: elige fecha y cruza el umbral con discreción."
+    },
+    "breadcrumbs": {
+      "aria_label": "Migas de pan",
+      "home": "Inicio",
+      "experiencias": "Experiencias",
+      "separator": "/"
+    },
+    "share": {
+      "aria_label": "Compartir esta experiencia"
+    },
+    "stats": {
+      "duration_label": "Duración",
+      "participants_label": "Participantes",
+      "intensity_label": "Intensidad",
+      "price_label": "Precio",
+      "participants_couple": "Pareja",
+      "participants_single": "1 persona",
+      "participants_up_to_prefix": "Hasta",
+      "participants_up_to_suffix": "personas",
+      "price_prefix": "Desde"
+    },
+    "content": {
+      "what_awaits_headline": "Lo que te espera"
+    },
+    "cta": {
+      "headline": "El misterio te aguarda",
+      "button": "QUIERO ESTA NOCHE"
+    },
+    "faq": {
+      "headline": "Protocolo y consultas"
+    },
+    "related": {
+      "headline": "Otras experiencias"
+    }
+  },
+
+  "el_club": {
+    "metadata": {
+      "title": "El Club — Eroscape",
+      "description": "Membresías exclusivas y comparativa de niveles para quienes vuelven una y otra vez."
+    },
+    "hero": {
+      "eyebrow": "PROTOCOLO CERRADO",
+      "headline": "ACCEDE AL LADO OSCURO DE EROSCAPE",
+      "body": "Membresías exclusivas para operativos recurrentes."
+    },
+    "tiers": {
+      "sr_heading": "Niveles de membresía",
+      "featured_badge": "MÁS POPULAR",
+      "cta_prefix": "ACTIVAR"
+    },
+    "comparison": {
+      "headline": "Comparativa de protocolos",
+      "body": "Qué incluye cada nivel en una sola vista.",
+      "grid_aria_label": "Comparativa de beneficios por nivel",
+      "benefit_header": "Beneficio",
+      "included_aria_label": "Incluido",
+      "not_included_aria_label": "No incluido"
+    },
+    "testimonials": {
+      "headline": "Voces del protocolo",
+      "body": "Testimonios anónimos de miembros verificados.",
+      "figcaption_prefix": "Miembro verificado · Arquetipo:"
+    },
+    "membership_actions": {
+      "headline": "Suscripción con Stripe",
+      "body": "El cobro recurrente se activará en una fase posterior. Mientras tanto puedes explorar el panel con la insignia de miembro en modo demostración.",
+      "cta_notify": "AVISARME CUANDO ABRA",
+      "cta_join_demo": "UNIRME (DEMO EN ESTE DISPOSITIVO)",
+      "cta_enter_demo": "DEMO: ENTRAR A MI ESPACIO"
+    },
+    "toasts_and_hints": {
+      "toast_prefix": "Disponible próximamente ·",
+      "toast_stripe": "Disponible próximamente · Stripe Subscriptions",
+      "demo_hint": "Insignia activa en este dispositivo. Abre tu sede de agente para verla."
+    }
+  },
+
+  "reservar": {
+    "step1": {
+      "step_header": { "paso_prefix": "PASO", "act_label": "I", "title": "¿DÓNDE QUIERES QUE OCURRA?" },
+      "experience_card": {
+        "intensity_labels": {
+          "ALPHA": "DESPERTAR · Suave",
+          "BETA": "INTENSO · Sin frenos",
+          "OMEGA": "SIN LÍMITES · Todo permitido"
+        },
+        "price_prefix": "Desde",
+        "select_cta": "SELECCIONAR"
+      },
+      "calendar": {
+        "section_title": "ELIGE TU NOCHE",
+        "prev_month_label": "Mes anterior",
+        "next_month_label": "Mes siguiente"
+      },
+      "time_slots": {
+        "section_title": "¿A QUÉ HORA EMPIEZA TODO?",
+        "slots": ["19:00", "21:00", "23:00"]
+      },
+      "bottom_bar": {
+        "summary_title": "SELECCIÓN ACTIVA",
+        "primary_label": "ASÍ LO QUIERO →",
+        "missing_value_placeholder": "—"
+      }
+    },
+
+    "step2": {
+      "step_header": { "paso_prefix": "PASO", "act_label": "II", "title": "CUÉNTANOS LO QUE DESEAS" },
+      "sections": {
+        "company_title": "¿CON QUIÉN VAS A EXPLORAR?",
+        "intensity_title": "¿HASTA DÓNDE QUIERES LLEGAR?",
+        "names_title": "¿CÓMO QUIERES QUE TE LLAMEN?",
+        "language_title": "IDIOMA DEL PLACER"
+      },
+      "company_types": [
+        { "id": "pareja", "label": "Pareja", "description": "Dos cuerpos, una complicidad." },
+        { "id": "rollete", "label": "Rollete", "description": "Sin etiquetas. Con todo." },
+        { "id": "plan_golfo", "label": "Plan Golfo", "description": "Un grupo que quiere jugar." },
+        { "id": "swinger", "label": "Swinger", "description": "Libertad consensuada." }
+      ],
+      "intensity_options": [
+        { "mission_level": "ALPHA", "level": "bajo", "nivel_prefix": "NIVEL", "title": "SUAVE · Despertar los sentidos", "descriptor": "Un inicio lento. Insinuación, piel, respiración." },
+        { "mission_level": "BETA", "level": "medio", "nivel_prefix": "NIVEL", "title": "INTENSO · Cruzar algún límite", "descriptor": "Más cerca. Más claro. Donde el juego ya se nota." },
+        { "mission_level": "OMEGA", "level": "turbio", "nivel_prefix": "NIVEL", "title": "SIN FILTROS · Todo está permitido", "descriptor": "Sin frenos innecesarios. Solo límites reales." }
+      ],
+      "gm_omega": {
+        "close_label": "Cerrar mensaje",
+        "terminal_prefix": "EL MAESTRO >",
+        "message": "Has elegido la experiencia sin filtros. La intensidad será total. Define tu Palabra Mágica en el siguiente paso — es tu control absoluto."
+      },
+      "names": {
+        "empty_state": "Selecciona un tipo de operativo para continuar.",
+        "placeholder": "Tu nombre, un apodo, lo que prefieras..."
+      },
+      "language": { "options": ["ES", "EN", "FR"] },
+      "archetype_preview": {
+        "tooltip": "Tu perfil de placer se revelará cuando completes tu reserva.",
+        "label": "Empezamos a conocerte:"
+      },
+      "bottom_bar": {
+        "summary_title": "TU ELECCIÓN",
+        "missing_value_placeholder": "—",
+        "primary_label": "CONTINUAR →",
+        "back_label_default": "← VOLVER"
+      }
+    },
+
+    "step3": {
+      "step_header": { "paso_prefix": "PASO", "act_label": "III", "title": "ABRE EL BAÚL" },
+      "subtitle": "Suma tentaciones a tu noche",
+      "upsell_item_ctas": { "add": "LO QUIERO", "remove": "SACARLO" },
+      "popular_ribbon": "EL FAVORITO",
+      "arsenal_panel": {
+        "title": "TU BAÚL",
+        "empty_state": "El baúl está vacío. La noche también puede ser salvaje así.",
+        "total_label": "EL VALOR DE TU NOCHE:"
+      },
+      "upsell_items": [
+        { "id": "pack_sensorial", "name": "Caja de Placeres", "rarity": "raro", "description": "Juguetes y accesorios sensuales esperándote en la sala al llegar." },
+        { "id": "tiempo_15", "name": "+15 min de abandono", "rarity": "descomun", "description": "Porque a veces el placer no puede apurarse." },
+        { "id": "tiempo_30", "name": "+30 min sin apuro", "rarity": "raro", "description": "El doble de tiempo para perderte en la experiencia." },
+        { "id": "upgrade_ia", "name": "El Maestro te conoce", "rarity": "epico", "description": "La IA personaliza cada detalle según tus deseos más profundos." },
+        { "id": "sorpresa", "name": "Susurro para tu acompañante", "rarity": "descomun", "description": "Un mensaje secreto y un detalle especial que solo ellos recibirán." }
+      ],
+      "bottom_bar": {
+        "summary_title": "EL VALOR DE TU NOCHE",
+        "primary_label": "CONTINUAR →",
+        "back_label_default": "← VOLVER"
+      }
+    },
+
+    "step4": {
+      "step_header": { "paso_prefix": "PASO", "act_label": "IV", "title": "EL JURAMENTO" },
+      "intro": "Lo que sigue tiene reglas. Tuyas. Nuestras. De nadie más.",
+      "privacy_banner": "Tu privacidad es sagrada aquí",
+      "document_sections": [
+        { "title": "ALCANCE DE LA EXPERIENCIA", "body": "El servicio consiste en una experiencia de escape room para adultos con temática sensual y narrativa inmersiva. Todo ocurre en un espacio controlado, con personal profesional y protocolos de seguridad. No constituye asesoramiento médico, psicológico ni terapéutico." },
+        { "title": "LÍMITES Y CONSENTIMIENTO", "body": "Participas de forma libre, voluntaria y revocable en cualquier momento mediante la palabra de seguridad acordada. Se respetan límites explícitos y se prioriza el bienestar de todas las personas presentes. Cualquier indicación de malestar detiene la experiencia." },
+        { "title": "CONFIDENCIALIDAD", "body": "Los datos personales y preferencias declaradas se tratan con estricta confidencialidad, conforme a la normativa aplicable en materia de protección de datos. No se comparten con terceros salvo obligación legal o tu consentimiento expreso." },
+        { "title": "VIGENCIA DEL CONSENTIMIENTO", "body": "Al firmar digitalmente este pacto confirmas que has leído y comprendido el documento, que la información facilitada es veraz y que aceptas las condiciones aplicables a tu reserva concreta." },
+        { "title": "USO DE LA PALABRA DE SEGURIDAD", "body": "La palabra de seguridad que elijas tiene efecto inmediato: interrumpe cualquier acción en curso sin juicio ni represalias. El equipo está entrenado para responder de forma neutral y discreta." },
+        { "title": "CANCELACIÓN Y MODIFICACIONES", "body": "Las políticas de cancelación, reprogramación y reembolso se aplican según las condiciones publicadas en el momento de la contratación. Las modificaciones sustanciales de este documento serán comunicadas con antelación razonable." }
+      ],
+      "safe_word": {
+        "title": "TU PALABRA MÁGICA",
+        "description": "Una sola palabra lo detiene todo. Inmediatamente. Sin preguntas. Sin consecuencias. Solo tú tienes ese poder.",
+        "placeholder": "Elige tu palabra...",
+        "suggestions": ["Lluvia", "Mariposa", "Pausa", "Aurora", "Eclipse", "Bruma"]
+      },
+      "signature": {
+        "title": "FIRMA AQUÍ",
+        "clear_cta": "Limpiar",
+        "canvas_placeholder": "Dibuja tu firma en el recuadro",
+        "production_note": "Firma digital vinculante disponible en producción."
+      },
+      "age_confirm": "Confirmo que soy mayor de edad (+18) y acepto las condiciones de este espacio.",
+      "privacy_faq": {
+        "question": "¿Qué hacemos con tu información?",
+        "answer": "Tratamos tus datos conforme al RGPD: base legitimadora del contrato, conservación limitada al tiempo necesario, derechos de acceso, rectificación, supresión, limitación, portabilidad y oposición. Puedes ejercerlos contactando con el responsable del tratamiento indicado en la web."
+      },
+      "seal_cta": "FIRMAR EL JURAMENTO",
+      "bottom_bar": {
+        "summary_title": "EL JURAMENTO",
+        "summary": "Todo listo para sellarlo.",
+        "primary_label": "FIRMAR EL JURAMENTO"
+      }
+    },
+
+    "step5": {
+      "step_header": { "paso_prefix": "PASO", "act_label": "V", "title": "LAS PUERTAS SE ABREN" },
+      "intro": "El último paso. Después, todo empieza.",
+      "access_granted_overlay": [
+        "> Preparando tu noche...",
+        "> Confirmando tus deseos...",
+        "> Todo listo. Bienvenido."
+      ],
+      "details": {
+        "title": "TU NOCHE, EN DETALLE",
+        "arsenal_title": "TU BAÚL",
+        "pricing_rows": ["Base", "Baúl", "Total"]
+      },
+      "bank_statement": {
+        "eyebrow": "EN TU EXTRACTO BANCARIO APARECERÁ COMO:",
+        "merchant": "Ocio y Eventos SL",
+        "note": "Tu privacidad protegida. Nadie sabrá lo que viviste aquí."
+      },
+      "payment": {
+        "section_title": "EL ÚLTIMO PASO",
+        "discount_toggle": "Código de descuento",
+        "discount_placeholder": "Introduce código",
+        "badges": [
+          "Cancelación libre 48h antes",
+          "Discreción absoluta",
+          "Siempre hay alguien para ti"
+        ]
+      },
+      "stripe": {
+        "missing_key_note_prefix": "Configura",
+        "missing_key_env": "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+        "missing_key_note_suffix": "para pagos con tarjeta.",
+        "prepare_experience": "Preparando tu experiencia...",
+        "demo_mode": "Cobro en modo demo (sin PaymentIntent en servidor). Puedes confirmar tu noche y continuar al panel.",
+        "divider": "o paga con tarjeta",
+        "errors": [
+          "No se pudo completar el pago",
+          "Autenticación fallida",
+          "Introduce los datos de la tarjeta",
+          "Pago rechazado"
+        ],
+        "processing_label": "PROCESANDO PROTOCOLO...",
+        "confirm_cta": "[ CONFIRMAR MI NOCHE ]"
+      },
+      "bottom_bar": {
+        "summary_title": "TOTAL",
+        "primary_label": "[ CONFIRMAR MI NOCHE ]"
+      }
+    },
+
+    "bottom_bar_defaults": {
+      "back_label": "← VOLVER",
+      "primary_label": "CONTINUAR →"
+    },
+
+    "progress": {
+      "label": "TEMPERATURA:",
+      "suffix": "°"
+    }
+  },
+
+  "la_sociedad": {
+    "hero": {
+      "title": "LA SOCIEDAD",
+      "quote": "«Lo que ocurre aquí, no sale de aquí.»",
+      "body": "Un espacio de libertad medida, para quienes desean explorar bajo el velo de la discreción. En Eroscape, la comunidad respira misterio, elegancia y una sensualidad cuidada.",
+      "scroll_aria_label": "Ir a próximas noches"
+    },
+    "upcoming_nights": {
+      "section_title": "Próximas noches",
+      "status_labels": [
+        { "status": "cerrado", "label": "Cerrado" },
+        { "status": "ultimas", "label": "Últimas plazas" },
+        { "status": "disponible", "label": "Disponible" }
+      ],
+      "cta": "Saber más",
+      "events": [
+        { "image_alt": "Ambiente íntimo con máscaras y luz tenue, estética de velada exclusiva.", "date_line": "15 may · Madrid", "title": "Noche de máscaras", "quote": "Donde el anonimato es la única regla y la mirada el único lenguaje permitido." },
+        { "image_alt": "Interior lujoso con detalles barrocos y iluminación cálida.", "date_line": "22 may · Barcelona", "title": "Velada veneciana", "quote": "Romance y misterio bajo un prisma de deseo medido y sofisticación." },
+        { "image_alt": "Espacio contemplativo con texturas oscuras y luz suave.", "date_line": "1 jun · Valencia", "title": "Círculo de escucha", "quote": "Palabra, consentimiento y presencia como herramientas de conexión profunda." }
+      ]
+    },
+    "corporate": {
+      "eyebrow": "Más allá de lo privado",
+      "title": "Eventos & corporativo",
+      "body": "Llevamos nuestra filosofía de excelencia y comunicación consciente al ámbito profesional: encuentros donde la confianza y la escucha son el centro. Lo que se fortalece en la penumbra, ilumina el día a día.",
+      "cta": "Consultar disponibilidad",
+      "cards": [
+        { "title": "Despedidas memorables", "subtitle": "Celebraciones bajo sello de discreción" },
+        { "title": "Aniversarios y hitos", "subtitle": "Rituales a medida para dos" },
+        { "title": "Equipos y liderazgo", "subtitle": "Confianza y comunicación consciente" },
+        { "title": "Noches bajo un halo", "subtitle": "Conceptos ad hoc para tu grupo" }
+      ]
+    },
+    "commitment": {
+      "title": "El compromiso Eroscape",
+      "pillars": [
+        { "title": "Sin grabaciones", "body": "Privacidad digital prioritaria. Pedimos que el móvil descanse, para que lo vivido quede solo entre quienes estuvieron ahí." },
+        { "title": "Sin juicios", "body": "Un espacio cuidado para explorar con respeto absoluto hacia cada persona y su ritmo." },
+        { "title": "Todo opcional", "body": "Tú marcas el límite. Nada es obligatorio: cada propuesta es una invitación que puedes declinar en cualquier momento." }
+      ]
+    },
+    "footer_links": {
+      "security_link": "Seguridad y consentimiento",
+      "club_prompt": "¿Planes de membresía?",
+      "club_link": "Ver niveles en El Club"
+    }
+  },
+
+  "seguridad": {
+    "hero": {
+      "eyebrow": "El poder de la palabra",
+      "headline": "El consentimiento manda. Sin él, no hay juego.",
+      "body": "En Eroscape, el placer solo existe con cuidado. Antes de empezar defines tus límites, eliges tu palabra segura y afinas la intensidad contigo, no contra ti."
+    },
+    "process": {
+      "steps": [
+        { "title": "Consulta previa", "body": "Completas el cuestionario de límites y preferencias para que la noche respete tu ritmo." },
+        { "title": "Briefing personal", "body": "Conversación reservada sobre códigos y palabra segura con quienes cuidan el espacio." },
+        { "title": "Durante la experiencia", "body": "Voz y guía digital en sala; el equipo humano permanece a un toque en la app si lo necesitas." },
+        { "title": "Aftercare", "body": "Cierre opcional y un momento tranquilo para integrar lo vivido, sin prisas." }
+      ]
+    },
+    "guarantees_grid": {
+      "items": [
+        { "title": "Consentimiento guiado", "body": "Límites explícitos antes de empezar. Tu palabra segura se respeta siempre, sin excepciones." },
+        { "title": "Seguridad cuidada", "body": "Equipo disponible sin invadir tu intimidad: presencia discreta y canales claros." },
+        { "title": "Privacidad garantizada", "body": "Sin grabaciones de ocio. Lo que ocurre en sala queda entre quienes estuvieron ahí." },
+        { "title": "Higiene premium", "body": "Limpieza profunda entre visitas y materiales tratados con el mismo rigor que el resto del ritual." },
+        { "title": "Curación digital en penumbra", "body": "Guía por voz y capas sensoriales coordinadas, sin presencia humana dentro de la sala salvo lo acordado." },
+        { "title": "Documentación clara", "body": "Condiciones legibles y derecho a parar o replantear en cualquier momento." }
+      ]
+    },
+    "palabra_section": {
+      "title": "Tu palabra mágica",
+      "body": "Una sola palabra lo detiene todo. En el acto. Sin preguntas incómodas. Solo recuperas el control absoluto sobre el espacio que habitas.",
+      "cta": "Renegociar tu noche",
+      "image_alt": "Sellos y lacre bajo luz tenue, metáfora visual de un pacto sellado con discreción."
+    },
+    "promises_bar": {
+      "labels": ["Sin grabaciones", "Sin juicios", "Todo opcional", "Tú mandas"]
+    },
+    "legal_accordion": {
+      "title": "Aspectos legales",
+      "items": [
+        { "title": "¿Qué información recopilamos?", "body": "Solo lo imprescindible para tu seguridad y la personalización de la visita: datos de contacto verificados, preferencias y límites. No vendemos datos a terceros." },
+        { "title": "¿Cómo protegemos tus datos?", "body": "Cifrado en tránsito, accesos restringidos y prácticas mínimas de retención. Puedes solicitar rectificación o borrado según la normativa aplicable." },
+        { "title": "Política de cancelación", "body": "Puedes cancelar o reprogramar con antelación según las condiciones de tu reserva. Los detalles concretos se confirman al sellar la noche." }
+      ]
+    }
+  },
+
+  "boutique": {
+    "_note": "La mayoría del copy (title, intro, products, offers, reviews, newsletter) se carga desde public/eros.json:boutique. Acá solo lo HARDCODEADO en BoutiquePage.tsx.",
+    "categories": [
+      { "id": "all", "label": "Todo" },
+      { "id": "kits", "label": "Kits" },
+      { "id": "juegos", "label": "Juegos" },
+      { "id": "lenceria", "label": "Lencería" },
+      { "id": "accesorios", "label": "Accesorios" },
+      { "id": "masajes", "label": "Masajes" }
+    ],
+    "hero": {
+      "eyebrow": "Boutique",
+      "chip": "Packaging elegante, envío discreto."
+    },
+    "product_card": {
+      "fallback_category_label": "Curado",
+      "badge": "Discreto",
+      "meta": "Curaduría sensorial",
+      "cta_add": "Añadir",
+      "cta_in_bag": "En tu baúl"
+    },
+    "empty_state": {
+      "no_products": "No hay productos en esta categoría por ahora."
+    },
+    "offers_section": {
+      "eyebrow": "Privilegios",
+      "title": "Ofertas cuidadas",
+      "card_eyebrow": "Edición limitada"
+    },
+    "reviews_section": {
+      "title": "Lo que se susurra"
+    },
+    "newsletter": {
+      "eyebrow": "Newsletter",
+      "title": "Dejá que te escribamos con discreción",
+      "sr_only_email_label": "Email",
+      "email_placeholder": "tu@email.com",
+      "cta": "Suscribirme",
+      "success_message": "Listo. Te escribiremos solo cuando haya algo que valga la pena."
+    },
+    "fallback_copy": {
+      "title": "El Tocador",
+      "intro": "Objetos curados para extender la experiencia con discreción, elegancia y cuidado.",
+      "products": [
+        { "name": "Kit Sensorial de Lujo", "desc": "Aceites aromáticos, plumas y elementos táctiles premium inspirados en nuestras salas." },
+        { "name": "Cartas del Deseo", "desc": "Baraja exclusiva con preguntas íntimas y desafíos sensuales para parejas aventureras." },
+        { "name": "Lencería Veneciana", "desc": "Diseños exclusivos inspirados en Venecia, disponibles en todas las tallas." },
+        { "name": "Máscaras Artesanales", "desc": "Máscaras venecianas auténticas hechas a mano para tus propios juegos de seducción." },
+        { "name": "Velas de Masaje Gourmet", "desc": "Set de velas con aromas que se convierten en aceites de masaje." },
+        { "name": "Box Experiencia Privada", "desc": "Kit completo para recrear una noche Eroscape en casa con guía paso a paso." }
+      ],
+      "offers": [
+        { "name": "Para Parejas Nuevas", "desc": "Kit de iniciación con descuento para quienes reserven su primera experiencia." },
+        { "name": "Membresía VIP", "desc": "Acceso a productos limitados y descuentos permanentes." }
+      ],
+      "reviews": [
+        "“Packaging increíblemente elegante. Se nota el cuidado en cada detalle.” — Cliente verificado"
+      ],
+      "newsletter": "Suscribite y recibe novedades discretas y privilegios exclusivos."
+    }
+  },
+
+  "app_movil": {
+    "landing_hero": {
+      "eyebrow": "Tecnología del placer",
+      "headline": "La app que te guía hacia el deseo",
+      "body": "Mucho más que una utilidad: una extensión digital de la curación Eroscape. Orquesta cada detalle antes, durante y después de tu noche.",
+      "store_aria_labels": ["Descargar en App Store", "Descargar en Google Play"],
+      "chat_frame": {
+        "title": "Guía digital",
+        "status": "En línea",
+        "message_1": "He guardado tus preferencias de la última visita. ¿Quieres que bajemos un punto la intensidad del ambiente esta noche?",
+        "message_2": "Sí, prefiero un inicio más suave.",
+        "message_3": "Hecho. La atmósfera se adaptará a tu pulso. Nos vemos dentro.",
+        "sr_only_input_label": "Campo de mensaje (demostración)",
+        "input_placeholder": "Escribe un mensaje…"
+      }
+    },
+    "architecture_section": {
+      "title": "Arquitectura del placer",
+      "subtitle": "Funcionalidades pensadas para la inmersión total, sin ruido ni prisas.",
+      "features": [
+        { "title": "Curación que aprende contigo", "body": "Sugerencias que se afinan con tu ritmo y tus preferencias, sin prisas ni juicios." },
+        { "title": "Tu palabra segura", "body": "Acceso inmediato al modo discretísimo y recordatorios suaves para que siempre vuelvas cuando quieras." },
+        { "title": "Preludio antes de llegar", "body": "Pistas sensoriales y listas curadas que empiezan a tejer la noche mucho antes de cruzar la puerta." },
+        { "title": "Comunicación velada", "body": "Canal reservado con conserjería y anfitriones: pocas palabras, mucha claridad." },
+        { "title": "Diario de sensaciones", "body": "Un espacio privado para atesorar lo vivido, si tú lo deseas, con total discreción." },
+        { "title": "EROSENSE integrado", "body": "Armoniza luces, aroma y vibración con lo que ocurre en sala, desde la palma de la mano." }
+      ]
+    },
+    "erosense_section": {
+      "title": "EROSENSE™",
+      "body": "Tecnología sensorial que armoniza luz, aroma y vibración con lo que vives en sala, en tiempo real, desde la app.",
+      "cta": "Saber más sobre la tecnología"
+    },
+    "preview_strip": {
+      "frames": [
+        { "image_alt": "Pantalla de bienvenida oscura con logotipo dorado y tipografía elegante.", "label": "Bienvenida", "caption": "Tu identidad discreta comienza aquí" },
+        { "image_alt": "Selección de experiencias con tarjetas tipo cristal y acentos magenta.", "label": "Reservas", "caption": "Elige tu noche" },
+        { "image_alt": "Conversación fluida con burbujas translúcidas sobre fondo oscuro.", "label": "Guía digital", "caption": "Compañía silenciosa en el bolsillo" }
+      ]
+    },
+    "stores_strip": {
+      "title": "Descarga",
+      "note": "Enlaces de demostración. Próximamente deep link y QR dinámico.",
+      "store_aria_labels": ["Descargar en App Store", "Descargar en Google Play"],
+      "qr_label": "QR (demo)",
+      "qr_aria_label": "Ir a enlaces de descarga en App Store y Google Play",
+      "qr_title": "Código QR de demostración"
+    },
+    "store_badges": {
+      "app_store_badge_text_1": "Descargar en el",
+      "app_store_badge_text_2": "App Store",
+      "google_play_badge_text_1": "DISPONIBLE EN",
+      "google_play_badge_text_2": "Google Play"
+    }
+  },
+
+  "faq": {
+    "metadata": {
+      "title": "FAQ — Eroscape",
+      "description": "Respuestas discretas sobre la experiencia, reservas, seguridad, privacidad y el Maestro."
+    },
+    "hero_intro": {
+      "eyebrow": "Lo que todos preguntan (pero pocos se atreven a decir)",
+      "headline": "Tus dudas, resueltas.",
+      "lead": "Si no encuentras lo que buscas, el Maestro puede guiarte con calma — sin exponer nada que no quieras revelar."
+    },
+    "categories": {
+      "todas": "Todas",
+      "experiencia": "La Experiencia",
+      "reservas": "Reservas",
+      "seguridad": "Seguridad",
+      "privacidad": "Privacidad",
+      "maestro_ia": "El Maestro IA"
+    },
+    "items": [
+      { "category": "experiencia", "question": "¿Qué pasa exactamente dentro de la sala?", "answer": "El Maestro orquesta un viaje sensorial personalizado. Estímulos táctiles, auditivos y visuales se alinean con una narrativa que se ajusta a tus límites. No es solo un escape room: es una coreografía íntima y elegante." },
+      { "category": "experiencia", "question": "¿Es realmente intenso o es solo sugerente?", "answer": "Tú decides la profundidad. La intensidad se calibra antes de entrar y se respeta durante toda la noche. Todo se adapta a tu consentimiento — siempre con discreción, siempre con control." },
+      { "category": "privacidad", "question": "¿Hay personas presentes durante la experiencia?", "answer": "La privacidad es un pilar. La sala se guía desde la sombra y sin supervisión humana directa en el espacio, salvo que una narrativa específica indique lo contrario (siempre se comunica de antemano)." },
+      { "category": "seguridad", "question": "¿Qué es la palabra segura y cómo funciona?", "answer": "Es tu control absoluto. Si la pronuncias, la experiencia se detiene, el ambiente cambia a modo seguro y se habilitan salidas. Tu bienestar es el límite no negociable." },
+      { "category": "reservas", "question": "¿Con quién puedo ir?", "answer": "Puedes venir a solas, en pareja o en un grupo reducido (hasta 4). La dinámica cambia según tu elección: más íntima, más social, o más estratégica — siempre cuidada." },
+      { "category": "privacidad", "question": "¿Aparecerá esto en mi extracto bancario?", "answer": "Discreción ante todo: los cargos se muestran bajo un descriptor comercial neutro. La naturaleza de tu visita se queda contigo." },
+      { "category": "maestro_ia", "question": "¿Qué es el Maestro IA y qué puede hacer?", "answer": "El Maestro es un sistema de guía narrativa y ambientación. Ajusta música, luz y ritmo en función de tus elecciones, manteniendo el tono y la seguridad. No “juzga”: acompaña." }
+    ],
+    "cta_panel": {
+      "headline": "¿Aún te queda una duda en la garganta?",
+      "body": "Escríbenos con calma. Tu privacidad es parte del ritual: no pedimos más de lo necesario.",
+      "links": {
+        "consentimiento": "Ver consentimiento",
+        "contacto": "Contactar"
+      }
+    }
+  },
+
+  "inversores": {
+    "metadata": {
+      "title": "Inversores — Eroscape",
+      "description": "Relación con inversores: una oportunidad premium construida sobre narrativa, tecnología y privacidad."
+    },
+    "hero": {
+      "logo_alt": "Eroscape",
+      "eyebrow": "Inversión discreta",
+      "headline": "Una categoría nueva.\nUna oportunidad única.",
+      "body": "Eroscape es una plataforma de experiencias inmersivas premium, construida sobre narrativa, tecnología y privacidad. Una propuesta elegante, adulta y cuidada — sin lo explícito, con lo memorable.",
+      "metrics": [
+        { "value": "5 ciudades", "label": "Presencia" },
+        { "value": "25 experiencias", "label": "IPs únicas" },
+        { "value": "€180 ticket medio", "label": "Margen alto" }
+      ],
+      "cta": "Solicitar información"
+    },
+    "oportunidad": {
+      "eyebrow": "Potencial",
+      "headline": "La economía de la experiencia sigue creciendo.",
+      "body": "En un mercado saturado de lo predecible, las experiencias inmersivas premium ganan terreno. Eroscape toma esa tendencia y la traduce en una propuesta con alto valor percibido, repetición y expansión controlada.",
+      "highlights": [
+        { "value": "+42%", "label": "crecimiento interanual estimado" },
+        { "value": "€2.4B", "label": "mercado experiencial (TAM)" }
+      ],
+      "panel": {
+        "label_left": "Crecimiento (referencial)",
+        "label_right": "Señal",
+        "years": ["2018", "2020", "2022", "2024"]
+      }
+    },
+    "modelo": {
+      "title": "Modelo",
+      "cards": [
+        { "title": "Reservas (Base)", "description": "Ticket premium con demanda dinámica y control de disponibilidad." },
+        { "title": "El Baúl (Upsell)", "description": "Curaduría de complementos in-situ para elevar la noche con intención." },
+        { "title": "El Tocador (Membresía)", "description": "Acceso recurrente a privilegios discretos y agenda prioritaria." },
+        { "title": "Licencias (Expansión)", "description": "Crecimiento mediante acuerdos operativos con estándares de marca." }
+      ]
+    },
+    "mercado": {
+      "items": [
+        { "n": "01", "title": "Cambio cultural", "body": "Auge de la sexualidad positiva y de la búsqueda de intimidad cuidada, sin vulgaridad." },
+        { "n": "02", "title": "Economía de la experiencia", "body": "El gasto se desplaza de objetos a vivencias con historia, diseño y exclusividad." },
+        { "n": "03", "title": "Ventaja de categoría", "body": "Una propuesta diferenciada, premium y escalable por estándares y tecnología." }
+      ]
+    },
+    "contacto": {
+      "title": "Contacto",
+      "body": "Acceso solo para inversores acreditados. Sin sobreexposición: lo mínimo necesario, con la máxima discreción.",
+      "form": {
+        "labels": {
+          "nombre_completo": "Nombre completo",
+          "email_profesional": "Email profesional",
+          "perfil_de_inversor": "Perfil de inversor",
+          "mensaje": "Mensaje"
+        },
+        "placeholders": {
+          "nombre": "Tu nombre",
+          "email": "nombre@firma.com",
+          "mensaje": "Qué te interesa conocer"
+        },
+        "perfil_options": ["VC", "Family Office", "Angel", "Estratégico", "Otro"],
+        "selected_prefix": "Seleccionado:",
+        "helper": "Respondemos con discreción.",
+        "submit": "Enviar solicitud"
+      },
+      "confidencial": "Confidencial • Compartimos material solo bajo solicitud"
+    }
+  },
+
+  "mi_reserva": {
+    "headquarters": {
+      "invalid_credential": "Credencial no válida.",
+      "eyebrow": "YA TE ESPERÁBAMOS.",
+      "title": "Tu espacio privado",
+      "booking_label_prefix": "Tu reserva:",
+      "club_badge": "MIEMBRO DE LA SOCIEDAD",
+      "tabs": ["TU NOCHE", "TUS DESEOS", "TU ACCESO", "TU HISTORIAL"]
+    },
+    "mission_active": {
+      "status_eyebrow": "RESERVA CONFIRMADA · TODO LISTO",
+      "status_line": "TE ESTAMOS ESPERANDO",
+      "countdown_title": "CUENTA REGRESIVA HACIA TU NOCHE",
+      "countdown_labels": ["DÍAS", "HRS", "MIN", "SEG"],
+      "safe_word_title": "TU PALABRA MÁGICA:",
+      "safe_word_toggle_aria": {
+        "reveal": "Ver mi palabra mágica",
+        "hide": "Ocultar palabra mágica"
+      }
+    },
+    "agent_profile": {
+      "title": "CUÉNTANOS MÁS",
+      "subtitle": "Completa estas confesiones para que El Maestro ajuste cada detalle a ti.",
+      "progress_format": "[{answered_count}/{total} confesiones completas]",
+      "status_aria_label": "Estado del cuestionario",
+      "question_prefix": "PREGUNTA",
+      "question_divider": "/",
+      "textarea_placeholder": "Escribe tu respuesta...",
+      "quick_options": ["Sí", "No", "Prefiero no decirlo"],
+      "next_cta": "SEGUIR CONTANDO →",
+      "save_last_cta": "GUARDAR ÚLTIMA CONFESIÓN",
+      "submit_cta": "ENVIAR MIS DESEOS AL MAESTRO",
+      "submitting": "ENVIANDO…",
+      "submitted_note": "Tus deseos ya están con El Maestro.",
+      "errors": ["No se pudo enviar. Inténtalo de nuevo.", "Error de red."],
+      "questions": [
+        "¿Qué intensidad narrativa te resulta más cómoda en un espacio cerrado?",
+        "¿Hay algún tema o atmósfera que prefieras evitar por completo?",
+        "¿Cómo describirías tu ritmo ideal: pausado, equilibrado o dinámico?",
+        "¿Te importa más la componente sensorial o la puramente intelectual?",
+        "¿Has participado antes en experiencias inmersivas para adultos?",
+        "¿Qué nivel de interacción con el equipo en sala esperas?",
+        "¿Alguna alergia o sensibilidad que debamos conocer?",
+        "¿Prefieres instrucciones verbales breves o un briefing más detallado?",
+        "¿Hay un detalle personal que te gustaría que el Game Master tuviera en cuenta?",
+        "¿Confirmas que la información facilitada es veraz y está actualizada?"
+      ]
+    },
+    "archive": {
+      "empty_title": "Aún no has vivido ninguna noche con nosotros.",
+      "empty_body": "Tu primera experiencia se guardará aquí para siempre.",
+      "title": "TU HISTORIAL",
+      "past_status_badge": "VIVIDA"
+    },
+    "credential": {
+      "title": "TU LLAVE DE ENTRADA",
+      "subtitle": "Cómo entrar la noche de tu experiencia.",
+      "download_cta": "Guardar mi llave",
+      "steps": [
+        "Descarga la App Eroscape",
+        "Abre el escáner en la App",
+        "Tu sala te reconocerá"
+      ],
+      "store_labels": ["App Store", "Google Play"],
+      "store_aria": ["Descargar en App Store", "Descargar en Google Play"]
+    },
+    "game_master": {
+      "header_name": "EL MAESTRO",
+      "header_status": "· ESCUCHÁNDOTE",
+      "typing": "El Maestro está escribiendo...",
+      "cta": "CONTARLE MIS SECRETOS →",
+      "intro_messages": [
+        "Ya tenemos tu reserva. Ahora queremos conocerte mejor.",
+        "Cada detalle de esta noche se moldeará a lo que deseas.",
+        "Antes de que llegues, necesito saber algo más sobre ti."
+      ]
+    }
+  }
+}

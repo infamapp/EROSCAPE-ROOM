@@ -51,9 +51,25 @@ export function CatalogExperienceCard({ item, citySlug, index }: CatalogExperien
   const priceLabel = `Desde ${formatCurrency(item.priceFrom)}`
   const cardImage = getExperienceCardImage(item.slug, item.title)
 
+  const isAgotado = item.availability === 'AGOTADO'
+  const isOmega = item.intensity === 'OMEGA'
+  const isDisabled = isAgotado || item.isComingSoon
+
+  const ctaLabel = isAgotado
+    ? 'NO DISPONIBLE'
+    : item.isComingSoon
+      ? 'PRÓXIMAMENTE'
+      : 'VER ESTA EXPERIENCIA →'
+
+  const ariaLabel = isAgotado
+    ? `${item.title}: agotado`
+    : item.isComingSoon
+      ? `${item.title}: próximamente`
+      : item.title
+
   const inner = (
     <>
-      <div className="relative h-[200px] w-full overflow-hidden">
+      <div className="relative h-[220px] w-full overflow-hidden">
         <Image
           src={cardImage.src}
           alt={cardImage.alt}
@@ -68,11 +84,23 @@ export function CatalogExperienceCard({ item, citySlug, index }: CatalogExperien
           )}
           aria-hidden="true"
         />
-      </div>
 
-      <div className="flex flex-col gap-3 p-4 sm:p-5">
-        <div className="flex flex-wrap items-center justify-between gap-2">
-          <ExperienceIntensityPill level={item.intensity} />
+        <div className="pointer-events-none absolute inset-x-3 top-3 flex items-start justify-between gap-2">
+          <div className="flex flex-col items-start gap-1.5">
+            <ExperienceIntensityPill level={item.intensity} />
+            {isOmega ? (
+              <span
+                className="rounded-full border px-2 py-0.5 font-(--font-jetbrains) text-[9px] uppercase tracking-[0.18em]"
+                style={{
+                  background: 'rgba(127,29,29,0.45)',
+                  color: 'var(--color-omega-badge, #f87171)',
+                  borderColor: 'color-mix(in srgb, var(--color-omega-badge, #f87171) 45%, transparent)',
+                }}
+              >
+                Sin límites
+              </span>
+            ) : null}
+          </div>
           <span
             className={cn(
               'rounded-full border px-2.5 py-1 font-(--font-jetbrains) text-[10px] tracking-wide uppercase sm:text-[11px]',
@@ -82,44 +110,55 @@ export function CatalogExperienceCard({ item, citySlug, index }: CatalogExperien
             {item.availability}
           </span>
         </div>
+      </div>
 
-        <h3 className="font-(--font-playfair) text-lg font-bold leading-snug text-white sm:text-xl">
+      <div className="flex flex-col gap-3 p-4 sm:p-5">
+        <h3 className="text-lg font-bold leading-snug text-white [font-family:var(--font-playfair)] sm:text-xl">
           {item.title}
         </h3>
-        <p className="line-clamp-2 font-(--font-inter) text-sm leading-relaxed text-[var(--color-text-muted)] min-h-[48px]">
+        <p className="line-clamp-2 min-h-[48px] font-(--font-inter) text-sm leading-relaxed text-(--color-text-muted)">
           {item.description}
         </p>
 
         <div
-          className="flex flex-wrap items-center gap-x-4 gap-y-1 font-(--font-jetbrains) text-xs text-[var(--color-text-secondary)]"
+          className="flex flex-wrap items-center gap-x-4 gap-y-1 font-(--font-jetbrains) text-xs"
           style={{ color: 'var(--color-text-secondary)' }}
         >
           <span className="inline-flex items-center gap-1.5">
-            <Clock className="size-3.5 shrink-0 text-[var(--color-gold-light)]" aria-hidden="true" />
+            <Clock className="size-3.5 shrink-0 text-(--color-gold-light)" aria-hidden="true" />
             {item.durationMin} min
           </span>
           <span className="inline-flex items-center gap-1.5">
-            <Users className="size-3.5 shrink-0 text-[var(--color-gold-light)]" aria-hidden="true" />
+            <Users className="size-3.5 shrink-0 text-(--color-gold-light)" aria-hidden="true" />
             {item.capacity} {item.capacity === 1 ? 'persona' : 'personas'}
           </span>
         </div>
 
-        <p className="font-(--font-playfair) text-base font-semibold tracking-wide text-[var(--color-gold-light)]">
+        <p className="text-base font-semibold tracking-wide text-(--color-gold-light) [font-family:var(--font-playfair)]">
           {priceLabel}
         </p>
 
         <span
           className={cn(
             'block w-full rounded-full border py-2.5 text-center font-(--font-playfair) text-xs tracking-[0.14em] sm:text-sm',
-            item.isComingSoon
-              ? 'border-white/50 text-white/70'
-              : 'border-white/60 text-white transition-colors duration-300 group-hover:border-transparent group-hover:bg-(--color-magenta) group-hover:text-white',
+            isAgotado
+              ? 'border-red-500/30 text-red-400/60'
+              : item.isComingSoon
+                ? 'border-white/50 text-white/70'
+                : 'border-white/60 text-white transition-colors duration-300 group-hover:border-transparent group-hover:bg-(--color-magenta) group-hover:text-white',
           )}
         >
-          VER ESTA EXPERIENCIA →
+          {ctaLabel}
         </span>
       </div>
     </>
+  )
+
+  const articleClasses = cn(
+    'group overflow-hidden rounded-2xl border-(--border-subtle) bg-(--color-bg-elevated) [box-shadow:var(--glow-card)] transition-[box-shadow,transform,border-color] duration-300',
+    isDisabled
+      ? 'opacity-60'
+      : 'hover:-translate-y-1.5 hover:[box-shadow:var(--glow-magenta)] hover:border-[color-mix(in_srgb,var(--color-magenta)_55%,transparent)]',
   )
 
   return (
@@ -129,20 +168,21 @@ export function CatalogExperienceCard({ item, citySlug, index }: CatalogExperien
       initial={shouldReduceMotion ? false : 'hidden'}
       whileInView={shouldReduceMotion ? undefined : 'visible'}
       viewport={{ once: true, margin: '-40px' }}
-      className={cn(
-        'group overflow-hidden rounded-2xl border-(--border-subtle) bg-(--color-bg-elevated) [box-shadow:var(--glow-card)]',
-        item.isComingSoon
-          ? 'opacity-90'
-          : 'transition-[box-shadow,transform] duration-300 hover:-translate-y-0.5 hover:[box-shadow:var(--glow-magenta)]',
-      )}
-      aria-label={item.isComingSoon ? `${item.title}: próximamente` : item.title}
+      className={articleClasses}
+      aria-label={ariaLabel}
     >
-      <Link
-        href={href}
-        className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
-      >
-        {inner}
-      </Link>
+      {isDisabled ? (
+        <div aria-disabled="true" className="block cursor-not-allowed">
+          {inner}
+        </div>
+      ) : (
+        <Link
+          href={href}
+          className="block focus:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+        >
+          {inner}
+        </Link>
+      )}
     </motion.article>
   )
 }

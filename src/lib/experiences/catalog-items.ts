@@ -70,5 +70,15 @@ export const EXPERIENCIAS_CATALOG_ITEMS: readonly ExperienciasCatalogItem[] = [
   },
 ] as const
 
+/**
+ * API canónica para /experiencias.
+ * Nota: hoy el mock no discrimina por ciudad; devolvemos el catálogo completo.
+ * Cuando exista data por ciudad, filtrar aquí por citySlug.
+ */
+export function getExperiencesByCity(citySlug: string): readonly ExperienciasCatalogItem[] {
+  void citySlug
+  return EXPERIENCIAS_CATALOG_ITEMS
+}
+
 /** Primeras salas del catálogo para el bloque “destacadas” en la home. */
 export const EXPERIENCIAS_DESTACADAS_SLICES = 3 as const
