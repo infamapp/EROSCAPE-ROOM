@@ -22,7 +22,6 @@ cp .env.local.example .env.local
   - `NEXT_PUBLIC_APP_URL`
   - `IA_WEBHOOK_URL` (opcional en prototipo)
   - `IA_WEBHOOK_SECRET` (si lo defines, el webhook IA exige `Authorization: Bearer ...`)
-
 ## Instalar dependencias
 
 ```bash
