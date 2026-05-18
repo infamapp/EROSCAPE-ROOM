@@ -52,7 +52,7 @@ export function CtaHelpSectionClient({ className }: CtaHelpSectionClientProps) {
             style={{ background: 'var(--gradient-help-cta-card)' }}
           >
             <p className="font-(--font-jetbrains) text-[10px] uppercase tracking-[0.22em] text-(--color-text-muted) sm:text-[11px]">
-              EL MAESTRO SUGIERE
+              EL GAME MASTER SUGIERE
             </p>
             <h3 className="mt-4 font-(--font-cormorant) text-2xl text-white sm:text-3xl">
               ¿No sabés cuál elegir?

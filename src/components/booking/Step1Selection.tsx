@@ -5,7 +5,7 @@ import { CheckCircle2, ChevronLeft, ChevronRight } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { CITIES, EXPERIENCES_TEMPLATE } from '@/lib/constants'
+import { CITIES, DEFAULT_CITY_SLUG, EXPERIENCES_TEMPLATE, isCityBookable } from '@/lib/constants'
 import {
   formatMonthTitleEsUpper,
   getDaysInMonth,
@@ -53,6 +53,12 @@ function isCitySlug(value: unknown): value is CitySlug {
   return typeof value === 'string' && CITIES.some((c) => c.slug === value)
 }
 
+function isBookableCitySlug(value: unknown): value is CitySlug {
+  if (!isCitySlug(value)) return false
+  const city = CITIES.find((c) => c.slug === value)
+  return city !== undefined && isCityBookable(city)
+}
+
 function isExperienceSlug(value: unknown): value is ExperienceSlug {
   return typeof value === 'string' && EXPERIENCES_TEMPLATE.some((e) => e.slug === value)
 }
@@ -62,7 +68,7 @@ export function Step1Selection() {
   const router = useRouter()
   const { state, updateStep1, isStepValid } = useBookingFlow()
 
-  const selectedCity = (state.step1.citySlug as CitySlug | undefined) ?? 'madrid'
+  const selectedCity = (state.step1.citySlug as CitySlug | undefined) ?? DEFAULT_CITY_SLUG
   const selectedExp = state.step1.experienceSlug as ExperienceSlug | undefined
   const selectedDate = state.step1.date
   const selectedTime = state.step1.timeSlot
@@ -78,7 +84,7 @@ export function Step1Selection() {
       const parsed: unknown = JSON.parse(raw)
       const payload = parsed as PrefillPayload
 
-      const nextCity = isCitySlug(payload.citySlug) ? payload.citySlug : null
+      const nextCity = isBookableCitySlug(payload.citySlug) ? payload.citySlug : null
       const nextExp = isExperienceSlug(payload.experienceSlug) ? payload.experienceSlug : null
 
       if (nextCity || nextExp) {
@@ -103,6 +109,8 @@ export function Step1Selection() {
   const canContinue = isStepValid(1)
 
   const handleSelectCity = (slug: CitySlug) => {
+    const city = CITIES.find((c) => c.slug === slug)
+    if (!city || !isCityBookable(city)) return
     if (slug === selectedCity) return
     updateStep1({ citySlug: slug, experienceSlug: undefined, date: undefined, timeSlot: undefined })
   }
@@ -165,21 +173,27 @@ export function Step1Selection() {
               <p className="mt-3 font-(--font-inter) text-sm leading-relaxed text-(--color-text-secondary)">
                 Elegí el escenario. El resto se revela cuando estés listo.
               </p>
+              <p className="mt-2 font-(--font-inter) text-xs leading-relaxed text-(--color-text-muted)">
+                Ciudad de reserva actualmente: Granada. El resto de ciudades, próximamente.
+              </p>
             </div>
 
             <div className="mt-5 flex gap-2.5 overflow-x-auto pb-2 sm:mt-6 sm:gap-3 lg:flex-wrap lg:justify-center">
               {CITIES.map((c) => {
                 const isActive = c.slug === selectedCity
+                const bookable = isCityBookable(c)
                 return (
                   <motion.button
                     key={c.slug}
                     type="button"
                     variants={pillPulse}
-                    whileTap={shouldReduceMotion ? undefined : 'tap'}
+                    whileTap={bookable && !shouldReduceMotion ? 'tap' : undefined}
+                    disabled={!bookable}
                     onClick={() => handleSelectCity(c.slug)}
                     className={cn(
                       'shrink-0 rounded-full px-4 py-1.5 text-xs transition-colors sm:px-5 sm:py-2 sm:text-sm',
                       'focus:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)',
+                      !bookable && 'cursor-not-allowed opacity-50',
                     )}
                     style={{
                       background: isActive ? 'var(--gradient-cta)' : 'var(--color-bg-elevated)',
@@ -189,8 +203,10 @@ export function Step1Selection() {
                         ? '1px solid color-mix(in srgb, var(--color-magenta) 55%, transparent)'
                         : '1px solid rgba(255,255,255,0.06)',
                     }}
+                    aria-disabled={bookable ? undefined : true}
                   >
                     {c.displayName}
+                    {!bookable ? ' · pronto' : ''}
                   </motion.button>
                 )
               })}

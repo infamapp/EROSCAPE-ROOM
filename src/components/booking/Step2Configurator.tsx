@@ -2,18 +2,27 @@
 
 import type { LucideIcon } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { Flame, Heart, Infinity as InfinityIcon, Sparkles, Swords, Users, X, Zap } from 'lucide-react'
+import { Flame, Heart, Infinity as InfinityIcon, Plus, Sparkles, Swords, Users, X, Zap } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { StepHeader } from '@/components/booking/StepHeader'
 import { useBookingFlow } from '@/hooks/useBookingFlow'
+import {
+  areParticipantNamesValid,
+  getParticipantLimits,
+  PARTICIPANT_LIMITS,
+  resizeParticipantNames,
+} from '@/lib/booking-participants'
 import { COMPANY_TYPES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import type { BookingStep2, CompanyType, IntensityLevel, MissionLevel } from '@/types/booking'
 import { BookingBottomBar } from '@/components/booking/BookingBottomBar'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
+
+const CARD_TRANSITION = { duration: 0.45, ease: SENSUAL_EASE } as const
+const CARD_HOVER_TRANSITION = { duration: 0.55, ease: SENSUAL_EASE } as const
 
 const gmCardVariants = {
   hidden: { opacity: 0, height: 0 },
@@ -102,6 +111,7 @@ function CompanyTypeCard({ id, label, icon: Icon, description, isSelected, onSel
   const shouldReduceMotion = useReducedMotion()
   const [isHover, setIsHover] = useState(false)
   const detail = COMPANY_HOVER_DETAILS[id]
+  const showDetail = isHover && !shouldReduceMotion
 
   return (
     <motion.button
@@ -112,52 +122,50 @@ function CompanyTypeCard({ id, label, icon: Icon, description, isSelected, onSel
       onFocus={() => setIsHover(true)}
       onBlur={() => setIsHover(false)}
       className={cn(
-        'relative overflow-hidden rounded-2xl p-6 text-center',
+        'relative min-h-[11.5rem] overflow-hidden rounded-2xl p-6 text-center sm:min-h-[12.5rem]',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)',
       )}
       style={{
         background: 'var(--color-bg-elevated)',
         border: isSelected ? '2px solid var(--color-magenta)' : '2px solid rgba(185,48,158,0.18)',
-        boxShadow: 'var(--glow-card)',
+        boxShadow: isSelected ? 'var(--glow-magenta)' : 'var(--glow-card)',
       }}
       animate={
         shouldReduceMotion
           ? undefined
           : isSelected
-            ? { scale: 1.04, boxShadow: ['var(--glow-card)', 'var(--glow-magenta)', 'var(--glow-card)'] }
-            : { scale: 1, boxShadow: 'var(--glow-card)' }
+            ? { boxShadow: ['var(--glow-magenta)', 'var(--glow-card)', 'var(--glow-magenta)'] }
+            : { boxShadow: 'var(--glow-card)' }
       }
       transition={
         shouldReduceMotion
           ? undefined
           : isSelected
-            ? { scale: { type: 'spring', stiffness: 300, damping: 20 }, boxShadow: { duration: 1.6, repeat: Infinity, ease: SENSUAL_EASE } }
-            : { type: 'spring', stiffness: 300, damping: 22 }
+            ? { boxShadow: { duration: 2.4, repeat: Infinity, ease: SENSUAL_EASE } }
+            : CARD_TRANSITION
       }
-      whileHover={shouldReduceMotion ? undefined : { scale: isSelected ? 1.04 : 1.02 }}
     >
-      <div className="relative">
+      <motion.div
+        className="relative z-10"
+        animate={shouldReduceMotion ? undefined : { opacity: showDetail ? 0.35 : 1 }}
+        transition={CARD_HOVER_TRANSITION}
+      >
         <Icon className="mx-auto h-10 w-10" style={{ color: 'var(--color-magenta)' }} aria-hidden="true" />
-        <div className="mt-4 font-(--font-playfair) text-lg text-white">{label}</div>
+        <motion.div className="mt-4 font-(--font-playfair) text-lg text-white">{label}</motion.div>
         <p className="mt-2 text-center font-(--font-inter) text-xs leading-5" style={{ color: 'var(--color-text-muted)' }}>
           {description}
         </p>
+      </motion.div>
 
-        <AnimatePresence initial={false}>
-          {isHover ? (
-            <motion.div
-              key="detail"
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
-              animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-              exit={shouldReduceMotion ? undefined : { opacity: 0, y: 6 }}
-              transition={shouldReduceMotion ? undefined : { duration: 0.25, ease: SENSUAL_EASE }}
-              className="mx-auto mt-4 max-w-xs rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-left backdrop-blur-md"
-            >
-              <p className="font-(--font-inter) text-xs leading-5 text-(--color-text-secondary)">{detail}</p>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
-      </div>
+      <motion.div
+        className="pointer-events-none absolute inset-x-3 bottom-3 rounded-2xl border border-white/10 bg-black/55 px-4 py-3 text-left backdrop-blur-md"
+        initial={false}
+        animate={shouldReduceMotion ? undefined : { opacity: showDetail ? 1 : 0, y: showDetail ? 0 : 10 }}
+        transition={CARD_HOVER_TRANSITION}
+        aria-hidden={!showDetail}
+      >
+        <p className="font-(--font-inter) text-xs leading-5 text-(--color-text-secondary)">{detail}</p>
+      </motion.div>
     </motion.button>
   )
 }
@@ -190,8 +198,16 @@ function IntensityOption({ level, missionLevel, isSelected, onSelect, title, des
         boxShadow: 'var(--glow-card)',
         filter: isSelected ? `drop-shadow(0 0 14px ${accentVar})` : undefined,
       }}
-      animate={shouldReduceMotion ? undefined : isSelected ? { scale: 1.05 } : { scale: 1 }}
-      transition={shouldReduceMotion ? undefined : { type: 'spring', stiffness: 320, damping: 22 }}
+      animate={
+        shouldReduceMotion
+          ? undefined
+          : isSelected
+            ? { borderColor: accentVar, y: -2 }
+            : { borderColor: 'rgba(185,48,158,0.18)', y: 0 }
+      }
+      transition={shouldReduceMotion ? undefined : CARD_TRANSITION}
+      whileHover={shouldReduceMotion ? undefined : { y: -1 }}
+      whileTap={shouldReduceMotion ? undefined : { y: 0 }}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -260,18 +276,21 @@ export function Step2Configurator() {
   const gmText =
     '> Sin límites iniciado. La experiencia será directa e intensa. Elegí tu palabra mágica en el siguiente acto.'
 
-  const nameFieldCount = !companyType ? 0 : companyType === 'plan-golfo' || companyType === 'swinger' ? 2 : 1
+  const participantLimits = getParticipantLimits(companyType)
+  const nameFieldCount = participantLimits ? names.length : 0
+  const canAddParticipant = participantLimits ? names.length < participantLimits.max : false
 
   const handleCompanySelect = (id: CompanyType) => {
-    updateStep2({ companyType: id })
-    const nextLen = id === 'plan-golfo' || id === 'swinger' ? 2 : 1
-    const current = names
-    if (current.length === nextLen) return
-    if (current.length > nextLen) {
-      updateStep2({ companyType: id, names: current.slice(0, nextLen) })
-      return
-    }
-    updateStep2({ companyType: id, names: [...current, ...Array(nextLen - current.length).fill('')] })
+    const limits = PARTICIPANT_LIMITS[id]
+    updateStep2({
+      companyType: id,
+      names: resizeParticipantNames(names, limits),
+    })
+  }
+
+  const handleAddParticipant = () => {
+    if (!participantLimits || names.length >= participantLimits.max) return
+    updateStep2({ names: [...names, ''] })
   }
 
   const handleIntensitySelect = (level: IntensityLevel) => {
@@ -290,7 +309,9 @@ export function Step2Configurator() {
     updateStep2({ names: next })
   }
 
-  const canContinue = Boolean(companyType && intensityLevel)
+  const canContinue = Boolean(
+    companyType && intensityLevel && areParticipantNamesValid(companyType, names),
+  )
   const handlePrev = () => router.push('/reservar?step=1')
   const handleNext = () => {
     if (!canContinue) return
@@ -465,17 +486,51 @@ export function Step2Configurator() {
               Elegí con quién venís para continuar.
             </p>
           ) : (
-            <div className="mt-4 grid gap-3 md:grid-cols-2">
+            <motion.div className="mt-4 grid gap-3 md:grid-cols-2">
               {Array.from({ length: nameFieldCount }).map((_, idx) => (
-                <input
+                <motion.div
                   key={idx}
-                  value={names[idx] ?? ''}
-                  onChange={(e) => handleNameChange(idx, e.target.value)}
-                  placeholder="Tu nombre, un apodo, lo que prefieras..."
-                  className="w-full border-b border-(--border-subtle) bg-transparent px-0 py-2.5 font-(--font-inter) text-[13px] text-(--color-text-primary) placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:py-3 sm:text-sm"
-                />
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 6 }}
+                  animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, ease: SENSUAL_EASE, delay: idx * 0.04 }}
+                >
+                  <label
+                    htmlFor={`participant-name-${idx}`}
+                    className="mb-1.5 block font-(--font-jetbrains) text-[10px] tracking-[0.14em] uppercase"
+                    style={{ color: 'var(--color-text-muted)' }}
+                  >
+                    {nameFieldCount === 1 ? 'Participante' : `Participante ${idx + 1}`}
+                  </label>
+                  <input
+                    id={`participant-name-${idx}`}
+                    value={names[idx] ?? ''}
+                    onChange={(e) => handleNameChange(idx, e.target.value)}
+                    placeholder="Nombre o apodo..."
+                    className="w-full border-b border-(--border-subtle) bg-transparent px-0 py-2.5 font-(--font-inter) text-[13px] text-(--color-text-primary) placeholder:text-(--color-text-muted) focus-visible:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:py-3 sm:text-sm"
+                  />
+                </motion.div>
               ))}
-            </div>
+
+              {canAddParticipant ? (
+                <motion.div
+                  className={cn(nameFieldCount % 2 === 1 ? 'md:col-span-2' : '')}
+                  initial={shouldReduceMotion ? false : { opacity: 0 }}
+                  animate={shouldReduceMotion ? undefined : { opacity: 1 }}
+                  transition={{ duration: 0.35, ease: SENSUAL_EASE }}
+                >
+                  <button
+                    type="button"
+                    onClick={handleAddParticipant}
+                    className="inline-flex items-center gap-2 rounded-full border border-[rgba(185,48,158,0.25)] px-4 py-2 font-(--font-jetbrains) text-[10px] tracking-[0.14em] uppercase transition-colors hover:border-(--color-magenta) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+                    style={{ color: 'var(--color-text-secondary)' }}
+                  >
+                    <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+                    Añadir participante
+                    {participantLimits ? ` (${names.length}/${participantLimits.max})` : null}
+                  </button>
+                </motion.div>
+              ) : null}
+            </motion.div>
           )}
         </div>
 

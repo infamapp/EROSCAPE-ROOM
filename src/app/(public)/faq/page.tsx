@@ -4,16 +4,16 @@
  
  export const metadata: Metadata = {
    title: 'FAQ — Eroscape',
-   description: 'Respuestas discretas sobre la experiencia, reservas, seguridad, privacidad y el Maestro.',
+   description: 'Respuestas discretas sobre la experiencia, reservas, seguridad, privacidad y el Game Master.',
    openGraph: {
      title: 'FAQ — Eroscape',
-     description: 'Respuestas discretas sobre la experiencia, reservas, seguridad, privacidad y el Maestro.',
+     description: 'Respuestas discretas sobre la experiencia, reservas, seguridad, privacidad y el Game Master.',
      type: 'website',
    },
    twitter: {
      card: 'summary_large_image',
      title: 'FAQ — Eroscape',
-     description: 'Respuestas discretas sobre la experiencia, reservas, seguridad, privacidad y el Maestro.',
+     description: 'Respuestas discretas sobre la experiencia, reservas, seguridad, privacidad y el Game Master.',
    },
  }
  

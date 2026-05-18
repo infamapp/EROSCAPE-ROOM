@@ -5,7 +5,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { useMemo, useState } from 'react'
 
 import { CatalogExperienceCard } from '@/components/marketing/CatalogExperienceCard'
-import { CITIES } from '@/lib/constants'
+import { CITIES, DEFAULT_CITY_SLUG, isCityBookable } from '@/lib/constants'
 import { EXPERIENCIAS_CATALOG_ITEMS, EXPERIENCIAS_DESTACADAS_SLICES } from '@/lib/experiences/catalog-items'
 import { cn } from '@/lib/utils'
 import type { ExperienciasCatalogIntensity, ExperienciasCatalogItem } from '@/types/experiencias-catalog'
@@ -41,11 +41,13 @@ export function ExperienciasHomeCatalog({
   layout = 'full',
 }: ExperienciasHomeCatalogProps = {}) {
   const shouldReduceMotion = useReducedMotion()
-  const [internalActiveCity, setInternalActiveCity] = useState<ExperienciasCatalogCitySlug>('madrid')
+  const [internalActiveCity, setInternalActiveCity] = useState<ExperienciasCatalogCitySlug>(DEFAULT_CITY_SLUG)
   const controlled =
     controlledActiveCity !== undefined && onActiveCityChange !== undefined
   const activeCity = controlled ? controlledActiveCity : internalActiveCity
   const setActiveCity = (slug: ExperienciasCatalogCitySlug) => {
+    const city = CITIES.find((c) => c.slug === slug)
+    if (!city || !isCityBookable(city)) return
     if (controlled) onActiveCityChange(slug)
     else setInternalActiveCity(slug)
   }
@@ -140,12 +142,14 @@ export function ExperienciasHomeCatalog({
               >
                 {CITIES.map((city) => {
                   const isActive = activeCity === city.slug
+                  const bookable = isCityBookable(city)
                   return (
                     <button
                       key={city.slug}
                       type="button"
                       role="tab"
                       aria-selected={isActive}
+                      disabled={!bookable}
                       onClick={() => setActiveCity(city.slug)}
                       className={cn(
                         'shrink-0 border-b-2 pb-2 font-(--font-playfair) text-sm tracking-wide transition-colors duration-300 sm:text-base',
@@ -153,7 +157,9 @@ export function ExperienciasHomeCatalog({
                         isActive
                           ? 'border-(--color-magenta) text-white'
                           : 'border-transparent text-(--color-text-muted) hover:text-(--color-text-secondary)',
+                        !bookable && 'cursor-not-allowed opacity-50 hover:text-(--color-text-muted)',
                       )}
+                      aria-disabled={bookable ? undefined : true}
                     >
                       {city.displayName.toUpperCase()}
                     </button>

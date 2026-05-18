@@ -55,6 +55,8 @@ const polaroidVariants = {
 
 function getCityAccent(slug: string): string {
   switch (slug) {
+    case 'granada':
+      return 'var(--color-gold)'
     case 'madrid':
       return 'var(--color-magenta)'
     case 'barcelona':
@@ -324,7 +326,7 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
                     [
                       { k: 'DURACIÓN', v: `${experience.duration} min` },
                       { k: 'PARA CUÁNTOS', v: String(experience.maxParticipants) },
-                      { k: 'EL MAESTRO', v: experience.specs.aiLevel },
+                      { k: 'EL GAME MASTER', v: experience.specs.aiLevel },
                       { k: 'INTENSIDAD', intensity: true as const },
                       { k: 'PRECIO', v: priceText },
                     ] as const

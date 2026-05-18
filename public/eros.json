@@ -2,7 +2,7 @@
     "hero": {
         "headline": "Atrévete a entrar. Salir es otra historia.",
         "subheadline": "No es un juego. Es una experiencia sensorial. Diseñado para adultos que saben jugar.",
-        "franchise_cta": "Oportunidad de Franquicia Mundial: Se el primero en traer esta experiencia revolucionaria a tu ciudad. Inversión única en un mercado sin competencia."
+        "franchise_cta": "Monta tu propia franquicia Eroscape. Una oportunidad única en su categoría — solicita información con discreción."
     },
     "concept": {
         "title": "¿Qué es EROSCAPE ROOM®?",
@@ -124,7 +124,7 @@
         "intro": "En Eroscape, el placer solo existe con cuidado. Antes de empezar, defines tus límites, eliges tu palabra segura y decides tu nivel de intensidad. Nosotros cuidamos la ambientación, la higiene y tu privacidad.",
         "quote": "\"El consentimiento manda: sin él, no hay juego.\"",
         "guarantees": [
-            "Consentimiento Guiado: Formulario previo de límites y preferencias. Tu palabra segura siempre será respetada.",
+            "Consentimiento guiado: Formulario previo de límites y preferencias. La palabra segura frena la actividad de inmediato y activa conexión con un asistente humano.",
             "Seguridad Total: Protocolo de seguridad con personal presente en todo momento, sin intrusión en tu experiencia.",
             "Privacidad Garantizada: Cámaras solo para seguridad, nunca para grabación. Tu intimidad está protegida.",
             "Higiene Premium: Protocolos de limpieza hospitalaria entre sesiones. Todo esterilizado y renovado.",
@@ -134,7 +134,7 @@
         "process_steps": [
             "Consulta Previa: Completás el formulario de límites y preferencias",
             "Briefing Personal: Conversación privada sobre códigos y palabras seguras",
-            "Durante la Experiencia: Guiada completamente por Game Master IA automatizada. Personal humano disponible vía app ante cualquier emergencia",
+            "Durante la experiencia: Guiada por Game Master IA. Palabra segura o app activan asistente humano de inmediato.",
             "Aftercare: Debriefing opcional y espacio para procesar la experiencia"
         ],
         "our_guarantees": [
@@ -145,54 +145,56 @@
         ]
     },
     "boutique": {
-        "title": "Boutique Sensual",
-        "intro": "Lleva la magia de Eroscape a casa. Productos cuidadosamente seleccionados para extender tu experiencia más allá de nuestras salas.",
+        "title": "El Tocador",
+        "intro": "Objetos curados para extender la experiencia con discreción, elegancia y cuidado.",
         "products": [
             {
                 "name": "Kit Sensorial de Lujo",
-                "desc": "Aceites aromáticos, plumas y elementos táctiles premium inspirados en nuestras salas"
+                "desc": "Aceites aromáticos, plumas y elementos táctiles premium inspirados en nuestras salas."
             },
             {
                 "name": "Cartas del Deseo",
-                "desc": "Baraja exclusiva con preguntas íntimas y desafíos sensuales para parejas aventureras"
+                "desc": "Baraja exclusiva con preguntas íntimas y desafíos sensuales para parejas aventureras."
             },
             {
                 "name": "Lencería Veneciana",
-                "desc": "Diseños exclusivos inspirados en nuestro Burdel de Venecia, disponibles en todas las tallas"
+                "desc": "Diseños exclusivos inspirados en Venecia, disponibles en todas las tallas."
             },
             {
                 "name": "Máscaras Artesanales",
-                "desc": "Máscaras venecianas auténticas hechas a mano para tus propios juegos de seducción"
+                "desc": "Máscaras venecianas auténticas hechas a mano para tus propios juegos de seducción."
             },
             {
                 "name": "Velas de Masaje Gourmet",
-                "desc": "Set de velas con aromas afrodisíacos que se convierten en aceites de masaje"
+                "desc": "Set de velas con aromas que se convierten en aceites de masaje."
             },
             {
                 "name": "Box Experiencia Privada",
-                "desc": "Kit completo para recrear una experiencia Eroscape en casa con guía paso a paso"
+                "desc": "Kit completo para recrear una noche Eroscape en casa con guía paso a paso."
+            },
+            {
+                "name": "El Susurro",
+                "desc": "Una dedicatoria especial y personalizada para la persona indicada. Un detalle íntimo que llega antes de que empiece la noche."
             }
         ],
         "offers": [
             {
                 "name": "Para Parejas Nuevas",
-                "desc": "Kit de iniciación con 20% descuento para quienes reserven su primera experiencia."
+                "desc": "Kit de iniciación con descuento para quienes reserven su primera experiencia. Diseñado para ampliar y enriquecer vuestra primera noche juntos."
             },
             {
                 "name": "Membresía VIP",
-                "desc": "Acceso exclusivo a productos limitados y descuentos permanentes del 15%."
+                "desc": "Acceso a productos limitados, descuentos permanentes y la posibilidad de probar el resto de experiencias disponibles. Cada sala es una historia diferente."
             }
         ],
         "reviews": [
-            "\" El Kit Sensorial de Lujo superó nuestras expectativas. Calidad premium y muy discreto. \" - Cliente verificado",
-            "\" Las Cartas del Deseo nos han dado horas de diversión. Preguntas muy creativas. \" - Cliente verificado",
-            "\" Envío rápido y packaging increíblemente elegante. Se nota el cuidado en cada detalle. \" - Cliente verificado"
+            "\"Packaging increíblemente elegante. Se nota el cuidado en cada detalle.\" — Cliente verificado"
         ],
-        "newsletter": "¿Primera vez en nuestra boutique? Suscribite y recibe un 10% de descuento en tu primera compra, además de acceso a productos exclusivos para suscriptores."
+        "newsletter": "Suscribite y recibe novedades discretas y privilegios exclusivos."
     },
     "events": {
         "title": "Eventos & Corporativo",
-        "intro": "Experiencias personalizadas para ocasiones especiales, team building empresarial y eventos de la comunidad. Siempre con nuestro sello de elegancia y profesionalidad.",
+        "intro": "Eventos corporativos, despedidas, celebraciones especiales, salidas con amigos y mucho más. Experiencias personalizadas con nuestro sello de elegancia y profesionalidad.",
         "types": [
             {
                 "name": "Despedidas de Soltero/a",
@@ -234,7 +236,7 @@
             "Gestión de Límites: Aprende a establecer y respetar límites profesionales saludables",
             "Diversidad e Inclusión: Sensibilización sobre diversidad sexual y de género en el workplace"
         ],
-        "cta": "¿Tienes una ocasión especial en mente? Contacta con nuestro equipo de eventos para crear una experiencia completamente personalizada para ti y tu grupo."
+        "cta": "¿Tienes una ocasión especial en mente? Escríbenos por WhatsApp para crear una experiencia personalizada para ti y tu grupo."
     },
     "pricing": {
         "title": "Precios, Pagos & Ofertas",
@@ -256,9 +258,10 @@
         "extras": {
             "title": "Amplía Tu Experiencia",
             "items": [
-                "Tiempo Adicional: Extiende tu experiencia con más tiempo en la sala",
-                "Experiencia Personalizada: Diseña una experiencia única adaptada a vuestros deseos",
-                "Productos Boutique: Añade productos de nuestra boutique exclusiva"
+                "+30 min de abandono: Amplía tu experiencia media hora más. Porque el placer no debería apurarse.",
+                "+60 min sin apuro: Una hora más para perderte del todo en la experiencia.",
+                "El Susurro: Un mensaje secreto y personalizado que solo tu acompañante recibirá.",
+                "Caja de Placeres: Juguetes y accesorios sensuales esperándote en la sala al llegar."
             ]
         },
         "payment_methods": {
@@ -267,7 +270,7 @@
         },
         "policy": {
             "changes": "No ofrecemos cancelaciones. Puedes cambiar tu fecha con 72-48h de antelación sin coste adicional.",
-            "duration": "Duración base: 2 horas. Ampliaciones disponibles:",
+            "duration": "Duración base: 2 horas (120 min). Precios desde 140€ (ALPHA), 160€ (BETA), 180€ (OMEGA). Ampliaciones desde +30 min."
         },
         "terms": [
             "Depósito con tarjeta: Se autoriza temporalmente tu tarjeta de crédito como garantía. No se cobra a menos que existan cargos adicionales.",
@@ -279,20 +282,20 @@
     "offers": {
         "title": "Ofertas Especiales",
         "items": [
-            "Parejas nuevas: 15% de descuento en primera experiencia",
-            "Cumpleaños y aniversarios: Copa de champagne gratis",
-            "Grupo de 4+ personas: 10% descuento por persona"
+            "Mínimo 2 personas por experiencia; grupos de hasta 10 con consulta previa",
+            "Parejas nuevas: kit de iniciación en El Tocador",
+            "Grupos especiales: contacto directo por WhatsApp"
         ],
         "promo_code": "¿Tienes un código promocional?"
     },
     "locations": {
         "title": "Ciudades disponibles",
-        "current": "Ahora mismo: Granada · Málaga · Sevilla",
-        "upcoming": "Próximamente: Madrid · Barcelona · Valencia · Alicante · Murcia"
+        "current": "Ciudad de reserva actualmente: Granada. El resto de ciudades, próximamente.",
+        "upcoming": "Madrid · Barcelona · Valencia · Sevilla · Bilbao"
     },
     "booking": {
         "title": "Reserva tu Experiencia",
-        "intro": "Completa el formulario para reservar tu noche de misterio y deseo. Te contactaremos para confirmar todos los detalles y preparar tu experiencia perfecta.",
+        "intro": "Reserva tu experiencia (mínimo 2 personas, hasta 10). Te contactaremos para confirmar detalles con total discreción.",
         "step_1": "Paso 1: Información Personal"
     },
     "digital_experience": {
@@ -353,8 +356,8 @@
         ]
     },
     "franchise": {
-        "title": "Franquicia EROSCAPE ROOM®",
-        "intro": "Únete a la revolución del entretenimiento adulto. Se el primero en traer esta experiencia física presencial a tu ciudad. Un espacio real con salas temáticas, habitaciones de placer y tecnología IA. Invierte en un negocio sin precedentes con rentabilidad probada.",
+        "title": "Monta tu Franquicia — Eroscape",
+        "intro": "Te montamos tu propia franquicia. Una de las franquicias únicas en el mundo de su categoría, con los mayores estándares de calidad, discreción y experiencia.",
         "why": [
             "No es solo un negocio, es la oportunidad de liderar un mercado completamente nuevo",
             "Marca Mundial Pionera: Primer Escape Room Erótico físico del mundo. Experiencia presencial única sin competencia directa en ninguna ciudad.",
@@ -370,28 +373,29 @@
             "Innovación I+D: Tecnología patentada y certificada",
             "Potencial Global: Mercado adulto en expansión mundial"
         ],
-        "cta": "Da el Primer Paso: Solicita información sin compromiso y descubre cómo puedes formar parte de esta revolución. Plazas limitadas por territorio. Reserva tu ciudad ahora.",
-        "form": "Email, Teléfono. Al enviar este formulario, aceptas que nos pongamos en contacto contigo para compartir información sobre la franquicia.",
-        "territories": "Territorios Prioritarios: Estamos buscando activamente franquiciados en estas ubicaciones estratégicas. ¿Tu ciudad no está en la lista? Contáctanos igualmente. Valoramos todas las propuestas."
+        "cta": "¿Te interesa abrir tu propio Eroscape? Solicita información sin compromiso.",
+        "form": "Nombre o empresa, correo, teléfono y mensaje. Nos pondremos en contacto con total discreción.",
+        "territories": "Territorios Prioritarios: Estamos buscando activamente franquiciados en estas ubicaciones estratégicas. ¿Tu ciudad no está en la lista? Contáctanos igualmente. Valoramos todas las propuestas.",
+        "whatsapp": "https://wa.me/34640758672"
     },
     "faq_general": {
-        "title": "Preguntas Frecuentes",
+        "title": "Preguntas frecuentes",
         "categories": [
-            "General",
-            "Límites y Seguridad",
+            "La experiencia",
+            "Reservas",
+            "Seguridad",
             "Privacidad",
-            "Experiencia",
-            "Reservas y Cambios",
-            "Accesibilidad"
+            "El Game Master IA"
         ],
-        "cta": "¿Tienes más preguntas? Nuestro equipo está disponible para resolver cualquier duda adicional sobre tu experiencia en Eroscape."
+        "cta": "¿Tienes más preguntas? Escríbenos por WhatsApp con total discreción.",
+        "whatsapp": "https://wa.me/34640758672"
     },
     "legal": {
         "title": "Información Legal",
         "intro": "Términos, condiciones y políticas que garantizan tu seguridad y privacidad",
         "terms_conditions": "Al utilizar nuestros servicios, aceptas cumplir con nuestros términos de uso, políticas de comportamiento y normas de convivencia.",
         "privacy_policy": "Política de Privacidad: Cumplimiento estricto del GDPR. Tus datos personales están protegidos con encriptación de nivel bancario y nunca se comparten con terceros.",
-        "consent_policy": "Política de Consentimiento: Consentimiento informado y revocable en todo momento. Tu palabra segura es sagrada y respetada inmediatamente sin excepción.",
+        "consent_policy": "Política de consentimiento: La palabra de seguridad interrumpe cualquier acción sin juicio y activa conexión directa con un asistente humano para corroborar que todo está bien. También puedes avisar a través de la app en cualquier momento.",
         "cancellation_policy": "Política de Cancelación: Cancelación gratuita hasta 48h antes. Reembolso del 50% entre 48h-24h. Sin reembolso con menos de 24h de antelación excepto causas de fuerza mayor.",
         "code_of_conduct": "Código de Conducta: Tolerancia cero con comportamientos no consensuados, acoso o irrespeto. Expulsión inmediata sin reembolso por incumplimiento.",
         "corporate_info": {
@@ -439,5 +443,82 @@
             "Máxima Privacidad: Sin grabaciones, total confidencialidad"
         ],
         "promise": "Prometemos discreción, cuidamos tu seguridad y garantizamos una experiencia irrepetible. El deseo no espera. La aventura comienza con un clic."
+    },
+    "la_sociedad": {
+        "hero_body": "Un espacio para quienes desean explorar bajo un velo de experiencias diferente. En Eroscape, la comunidad respira misterio, elegancia y una sensualidad cuidada.",
+        "corporate_intro": "Eventos corporativos, despedidas, celebraciones especiales, salidas con amigos y mucho más."
+    },
+    "faq": {
+        "metadata": {
+            "title": "FAQ — Eroscape",
+            "description": "Respuestas discretas sobre la experiencia, reservas, seguridad, privacidad y el Game Master."
+        },
+        "hero_intro": {
+            "eyebrow": "Lo que todos preguntan (pero pocos se atreven a decir)",
+            "headline": "Tus dudas, resueltas.",
+            "lead": "Si no encontrás lo que buscás, el Game Master puede guiarte con calma — sin exponer nada que no quieras revelar."
+        },
+        "categories": {
+            "todas": "Todas",
+            "experiencia": "La experiencia",
+            "reservas": "Reservas",
+            "seguridad": "Seguridad",
+            "privacidad": "Privacidad",
+            "maestro_ia": "El Game Master IA"
+        },
+        "items": [
+            {
+                "category": "experiencia",
+                "question": "¿Qué pasa exactamente dentro de la sala?",
+                "answer": "El Game Master orquesta un viaje sensorial personalizado. Estímulos táctiles, auditivos y visuales se alinean con una narrativa que se ajusta a tus límites. No es solo un escape room: es una coreografía íntima y elegante."
+            },
+            {
+                "category": "experiencia",
+                "question": "¿Es realmente intenso o es sugerente?",
+                "answer": "Tú decides la profundidad. La intensidad se calibra antes de entrar y se respeta durante toda la noche. Todo se adapta a tu consentimiento — siempre con discreción, siempre con control."
+            },
+            {
+                "category": "privacidad",
+                "question": "¿Hay personas presentes durante la experiencia?",
+                "answer": "La privacidad es un pilar. La sala se guía desde la sombra y sin supervisión humana directa en el espacio, salvo que una narrativa específica indique lo contrario (siempre se comunica de antemano)."
+            },
+            {
+                "category": "seguridad",
+                "question": "¿Qué es la palabra segura y cómo funciona?",
+                "answer": "Con la palabra segura se frena la actividad de inmediato y se conecta con un asistente humano para corroborar que no existe ningún problema."
+            },
+            {
+                "category": "reservas",
+                "question": "¿Con quién puedo ir?",
+                "answer": "A partir de dos personas por experiencia. Disponemos de experiencias para grupos de 2 a 10 personas. Para eventos más personalizados o grupos especiales, contáctanos directamente."
+            },
+            {
+                "category": "privacidad",
+                "question": "¿Aparecerá esto en mi extracto bancario?",
+                "answer": "En tu extracto bancario aparecerán los datos de la empresa, los cuales no se correlacionan con la naturaleza de la experiencia. Sin huellas."
+            },
+            {
+                "category": "maestro_ia",
+                "question": "¿Qué es el Game Master IA y qué puede hacer?",
+                "answer": "El Game Master es un sistema de guía narrativa y ambientación. Ajusta música, luz y ritmo en función de tus elecciones, manteniendo el tono y la seguridad. No juzga: acompaña."
+            }
+        ],
+        "cta_panel": {
+            "headline": "¿Aún te queda una duda en la garganta?",
+            "body": "Escribinos con calma. Tu privacidad es parte del ritual: no pedimos más de lo necesario.",
+            "links": {
+                "consentimiento": "/la-sociedad/seguridad",
+                "contacto": "https://wa.me/34640758672"
+            }
+        }
+    },
+    "experience_catalog": {
+        "duration_min": 120,
+        "prices": {
+            "ALPHA": 140,
+            "BETA": 160,
+            "OMEGA": 180
+        },
+        "faq_pareja": "Mínimo dos personas por reserva. Para grupos de hasta 10 consulta disponibilidad. La narrativa y el ritmo se adaptan siempre a quienes sois."
     }
 }

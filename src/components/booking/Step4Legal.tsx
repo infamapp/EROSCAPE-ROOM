@@ -320,8 +320,9 @@ export function Step4Legal() {
               USO DE LA PALABRA DE SEGURIDAD
             </h3>
             <p>
-              La palabra de seguridad que elijas tiene efecto inmediato: interrumpe cualquier acción en curso sin juicio ni represalias. El equipo está entrenado para responder de
-              forma neutral y discreta.
+              La palabra de seguridad que elijas tiene efecto inmediato: interrumpe cualquier acción en curso sin juicio ni represalias. Además, activa la conexión directa con un
+              asistente humano para corroborar que todo está bien. También puedes avisar a través de la app en cualquier momento. El equipo está entrenado para responder de forma
+              neutral y discreta.
             </p>
           </section>
 

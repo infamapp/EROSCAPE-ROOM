@@ -7,7 +7,7 @@ import { Clock, Users } from 'lucide-react'
 import { useState } from 'react'
 
 import { SpainMapSection } from '@/components/marketing/SpainMapSection'
-import { CITIES } from '@/lib/constants'
+import { CITIES, DEFAULT_CITY_SLUG, isCityBookable } from '@/lib/constants'
 import { FEATURED_EXPERIENCES, type FeaturedExperience, type FeaturedExperienceIntensity } from '@/lib/featured-experiences'
 import { getExperienceCardImage } from '@/lib/experiences/visuals'
 import { cn } from '@/lib/utils'
@@ -42,13 +42,10 @@ const cardVariants = {
 const SURFACE_CARD =
   'rounded-2xl overflow-hidden border-(--border-subtle) bg-(--color-bg-elevated) [box-shadow:var(--glow-card)]'
 
-const CITY_PILLS: readonly { slug: CitySlug; label: string }[] = [
-  { slug: 'madrid', label: 'Madrid' },
-  { slug: 'barcelona', label: 'Barcelona' },
-  { slug: 'valencia', label: 'Valencia' },
-  { slug: 'sevilla', label: 'Sevilla' },
-  { slug: 'bilbao', label: 'Bilbao' },
-] as const
+const CITY_PILLS = CITIES.map((c) => ({ slug: c.slug, label: c.displayName })) as readonly {
+  slug: CitySlug
+  label: string
+}[]
 
 function intensityCopy(intensity: FeaturedExperienceIntensity): string {
   switch (intensity) {
@@ -92,20 +89,28 @@ function SpainCitySelector({ activeCity, onSelectCity }: SpainCitySelectorProps)
     <div className="-mx-1 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       <div className="flex min-w-0 justify-start gap-2 px-1 sm:justify-center sm:gap-2.5">
         {CITY_PILLS.map((pill) => {
+          const city = CITIES.find((c) => c.slug === pill.slug)
+          const bookable = city !== undefined && isCityBookable(city)
           const isOn = activeCity === pill.slug
           return (
             <button
               key={pill.slug}
               type="button"
-              onClick={() => onSelectCity(pill.slug)}
+              disabled={!bookable}
+              onClick={() => {
+                if (!bookable) return
+                onSelectCity(pill.slug)
+              }}
               className={cn(
                 'shrink-0 rounded-full px-4 py-1.5 text-xs font-(--font-jetbrains) uppercase tracking-[0.15em]',
                 'transition-[border-color,background-color,color] duration-300',
                 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)',
                 isOn ? 'text-white' : 'border-(--border-subtle) bg-transparent text-(--color-text-muted) hover:text-white',
+                !bookable && 'cursor-not-allowed opacity-50 hover:text-(--color-text-muted)',
               )}
               style={isOn ? { background: 'var(--gradient-cta)' } : undefined}
               aria-pressed={isOn}
+              aria-disabled={bookable ? undefined : true}
             >
               <span className="inline-flex items-center gap-2">
                 {isOn ? (
@@ -204,9 +209,15 @@ function HomeFeaturedCard({ item }: HomeFeaturedCardProps) {
 
 export function ExperienciasHomeFeatured({ id = 'experiencias-destacadas' }: ExperienciasHomeFeaturedProps) {
   const shouldReduceMotion = useReducedMotion()
-  const [activeCity, setActiveCity] = useState<CitySlug>('madrid')
+  const [activeCity, setActiveCity] = useState<CitySlug>(DEFAULT_CITY_SLUG)
 
-  const cityLabel = CITIES.find((c) => c.slug === activeCity)?.displayName ?? 'Madrid'
+  const handleSelectCity = (slug: CitySlug) => {
+    const city = CITIES.find((c) => c.slug === slug)
+    if (!city || !isCityBookable(city)) return
+    setActiveCity(slug)
+  }
+
+  const cityLabel = CITIES.find((c) => c.slug === activeCity)?.displayName ?? 'Granada'
   const items = FEATURED_EXPERIENCES.filter((e) => e.city.toLowerCase() === cityLabel.toLowerCase()).slice(0, 3)
 
   return (
@@ -226,7 +237,7 @@ export function ExperienciasHomeFeatured({ id = 'experiencias-destacadas' }: Exp
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
 
         <div className="mt-10 sm:mt-12">
-          <SpainMapSection activeCitySlug={activeCity} onSelectCity={setActiveCity} />
+          <SpainMapSection activeCitySlug={activeCity} onSelectCity={handleSelectCity} />
         </div>
 
         <motion.header
@@ -248,7 +259,7 @@ export function ExperienciasHomeFeatured({ id = 'experiencias-destacadas' }: Exp
         </motion.header>
 
         <div className="mt-10 sm:mt-12">
-          <SpainCitySelector activeCity={activeCity} onSelectCity={setActiveCity} />
+          <SpainCitySelector activeCity={activeCity} onSelectCity={handleSelectCity} />
         </div>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div

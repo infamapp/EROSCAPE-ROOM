@@ -191,7 +191,7 @@ export function GameMasterChat({ onStartQuestionnaire }: GameMasterChatProps) {
                   background: 'color-mix(in srgb, var(--color-gm-terminal) 8%, transparent)',
                 }}
               >
-                Responder al Maestro →
+                Responder al Game Master →
               </button>
             </motion.div>
           ) : null}

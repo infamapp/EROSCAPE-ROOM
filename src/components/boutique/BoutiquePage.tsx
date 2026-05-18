@@ -118,10 +118,17 @@ const FALLBACK_COPY: BoutiqueCopy = {
     { name: 'Máscaras Artesanales', desc: 'Máscaras venecianas auténticas hechas a mano para tus propios juegos de seducción.' },
     { name: 'Velas de Masaje Gourmet', desc: 'Set de velas con aromas que se convierten en aceites de masaje.' },
     { name: 'Box Experiencia Privada', desc: 'Kit completo para recrear una noche Eroscape en casa con guía paso a paso.' },
+    { name: 'El Susurro', desc: 'Una dedicatoria especial y personalizada para la persona indicada. Un detalle íntimo que llega antes de que empiece la noche.' },
   ],
   offers: [
-    { name: 'Para Parejas Nuevas', desc: 'Kit de iniciación con descuento para quienes reserven su primera experiencia.' },
-    { name: 'Membresía VIP', desc: 'Acceso a productos limitados y descuentos permanentes.' },
+    {
+      name: 'Para Parejas Nuevas',
+      desc: 'Kit de iniciación con descuento para quienes reserven su primera experiencia. Diseñado para ampliar y enriquecer vuestra primera noche juntos.',
+    },
+    {
+      name: 'Membresía VIP',
+      desc: 'Acceso a productos limitados, descuentos permanentes y la posibilidad de probar el resto de experiencias disponibles. Cada sala es una historia diferente.',
+    },
   ],
   reviews: ['“Packaging increíblemente elegante. Se nota el cuidado en cada detalle.” — Cliente verificado'],
   newsletter: 'Suscribite y recibe novedades discretas y privilegios exclusivos.',

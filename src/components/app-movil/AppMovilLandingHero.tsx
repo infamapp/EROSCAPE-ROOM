@@ -25,7 +25,7 @@ function AppMovilChatFrame() {
           CHAT DEMO
         </p>
         <p className="text-[10px] uppercase tracking-[0.2em] text-(--color-gm-terminal) [font-family:var(--font-jetbrains)]">
-          Maestro IA
+          Game Master IA
         </p>
       </div>
       <div className="flex min-h-0 flex-1 flex-col gap-3 px-4 py-4">

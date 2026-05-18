@@ -21,8 +21,9 @@ export function LaSociedadCorporate() {
             Eventos & corporativo
           </h2>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-(--color-text-secondary) [font-family:var(--font-inter)] sm:text-base">
-            Llevamos nuestra filosofía de excelencia y comunicación consciente al ámbito profesional: encuentros donde
-            la confianza y la escucha son el centro. Lo que se fortalece en la penumbra, ilumina el día a día.
+            Eventos corporativos, despedidas, celebraciones especiales, salidas con amigos y mucho más. Llevamos nuestra
+            filosofía de excelencia y comunicación consciente al ámbito profesional: encuentros donde la confianza y la
+            escucha son el centro.
           </p>
           <div className="mt-6 h-px w-24 bg-[color-mix(in_srgb,var(--color-gold)_70%,transparent)]" />
         </div>

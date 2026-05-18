@@ -250,7 +250,7 @@ export function Navbar() {
                 boxShadow: 'var(--glow-gold)',
               }}
             >
-              Inversores
+              Franquicia
             </Link>
           </div>
 
@@ -335,7 +335,7 @@ export function Navbar() {
                   style={{ background: 'var(--color-gold)', boxShadow: 'var(--glow-gold)' }}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  Inversores
+                  Franquicia
                 </Link>
               </div>
             </motion.div>

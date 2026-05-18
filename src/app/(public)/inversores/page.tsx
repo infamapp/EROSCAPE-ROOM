@@ -3,21 +3,20 @@ import type { Metadata } from 'next'
 import { InversoresLanding } from '@/components/inversores/InversoresLanding'
 
 export const metadata: Metadata = {
-  title: 'Inversores — Eroscape',
-  description: 'Relación con inversores: una oportunidad premium construida sobre narrativa, tecnología y privacidad.',
+  title: 'Monta tu Franquicia — Eroscape',
+  description: 'Te montamos tu propia franquicia. Una de las únicas en el mundo de su categoría.',
   openGraph: {
-    title: 'Inversores — Eroscape',
-    description: 'Relación con inversores: una oportunidad premium construida sobre narrativa, tecnología y privacidad.',
+    title: 'Monta tu Franquicia — Eroscape',
+    description: 'Te montamos tu propia franquicia. Una de las únicas en el mundo de su categoría.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Inversores — Eroscape',
-    description: 'Relación con inversores: una oportunidad premium construida sobre narrativa, tecnología y privacidad.',
+    title: 'Monta tu Franquicia — Eroscape',
+    description: 'Te montamos tu propia franquicia. Una de las únicas en el mundo de su categoría.',
   },
 }
 
 export default function InversoresPage() {
   return <InversoresLanding />
 }
-

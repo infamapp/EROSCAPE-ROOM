@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-import { CITIES, EXPERIENCES_TEMPLATE } from '@/lib/constants'
+import { CITIES, DEFAULT_CITY_SLUG, EXPERIENCES_TEMPLATE, isCityBookable } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ExperienceCard } from '@/components/marketing/ExperienceCard'
 import { CityMap } from '@/components/ui/CityMap'
@@ -15,7 +15,7 @@ type CitySlug = (typeof CITIES)[number]['slug']
 
 export function CitySelector() {
   const shouldReduceMotion = useReducedMotion()
-  const [activeCity, setActiveCity] = useState<CitySlug>('madrid')
+  const [activeCity, setActiveCity] = useState<CitySlug>(DEFAULT_CITY_SLUG)
   const mapRef = useRef<HTMLDivElement | null>(null)
 
   const activeCityData = useMemo(() => CITIES.find((c) => c.slug === activeCity) ?? CITIES[0], [activeCity])
@@ -41,7 +41,10 @@ export function CitySelector() {
             ¿DÓNDE QUIERES QUE OCURRA?
           </h2>
           <p className="mt-3 sm:mt-5 font-(--font-jetbrains) text-[11px] sm:text-sm" style={{ color: 'var(--color-text-muted)' }}>
-            5 ciudades · 6 experiencias por ciudad · Plazas limitadas
+            Granada disponible · 6 experiencias · Resto de ciudades próximamente
+          </p>
+          <p className="mt-2 font-(--font-inter) text-xs leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
+            Ciudad de reserva actualmente: Granada. El resto de ciudades, próximamente.
           </p>
         </div>
 
@@ -51,7 +54,11 @@ export function CitySelector() {
               className="w-full"
               cities={CITIES}
               activeCitySlug={activeCity}
-              onSelectCity={(slug) => setActiveCity(slug as CitySlug)}
+              onSelectCity={(slug) => {
+                const city = CITIES.find((c) => c.slug === slug)
+                if (!city || !isCityBookable(city)) return
+                setActiveCity(slug as CitySlug)
+              }}
             />
           </div>
         </div>

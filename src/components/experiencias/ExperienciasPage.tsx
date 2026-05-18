@@ -6,7 +6,7 @@ import { useMemo, useState, type ReactNode } from 'react'
 
 import { CatalogExperienceCard } from '@/components/experiencias/CatalogExperienceCard'
 import { IntensityModeCard } from '@/components/experiencias/IntensityModeCard'
-import { CITIES } from '@/lib/constants'
+import { CITIES, DEFAULT_CITY_SLUG, isCityBookable } from '@/lib/constants'
 import { getExperiencesByCity } from '@/lib/experiences/catalog-items'
 import { cn } from '@/lib/utils'
 import type { ExperienciasCatalogIntensity } from '@/types/experiencias-catalog'
@@ -67,7 +67,13 @@ function normalizeAvailability(
 
 export function ExperienciasPage() {
   const shouldReduceMotion = useReducedMotion()
-  const [activeCity, setActiveCity] = useState<CitySlug>('madrid')
+  const [activeCity, setActiveCity] = useState<CitySlug>(DEFAULT_CITY_SLUG)
+
+  const handleSelectCity = (slug: CitySlug) => {
+    const city = CITIES.find((c) => c.slug === slug)
+    if (!city || !isCityBookable(city)) return
+    setActiveCity(slug)
+  }
   const [activeIntensity, setActiveIntensity] = useState<IntensityFilter>('TODAS')
 
   const all = useMemo(() => getExperiencesByCity(activeCity), [activeCity])
@@ -209,20 +215,24 @@ export function ExperienciasPage() {
                 <div role="tablist" className="flex min-w-0 gap-6 px-1 sm:justify-center sm:gap-10">
                   {CITIES.map((city) => {
                     const isActive = activeCity === city.slug
+                    const bookable = isCityBookable(city)
                     return (
                       <button
                         key={city.slug}
                         type="button"
                         role="tab"
                         aria-selected={isActive}
-                        onClick={() => setActiveCity(city.slug)}
+                        disabled={!bookable}
+                        onClick={() => handleSelectCity(city.slug)}
                         className={cn(
                           'shrink-0 border-b-2 pb-2 font-(--font-playfair) text-sm tracking-wide transition-colors duration-200 sm:text-base',
                           'focus:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)',
                           isActive
                             ? 'border-(--color-magenta) text-(--color-text-primary)'
                             : 'border-transparent text-(--color-text-muted) hover:text-(--color-text-secondary)',
+                          !bookable && 'cursor-not-allowed opacity-50 hover:text-(--color-text-muted)',
                         )}
+                        aria-disabled={bookable ? undefined : true}
                       >
                         {city.displayName.toUpperCase()}
                       </button>

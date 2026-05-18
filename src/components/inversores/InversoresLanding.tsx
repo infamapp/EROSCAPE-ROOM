@@ -21,12 +21,19 @@ import { useState, type FormEvent } from 'react'
  
  type InvestorProfile = 'family-office' | 'angel' | 'strategic' | 'otro'
  
- interface InversorFormState {
-   nombre: string
-   email: string
-   profile: InvestorProfile
-   mensaje: string
- }
+interface InversorFormState {
+  nombre: string
+  email: string
+  profile: InvestorProfile
+  mensaje: string
+}
+
+interface FranquiciaFormState {
+  nombre: string
+  email: string
+  telefono: string
+  mensaje: string
+}
  
  type Metric = { value: string; label: string }
  
@@ -69,19 +76,32 @@ import { useState, type FormEvent } from 'react'
  
  export function InversoresLanding({ className }: InversoresLandingProps) {
    const shouldReduceMotion = useReducedMotion()
-   const [submitted, setSubmitted] = useState(false)
-   const [formState, setFormState] = useState<InversorFormState>({
-     nombre: '',
-     email: '',
-     profile: 'family-office',
-     mensaje: '',
-   })
- 
-   const handleSubmit = (e: FormEvent) => {
-     e.preventDefault()
-     // TODO: conectar con Resend/SendGrid en producción
-     setSubmitted(true)
-   }
+  const [submitted, setSubmitted] = useState(false)
+  const [franquiciaSubmitted, setFranquiciaSubmitted] = useState(false)
+  const [formState, setFormState] = useState<InversorFormState>({
+    nombre: '',
+    email: '',
+    profile: 'family-office',
+    mensaje: '',
+  })
+  const [franquiciaForm, setFranquiciaForm] = useState<FranquiciaFormState>({
+    nombre: '',
+    email: '',
+    telefono: '',
+    mensaje: '',
+  })
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    // TODO: conectar con Resend/SendGrid en producción
+    setSubmitted(true)
+  }
+
+  const handleFranquiciaSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    // TODO: conectar con Resend/SendGrid en producción
+    setFranquiciaSubmitted(true)
+  }
  
    return (
      <main className={cn('min-h-screen pb-24', className)}>
@@ -123,18 +143,17 @@ import { useState, type FormEvent } from 'react'
              initial={shouldReduceMotion ? false : 'hidden'}
              animate={shouldReduceMotion ? undefined : 'visible'}
            >
-             UNA CATEGORÍA NUEVA.
-             <br />
-             UNA OPORTUNIDAD ÚNICA.
+             MONTA TU PROPIA FRANQUICIA
            </motion.h1>
- 
+
            <motion.p
              className="mx-auto mt-6 max-w-xl text-pretty text-sm leading-relaxed text-(--color-text-secondary) [font-family:var(--font-inter)] sm:text-base"
              variants={heroVariants}
              initial={shouldReduceMotion ? false : 'hidden'}
              animate={shouldReduceMotion ? undefined : 'visible'}
            >
-             Propuesta premium construida sobre narrativa, tecnología y privacidad. DNA visual consistente, tono ejecutivo.
+             Una de las franquicias únicas en el mundo. Con los mayores estándares de calidad, discreción y experiencia.
+             ¿Te interesa abrir tu propio Eroscape?
            </motion.p>
  
            <motion.div
@@ -164,7 +183,7 @@ import { useState, type FormEvent } from 'react'
  
            <motion.div className="mt-12" variants={heroVariants} initial={shouldReduceMotion ? false : 'hidden'} animate={shouldReduceMotion ? undefined : 'visible'}>
              <a
-               href="#contacto"
+               href="#franquicia-form"
                className="inline-flex items-center justify-center rounded-full border px-7 py-3 text-[11px] font-bold uppercase tracking-[0.22em] text-(--color-gold-light) transition-[background-color,border-color,color] [font-family:var(--font-jetbrains)] hover:bg-(--color-gold)/10"
                style={{ borderColor: 'var(--border-gold)' }}
              >
@@ -466,6 +485,132 @@ import { useState, type FormEvent } from 'react'
              )}
            </AnimatePresence>
          </div>
+       </section>
+
+       <section className="mx-auto max-w-3xl px-4 py-20 sm:px-6" id="franquicia-form">
+         <h2 className="text-3xl font-semibold text-white [font-family:var(--font-playfair)]">Solicitar información</h2>
+         <p className="mt-4 font-(--font-inter) text-sm text-(--color-text-secondary)">
+           Rellena el formulario y nos ponemos en contacto contigo con total discreción.
+         </p>
+
+         <motion.div
+           className="mt-10 rounded-3xl border p-8 sm:p-10"
+           style={{
+             borderColor: 'color-mix(in srgb, var(--color-gold) 20%, transparent)',
+             background: 'var(--color-bg-elevated)',
+           }}
+           variants={panelVariants}
+           initial={shouldReduceMotion ? false : 'hidden'}
+           whileInView={shouldReduceMotion ? undefined : 'visible'}
+           viewport={{ once: true, margin: '-15% 0px -15% 0px' }}
+         >
+           <AnimatePresence mode="wait">
+             {franquiciaSubmitted ? (
+               <motion.div
+                 key="franquicia-submitted"
+                 variants={panelVariants}
+                 initial={shouldReduceMotion ? false : 'hidden'}
+                 animate={shouldReduceMotion ? undefined : 'visible'}
+                 className="flex flex-col items-center justify-center gap-3 py-12 text-center"
+               >
+                 <CheckCircle2 className="h-10 w-10 text-(--color-gold-light)" aria-hidden="true" />
+                 <p className="text-sm font-semibold text-white [font-family:var(--font-playfair)]">Responderemos con discreción.</p>
+                 <p className="max-w-md text-sm text-(--color-text-secondary) [font-family:var(--font-inter)]">
+                   Gracias por tu interés en abrir un Eroscape.
+                 </p>
+               </motion.div>
+             ) : (
+               <motion.form
+                 key="franquicia-form"
+                 className="space-y-6"
+                 onSubmit={handleFranquiciaSubmit}
+                 variants={panelVariants}
+                 initial={shouldReduceMotion ? false : 'hidden'}
+                 animate={shouldReduceMotion ? undefined : 'visible'}
+               >
+                 <motion.div>
+                   <label
+                     className="mb-1 block text-[9px] uppercase tracking-[0.22em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]"
+                     htmlFor="franquicia-nombre"
+                   >
+                     Nombre / empresa
+                   </label>
+                   <input
+                     id="franquicia-nombre"
+                     value={franquiciaForm.nombre}
+                     onChange={(e) => setFranquiciaForm((s) => ({ ...s, nombre: e.target.value }))}
+                     type="text"
+                     required
+                     className="w-full bg-transparent py-2 text-sm text-white outline-none [font-family:var(--font-inter)]"
+                     style={{ borderBottom: '1px solid color-mix(in srgb, var(--color-gold) 30%, transparent)' }}
+                   />
+                 </motion.div>
+
+                 <motion.div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                   <motion.div>
+                     <label
+                       className="mb-1 block text-[9px] uppercase tracking-[0.22em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]"
+                       htmlFor="franquicia-email"
+                     >
+                       Correo
+                     </label>
+                     <input
+                       id="franquicia-email"
+                       value={franquiciaForm.email}
+                       onChange={(e) => setFranquiciaForm((s) => ({ ...s, email: e.target.value }))}
+                       type="email"
+                       required
+                       className="w-full bg-transparent py-2 text-sm text-white outline-none [font-family:var(--font-inter)]"
+                       style={{ borderBottom: '1px solid color-mix(in srgb, var(--color-gold) 30%, transparent)' }}
+                     />
+                   </motion.div>
+                   <motion.div>
+                     <label
+                       className="mb-1 block text-[9px] uppercase tracking-[0.22em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]"
+                       htmlFor="franquicia-telefono"
+                     >
+                       Teléfono
+                     </label>
+                     <input
+                       id="franquicia-telefono"
+                       value={franquiciaForm.telefono}
+                       onChange={(e) => setFranquiciaForm((s) => ({ ...s, telefono: e.target.value }))}
+                       type="tel"
+                       required
+                       className="w-full bg-transparent py-2 text-sm text-white outline-none [font-family:var(--font-inter)]"
+                       style={{ borderBottom: '1px solid color-mix(in srgb, var(--color-gold) 30%, transparent)' }}
+                     />
+                   </motion.div>
+                 </motion.div>
+
+                 <motion.div>
+                   <label
+                     className="mb-1 block text-[9px] uppercase tracking-[0.22em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]"
+                     htmlFor="franquicia-mensaje"
+                   >
+                     Mensaje
+                   </label>
+                   <textarea
+                     id="franquicia-mensaje"
+                     value={franquiciaForm.mensaje}
+                     onChange={(e) => setFranquiciaForm((s) => ({ ...s, mensaje: e.target.value }))}
+                     rows={4}
+                     className="w-full bg-transparent py-2 text-sm text-white outline-none [font-family:var(--font-inter)]"
+                     style={{ borderBottom: '1px solid color-mix(in srgb, var(--color-gold) 30%, transparent)' }}
+                   />
+                 </motion.div>
+
+                 <button
+                   type="submit"
+                   className="inline-flex w-full items-center justify-center rounded-full border px-7 py-3 text-[11px] font-bold uppercase tracking-[0.22em] text-(--color-gold-light) [font-family:var(--font-jetbrains)] sm:w-auto"
+                   style={{ borderColor: 'var(--color-gold)' }}
+                 >
+                   SOLICITAR INFORMACIÓN
+                 </button>
+               </motion.form>
+             )}
+           </AnimatePresence>
+         </motion.div>
        </section>
      </main>
    )

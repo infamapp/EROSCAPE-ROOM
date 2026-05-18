@@ -69,8 +69,8 @@ export function LaSociedadHero() {
         </div>
 
         <p className="mt-10 max-w-2xl font-(--font-inter) text-base leading-relaxed text-[var(--color-text-muted)] sm:text-lg">
-          Un espacio de libertad medida, para quienes desean explorar bajo el velo de la discreción. En Eroscape, la
-          comunidad respira misterio, elegancia y una sensualidad cuidada.
+          Un espacio para quienes desean explorar bajo un velo de experiencias diferente. En Eroscape, la comunidad
+          respira misterio, elegancia y una sensualidad cuidada.
         </p>
       </motion.div>
 

@@ -5,6 +5,7 @@ import React, { createContext, useCallback, useContext, useEffect, useMemo, useS
 
 import { UPSELL_ITEMS } from '@/lib/constants'
 import { generateBookingId } from '@/lib/utils'
+import { areParticipantNamesValid } from '@/lib/booking-participants'
 import type { BookingState, BookingStep1, BookingStep2, BookingStep3, BookingStep4, LegalConsent } from '@/types/booking'
 
 export const COMPLETED_BOOKING_STORAGE_KEY = 'eroscape_completed_booking'
@@ -117,7 +118,13 @@ export function BookingProvider({ children }: BookingProviderProps) {
         return Boolean(state.step1.citySlug && state.step1.experienceSlug && state.step1.date && state.step1.timeSlot)
       }
       if (step === 2) {
-        return Boolean(state.step2.companyType && state.step2.intensityLevel)
+        const companyType = state.step2.companyType ?? null
+        const names = state.step2.names ?? []
+        return Boolean(
+          companyType &&
+            state.step2.intensityLevel &&
+            areParticipantNamesValid(companyType, names),
+        )
       }
       if (step === 3) {
         return true

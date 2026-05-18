@@ -92,7 +92,7 @@ const DOSSIERS = [
   {
     archiveNumber: 'ARCH-003',
     icon: Brain,
-    title: 'El Maestro te conoce',
+    title: 'El Game Master te conoce',
     description: 'Nuestra IA procesa tus preferencias antes de que entres. La experiencia ya está calibrada para ti.',
     initialRotation: -0.9,
   },

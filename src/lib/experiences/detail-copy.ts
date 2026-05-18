@@ -53,7 +53,7 @@ export const EXPERIENCE_FAQ_ITEMS: readonly ExperienceFaqItem[] = [
     id: 'pareja',
     question: '¿Es necesario ir en pareja?',
     answer:
-      'Las experiencias están pensadas sobre todo para parejas, para maximizar la inmersión y la complicidad. Aceptamos reservas en solitario o grupos reducidos previa consulta, adaptando siempre la narrativa y el ritmo a quienes sois.',
+      'Mínimo dos personas por reserva. Para grupos de hasta 10 consulta disponibilidad. La narrativa y el ritmo se adaptan siempre a quienes sois.',
   },
   {
     id: 'discrecion',

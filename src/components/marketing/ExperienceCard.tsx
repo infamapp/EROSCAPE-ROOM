@@ -45,6 +45,8 @@ function getIntensityBadgeClass(level: ExperienceTemplate['missionLevel']): stri
 
 function getCityAccent(slug: string): string {
   switch (slug) {
+    case 'granada':
+      return 'var(--color-gold)'
     case 'madrid':
       return 'var(--color-magenta)'
     case 'barcelona':

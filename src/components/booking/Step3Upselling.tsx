@@ -2,7 +2,7 @@
 
 import type { LucideIcon } from 'lucide-react'
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion'
-import { CheckCircle2, Clock, Clock3, Cpu, Crown, Gift, Package, PlusCircle, Swords } from 'lucide-react'
+import { CheckCircle2, Clock, Clock3, Crown, Gift, Package, PlusCircle, Swords } from 'lucide-react'
 import { createPortal } from 'react-dom'
 import type { RefObject } from 'react'
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
@@ -35,7 +35,6 @@ const ICON_BY_NAME: Record<(typeof UPSELL_ITEMS)[number]['icon'], LucideIcon> = 
   Package,
   Clock,
   Clock3,
-  Cpu,
   Gift,
 }
 
@@ -156,7 +155,7 @@ function UpsellItemCard({ item, isSelected, selectionPulse, onToggle, hexRef }: 
       animate={isSelected ? { y: -4 } : { y: 0 }}
       transition={{ type: 'spring', stiffness: 380, damping: 26 }}
     >
-      {item.rarity === 'epico' ? (
+      {item.popular ? (
         <div
           className="absolute right-3 top-1 flex items-center gap-1 rounded-full px-2 py-0.5 font-(--font-jetbrains) text-[9px] tracking-wide"
           style={{ border: 'var(--border-gold)', color: 'var(--color-gold)', background: 'rgba(203,123,27,0.12)' }}

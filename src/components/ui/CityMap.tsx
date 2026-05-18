@@ -3,6 +3,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useMemo, useState } from 'react'
 
+import type { CityAvailability } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
 import spainPaths from '@/lib/geo/spain-paths.json'
@@ -11,8 +12,6 @@ const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
 const SPAIN_VIEWBOX = { x: 0, y: 0, width: 1000, height: 890 } as const
 
-// Spain silhouette built from administrative shapes, rendered as a single path so it reads as one country outline.
-// Source: https://simplemaps.com/static/svg/country/es/admin1/es.svg (downloaded and extracted).
 const SPAIN_PATHS = spainPaths as readonly string[]
 
 function unionBBox(a: DOMRect, b: DOMRect): DOMRect {
@@ -38,6 +37,7 @@ export interface CityMapCity {
   lon?: number
   svgX: string
   svgY: string
+  availability?: CityAvailability
 }
 
 export interface CityMapProps {
@@ -55,13 +55,9 @@ interface ViewBoxRect {
 }
 
 const SPAIN_MAINLAND_BOUNDS = {
-  // Rough mainland bounds in WGS84 (exclude Canaries).
   minLat: 35.5,
   maxLat: 43.8,
-  // Calibrated to match the specific SVG silhouette projection.
-  // Slightly extended west and slightly tightened east so Barcelona/Valencia
-  // land inside the coastline for this asset.
-  minLon: -8.40,
+  minLon: -8.4,
   maxLon: 3.1,
 } as const
 
@@ -98,14 +94,32 @@ function cityToViewBoxPoint(city: CityMapCity, viewBox: ViewBoxRect): { x: numbe
   }
 }
 
+function cityAvailability(city: CityMapCity): CityAvailability {
+  return city.availability ?? 'available'
+}
+
+function markerColors(city: CityMapCity, isActive: boolean): { fill: string; stroke: string; label: string } {
+  const available = cityAvailability(city) === 'available'
+  if (available) {
+    return {
+      fill: isActive ? 'var(--color-magenta)' : 'var(--color-magenta-dim)',
+      stroke: 'var(--color-magenta)',
+      label: isActive ? 'var(--color-text-primary)' : 'var(--color-text-secondary)',
+    }
+  }
+  return {
+    fill: 'color-mix(in srgb, var(--color-text-muted) 35%, transparent)',
+    stroke: 'color-mix(in srgb, var(--color-text-muted) 50%, transparent)',
+    label: 'var(--color-text-muted)',
+  }
+}
+
 export function CityMap({ cities, activeCitySlug, onSelectCity, className }: CityMapProps) {
   const shouldReduceMotion = useReducedMotion()
   const [hoverSlug, setHoverSlug] = useState<string | null>(null)
   const [computedViewBox, setComputedViewBox] = useState<ViewBoxRect>(SPAIN_VIEWBOX)
   const [silhouettePath, setSilhouettePath] = useState<string>(() => SPAIN_PATHS.join(' '))
 
-  // Compute a "mainland-first" viewBox so markers placed by % land on the country,
-  // not on the whitespace created by islands in the source SVG.
   useEffect(() => {
     const svgNs = 'http://www.w3.org/2000/svg'
     const svg = document.createElementNS(svgNs, 'svg')
@@ -128,7 +142,6 @@ export function CityMap({ cities, activeCitySlug, onSelectCity, className }: Cit
     try {
       const bboxes = paths.map((p) => p.getBBox())
 
-      // Canary Islands are far below; filtering them out removes the big lower whitespace.
       const mainlandCandidates = bboxes
         .map((bbox, i) => ({ bbox, d: SPAIN_PATHS[i] }))
         .filter(({ bbox }) => bbox.y < 650)
@@ -147,13 +160,12 @@ export function CityMap({ cities, activeCitySlug, onSelectCity, className }: Cit
           setSilhouettePath(nextPath)
         }, 0)
         return () => window.clearTimeout(t)
-      } else {
-        const t = window.setTimeout(() => {
-          setComputedViewBox(SPAIN_VIEWBOX)
-          setSilhouettePath(SPAIN_PATHS.join(' '))
-        }, 0)
-        return () => window.clearTimeout(t)
       }
+      const t = window.setTimeout(() => {
+        setComputedViewBox(SPAIN_VIEWBOX)
+        setSilhouettePath(SPAIN_PATHS.join(' '))
+      }, 0)
+      return () => window.clearTimeout(t)
     } catch {
       const t = window.setTimeout(() => {
         setComputedViewBox(SPAIN_VIEWBOX)
@@ -165,6 +177,13 @@ export function CityMap({ cities, activeCitySlug, onSelectCity, className }: Cit
     }
   }, [])
 
+  const highlightedCitySlug = useMemo(() => {
+    const active = cities.find((c) => c.slug === activeCitySlug)
+    if (active && cityAvailability(active) === 'available') return activeCitySlug
+    const firstAvailable = cities.find((c) => cityAvailability(c) === 'available')
+    return firstAvailable?.slug ?? activeCitySlug
+  }, [activeCitySlug, cities])
+
   const tooltip = useMemo(() => {
     if (!hoverSlug) return null
     const city = cities.find((c) => c.slug === hoverSlug)
@@ -172,7 +191,8 @@ export function CityMap({ cities, activeCitySlug, onSelectCity, className }: Cit
     const { x, y } = cityToViewBoxPoint(city, computedViewBox)
     const xPct = ((x - computedViewBox.x) / computedViewBox.width) * 100
     const yPct = ((y - computedViewBox.y) / computedViewBox.height) * 100
-    return { city, xPct, yPct }
+    const available = cityAvailability(city) === 'available'
+    return { city, xPct, yPct, available }
   }, [cities, computedViewBox, hoverSlug])
 
   return (
@@ -197,43 +217,68 @@ export function CityMap({ cities, activeCitySlug, onSelectCity, className }: Cit
 
         {cities.map((city, index) => {
           const { x, y } = cityToViewBoxPoint(city, computedViewBox)
-          const isActive = city.slug === activeCitySlug
+          const isActive = city.slug === highlightedCitySlug
           const isHover = city.slug === hoverSlug
+          const available = cityAvailability(city) === 'available'
+          const colors = markerColors(city, isActive)
+
+          const handleActivate = () => {
+            if (!available) return
+            onSelectCity(city.slug)
+          }
 
           return (
             <g
               key={city.slug}
               transform={`translate(${x} ${y})`}
+              style={{ cursor: available ? 'pointer' : 'default' }}
               onMouseEnter={() => setHoverSlug(city.slug)}
               onMouseLeave={() => setHoverSlug((v) => (v === city.slug ? null : v))}
-              onClick={() => onSelectCity(city.slug)}
-              role="button"
-              tabIndex={0}
+              onClick={handleActivate}
+              role={available ? 'button' : undefined}
+              tabIndex={available ? 0 : -1}
               onKeyDown={(e) => {
+                if (!available) return
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault()
                   onSelectCity(city.slug)
                 }
               }}
-              aria-label={`Elegir ${city.displayName}`}
+              aria-label={
+                available
+                  ? `Elegir ${city.displayName}`
+                  : `${city.displayName}, próximamente`
+              }
+              aria-disabled={available ? undefined : true}
             >
-              <motion.circle
-                r="16"
-                fill="none"
-                stroke="var(--color-magenta)"
-                initial={shouldReduceMotion ? false : { scale: 1, opacity: 0 }}
-                animate={shouldReduceMotion ? undefined : { scale: [1, 2], opacity: [0.6, 0] }}
-                transition={
-                  shouldReduceMotion
-                    ? undefined
-                    : { duration: 2, repeat: Infinity, delay: index * 0.4, ease: SENSUAL_EASE }
-                }
-                aria-hidden="true"
-              />
+              {available ? (
+                <motion.circle
+                  r="16"
+                  fill="none"
+                  stroke={colors.stroke}
+                  initial={shouldReduceMotion ? false : { scale: 1, opacity: 0 }}
+                  animate={shouldReduceMotion ? undefined : { scale: [1, 2], opacity: [0.6, 0] }}
+                  transition={
+                    shouldReduceMotion
+                      ? undefined
+                      : { duration: 2, repeat: Infinity, delay: index * 0.4, ease: SENSUAL_EASE }
+                  }
+                  aria-hidden="true"
+                />
+              ) : (
+                <circle
+                  r="14"
+                  fill="none"
+                  stroke={colors.stroke}
+                  strokeOpacity={0.35}
+                  strokeDasharray="3 4"
+                  aria-hidden="true"
+                />
+              )}
               <motion.circle
                 r="6"
-                fill={isActive ? 'var(--color-magenta)' : 'var(--color-magenta-dim)'}
-                animate={shouldReduceMotion ? undefined : isHover ? { r: 10 } : { r: 6 }}
+                fill={colors.fill}
+                animate={shouldReduceMotion ? undefined : isHover && available ? { r: 10 } : { r: 6 }}
                 transition={shouldReduceMotion ? undefined : { duration: 0.15, ease: SENSUAL_EASE }}
                 aria-hidden="true"
               />
@@ -243,16 +288,53 @@ export function CityMap({ cities, activeCitySlug, onSelectCity, className }: Cit
                 textAnchor="middle"
                 fontSize="10"
                 style={{
-                  fill: isActive ? 'var(--color-text-primary)' : 'var(--color-text-muted)',
+                  fill: colors.label,
                   fontFamily: 'var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace',
                 }}
               >
                 {city.displayName}
               </text>
+              {!available ? (
+                <text
+                  x="0"
+                  y="38"
+                  textAnchor="middle"
+                  fontSize="7"
+                  style={{
+                    fill: 'var(--color-text-muted)',
+                    fontFamily: 'var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace',
+                    letterSpacing: '0.12em',
+                  }}
+                >
+                  PRÓXIMAMENTE
+                </text>
+              ) : null}
             </g>
           )
         })}
       </svg>
+
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+        <span className="inline-flex items-center gap-2 font-(--font-jetbrains) text-[10px] uppercase tracking-[0.16em] text-(--color-text-muted)">
+          <span
+            className="inline-block size-2.5 rounded-full"
+            style={{ background: 'var(--color-magenta)' }}
+            aria-hidden="true"
+          />
+          Disponible
+        </span>
+        <span className="inline-flex items-center gap-2 font-(--font-jetbrains) text-[10px] uppercase tracking-[0.16em] text-(--color-text-muted)">
+          <span
+            className="inline-block size-2.5 rounded-full border border-dashed"
+            style={{
+              background: 'color-mix(in srgb, var(--color-text-muted) 35%, transparent)',
+              borderColor: 'color-mix(in srgb, var(--color-gold) 45%, transparent)',
+            }}
+            aria-hidden="true"
+          />
+          Próximamente
+        </span>
+      </div>
 
       <AnimatePresence>
         {tooltip ? (
@@ -265,7 +347,7 @@ export function CityMap({ cities, activeCitySlug, onSelectCity, className }: Cit
             transition={shouldReduceMotion ? undefined : { duration: 0.2, ease: SENSUAL_EASE }}
             aria-hidden="true"
           >
-            <div
+            <motion.div
               className="rounded-xl px-4 py-3 text-sm"
               style={{
                 background: 'rgba(17,0,17,0.92)',
@@ -277,16 +359,17 @@ export function CityMap({ cities, activeCitySlug, onSelectCity, className }: Cit
             >
               <div className="font-(--font-playfair)">{tooltip.city.displayName}</div>
               <div className="mt-1 text-xs" style={{ color: 'var(--color-text-muted)' }}>
-                6 experiencias disponibles
+                {tooltip.available ? '6 experiencias disponibles' : 'Próximamente'}
               </div>
-              <div className="mt-2 text-xs" style={{ color: 'var(--color-magenta)' }}>
-                Entrar →
-              </div>
-            </div>
+              {tooltip.available ? (
+                <div className="mt-2 text-xs" style={{ color: 'var(--color-magenta)' }}>
+                  Entrar →
+                </div>
+              ) : null}
+            </motion.div>
           </motion.div>
         ) : null}
       </AnimatePresence>
     </div>
   )
 }
-

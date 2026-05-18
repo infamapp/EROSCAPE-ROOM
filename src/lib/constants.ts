@@ -1,4 +1,18 @@
+export type CityAvailability = 'available' | 'coming_soon'
+
+export const DEFAULT_CITY_SLUG = 'granada' as const
+
 export const CITIES = [
+  {
+    slug: 'granada',
+    displayName: 'Granada',
+    barrio: 'Centro histórico',
+    lat: 37.5,
+    lon: -3.59904,
+    svgX: '44%',
+    svgY: '78%',
+    availability: 'available',
+  },
   {
     slug: 'madrid',
     displayName: 'Madrid',
@@ -7,6 +21,7 @@ export const CITIES = [
     lon: -3.7033,
     svgX: '10%',
     svgY: '56%',
+    availability: 'coming_soon',
   },
   {
     slug: 'barcelona',
@@ -16,15 +31,17 @@ export const CITIES = [
     lon: 1.1734,
     svgX: '40%',
     svgY: '40%',
+    availability: 'coming_soon',
   },
   {
     slug: 'valencia',
     displayName: 'Valencia',
     barrio: 'Ruzafa / Centro',
     lat: 39.4699,
-    lon: -1.,
+    lon: -0.3763,
     svgX: '73%',
     svgY: '63%',
+    availability: 'coming_soon',
   },
   {
     slug: 'sevilla',
@@ -34,33 +51,42 @@ export const CITIES = [
     lon: -5.5845,
     svgX: '36%',
     svgY: '80%',
+    availability: 'coming_soon',
   },
   {
     slug: 'bilbao',
     displayName: 'Bilbao',
     barrio: 'Casco Viejo',
-    lat: 43.,
+    lat: 43.263,
     lon: -2.935,
     svgX: '42%',
     svgY: '26%',
+    availability: 'coming_soon',
   },
 ] as const
 
+export function isCityBookable(city: { availability: CityAvailability }): boolean {
+  return city.availability === 'available'
+}
+
+export function getBookableCitySlug(): typeof DEFAULT_CITY_SLUG {
+  return DEFAULT_CITY_SLUG
+}
+
 export const EXPERIENCES_TEMPLATE = [
-  { n: 1, slug: 'habitacion-veneciana', title: 'La Habitación Veneciana', intensity: 'bajo', missionLevel: 'ALPHA', duration: 90, maxParticipants: 2, basePrice: 120 },
-  { n: 2, slug: 'ritual-de-medianoche', title: 'El Ritual de Medianoche', intensity: 'medio', missionLevel: 'BETA', duration: 90, maxParticipants: 4, basePrice: 140 },
-  { n: 3, slug: 'la-confesion', title: 'La Confesión', intensity: 'medio', missionLevel: 'BETA', duration: 90, maxParticipants: 2, basePrice: 140 },
-  { n: 4, slug: 'espejo-negro', title: 'Espejo Negro', intensity: 'turbio', missionLevel: 'OMEGA', duration: 90, maxParticipants: 4, basePrice: 160 },
-  { n: 5, slug: 'el-coleccionista', title: 'El Coleccionista', intensity: 'turbio', missionLevel: 'OMEGA', duration: 90, maxParticipants: 2, basePrice: 160 },
-  { n: 6, slug: 'la-mascarada', title: 'La Mascarada', intensity: 'medio', missionLevel: 'BETA', duration: 90, maxParticipants: 2, basePrice: 140 },
+  { n: 1, slug: 'habitacion-veneciana', title: 'La Habitación Veneciana', intensity: 'bajo', missionLevel: 'ALPHA', duration: 120, maxParticipants: 2, basePrice: 140 },
+  { n: 2, slug: 'ritual-de-medianoche', title: 'El Ritual de Medianoche', intensity: 'medio', missionLevel: 'BETA', duration: 120, maxParticipants: 4, basePrice: 160 },
+  { n: 3, slug: 'la-confesion', title: 'La Confesión', intensity: 'medio', missionLevel: 'BETA', duration: 120, maxParticipants: 2, basePrice: 160 },
+  { n: 4, slug: 'espejo-negro', title: 'Espejo Negro', intensity: 'turbio', missionLevel: 'OMEGA', duration: 120, maxParticipants: 4, basePrice: 180 },
+  { n: 5, slug: 'el-coleccionista', title: 'El Coleccionista', intensity: 'turbio', missionLevel: 'OMEGA', duration: 120, maxParticipants: 2, basePrice: 180 },
+  { n: 6, slug: 'la-mascarada', title: 'La Mascarada', intensity: 'medio', missionLevel: 'BETA', duration: 120, maxParticipants: 2, basePrice: 160 },
 ] as const
 
 export const UPSELL_ITEMS = [
   { id: 'pack-sensorial', name: 'Caja de Placeres', rarity: 'raro', price: 39, description: 'Juguetes y accesorios sensuales esperándote en la sala al llegar.', popular: false, icon: 'Package' },
-  { id: 'tiempo-15', name: '+15 min de abandono', rarity: 'descomun', price: 25, description: 'Porque a veces el placer no puede apurarse.', popular: false, icon: 'Clock' },
-  { id: 'tiempo-30', name: '+30 min sin apuro', rarity: 'raro', price: 45, description: 'El doble de tiempo para perderte en la experiencia.', popular: true, icon: 'Clock3' },
-  { id: 'upgrade-ia', name: 'El Maestro te conoce', rarity: 'epico', price: 20, description: 'La IA personaliza cada detalle según tus deseos más profundos.', popular: false, icon: 'Cpu' },
-  { id: 'sorpresa', name: 'Susurro para tu acompañante', rarity: 'descomun', price: 15, description: 'Un mensaje secreto y un detalle especial que solo ellos recibirán.', popular: false, icon: 'Gift' },
+  { id: 'tiempo-15', name: '+30 min de abandono', rarity: 'descomun', price: 25, description: 'Amplía tu experiencia media hora más. Porque el placer no debería apurarse.', popular: false, icon: 'Clock' },
+  { id: 'tiempo-30', name: '+60 min sin apuro', rarity: 'raro', price: 45, description: 'Una hora más para perderte del todo en la experiencia.', popular: true, icon: 'Clock3' },
+  { id: 'sorpresa', name: 'El Susurro', rarity: 'descomun', price: 15, description: 'Un mensaje secreto y personalizado que solo tu acompañante recibirá. Una dedicatoria íntima antes de que todo empiece.', popular: false, icon: 'Gift' },
 ] as const
 
 export const ARCHETYPES = [
@@ -77,7 +103,7 @@ export const ARCHETYPES = [
     name: 'El Amante Verdadero',
     icon: '🌹',
     description:
-      'Lo tuyo es la conexión profunda. Cada gesto, cada mirada, cada pausa. El Maestro lo ha entendido.',
+      'Lo tuyo es la conexión profunda. Cada gesto, cada mirada, cada pausa. El Game Master lo ha entendido.',
     gradient: 'var(--gradient-cta)',
   },
   {
@@ -93,7 +119,7 @@ export const ARCHETYPES = [
     name: 'El Arquitecto del Placer',
     icon: '🪞',
     description:
-      'Sabes exactamente lo que quieres y confías en que El Maestro puede dártelo. Alianza perfecta.',
+      'Sabes exactamente lo que quieres y confías en que el Game Master puede dártelo. Alianza perfecta.',
     gradient: 'var(--gradient-hero)',
   },
   {

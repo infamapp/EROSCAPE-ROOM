@@ -26,7 +26,10 @@ export function SpainMapSection({ activeCitySlug, onSelectCity }: SpainMapSectio
             ¿DÓNDE QUIERES QUE OCURRA?
           </h2>
           <p className="mt-3 font-(--font-jetbrains) text-[11px] text-(--color-text-muted) sm:mt-5 sm:text-sm">
-            5 ciudades · 6 experiencias por ciudad · Plazas limitadas
+            Granada disponible · 6 experiencias · Resto de ciudades próximamente
+          </p>
+          <p className="mt-2 font-(--font-inter) text-xs leading-relaxed text-(--color-text-muted)">
+            Ciudad de reserva actualmente: Granada. El resto de ciudades, próximamente.
           </p>
         </div>
 

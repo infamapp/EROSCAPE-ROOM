@@ -90,13 +90,15 @@ export function Footer() {
             </div>
             <ul className="mt-4 space-y-2">
               <li>
-                <Link
-                  href="/contacto"
+                <a
+                  href="https://wa.me/34640758672"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm hover:text-white transition-colors"
                   style={{ color: 'var(--color-text-secondary)' }}
                 >
                   Contacto
-                </Link>
+                </a>
               </li>
               <li>
                 <Link
@@ -134,7 +136,7 @@ export function Footer() {
             className="transition-colors hover:underline underline-offset-4"
             style={{ color: 'var(--color-text-muted)' }}
           >
-            → Conocé el proyecto
+            → Abre tu franquicia
           </Link>
         </p>
 

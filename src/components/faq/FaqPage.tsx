@@ -23,7 +23,7 @@ const CATEGORIES: ReadonlyArray<{ id: FaqCategory; label: string }> = [
   { id: 'reservas', label: 'RESERVAS' },
   { id: 'seguridad', label: 'SEGURIDAD' },
   { id: 'privacidad', label: 'PRIVACIDAD' },
-  { id: 'maestro-ia', label: 'EL MAESTRO IA' },
+  { id: 'maestro-ia', label: 'EL GAME MASTER IA' },
 ] as const
 
 const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
@@ -32,12 +32,12 @@ const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
     category: 'experiencia',
     question: '¿Qué pasa exactamente dentro de la sala?',
     answer:
-      'El Maestro orquesta un viaje sensorial personalizado. Estímulos táctiles, auditivos y visuales se alinean con una narrativa que se ajusta a tus límites. No es solo un escape room: es una coreografía íntima y elegante.',
+      'El Game Master orquesta un viaje sensorial personalizado. Estímulos táctiles, auditivos y visuales se alinean con una narrativa que se ajusta a tus límites. No es solo un escape room: es una coreografía íntima y elegante.',
   },
   {
     id: 'sugerente-o-profundo',
     category: 'experiencia',
-    question: '¿Es realmente intenso o es solo sugerente?',
+    question: '¿Es realmente intenso o es sugerente?',
     answer:
       'Tú decides la profundidad. La intensidad se calibra antes de entrar y se respeta durante toda la noche. Todo se adapta a tu consentimiento — siempre con discreción, siempre con control.',
   },
@@ -53,28 +53,28 @@ const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
     category: 'seguridad',
     question: '¿Qué es la palabra segura y cómo funciona?',
     answer:
-      'Es tu control absoluto. Si la pronuncias, la experiencia se detiene, el ambiente cambia a modo seguro y se habilitan salidas. Tu bienestar es el límite no negociable.',
+      'Con la palabra segura se frena la actividad de inmediato y se conecta con un asistente humano para corroborar que no existe ningún problema.',
   },
   {
     id: 'con-quien-ir',
     category: 'reservas',
     question: '¿Con quién puedo ir?',
     answer:
-      'Puedes venir a solas, en pareja o en un grupo reducido (hasta 4). La dinámica cambia según tu elección: más íntima, más social, o más estratégica — siempre cuidada.',
+      'A partir de dos personas por experiencia. Disponemos de experiencias para grupos de 2 a 10 personas. Para eventos más personalizados o grupos especiales, contáctanos directamente.',
   },
   {
     id: 'extracto-bancario',
     category: 'privacidad',
     question: '¿Aparecerá esto en mi extracto bancario?',
     answer:
-      'Discreción ante todo: los cargos se muestran bajo un descriptor comercial neutro. La naturaleza de tu visita se queda contigo.',
+      'En tu extracto bancario aparecerán los datos de la empresa, los cuales no se correlacionan con la naturaleza de la experiencia. Sin huellas.',
   },
   {
     id: 'maestro-ia',
     category: 'maestro-ia',
-    question: '¿Qué es el Maestro IA y qué puede hacer?',
+    question: '¿Qué es el Game Master IA y qué puede hacer?',
     answer:
-      'El Maestro es un sistema de guía narrativa y ambientación. Ajusta música, luz y ritmo en función de tus elecciones, manteniendo el tono y la seguridad. No “juzga”: acompaña.',
+      'El Game Master es un sistema de guía narrativa y ambientación. Ajusta música, luz y ritmo en función de tus elecciones, manteniendo el tono y la seguridad. No juzga: acompaña.',
   },
 ] as const
 
@@ -128,7 +128,7 @@ export function FaqPage({ className }: FaqPageProps) {
           initial={shouldReduceMotion ? false : 'hidden'}
           animate={shouldReduceMotion ? undefined : 'visible'}
         >
-          Si no encontrás lo que buscás, el Maestro puede guiarte con calma — sin exponer nada que no quieras revelar.
+          Si no encontrás lo que buscás, el Game Master puede guiarte con calma — sin exponer nada que no quieras revelar.
         </motion.p>
       </section>
 
@@ -237,7 +237,9 @@ export function FaqPage({ className }: FaqPageProps) {
               VER CONSENTIMIENTO
             </a>
             <a
-              href="/contacto"
+              href="https://wa.me/34640758672"
+              target="_blank"
+              rel="noopener noreferrer"
               className="rounded-full px-8 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white"
               style={{ background: 'var(--gradient-cta)' }}
             >

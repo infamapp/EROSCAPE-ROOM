@@ -20,7 +20,7 @@ export interface ClubFeatureRow {
 export const CLUB_FEATURE_ROWS: readonly ClubFeatureRow[] = [
   { id: 'discount_missions', label: 'Descuento en noches' },
   { id: 'early_access', label: 'Acceso anticipado a nuevas salas' },
-  { id: 'gm_extended', label: 'El Maestro, más cerca' },
+  { id: 'gm_extended', label: 'El Game Master, más cerca' },
   { id: 'private_events', label: 'Encuentros y eventos solo socios' },
   { id: 'priority_support', label: 'Soporte prioritario' },
   { id: 'anniversary_upgrade', label: 'Detalle sorpresa en aniversario' },
@@ -66,7 +66,7 @@ export const CLUB_TIERS: readonly ClubTierDefinition[] = [
     benefits: [
       '10% de descuento en noches',
       'Prioridad al elegir fechas',
-      'Tus deseos con lectura del Maestro',
+      'Tus deseos con lectura del Game Master',
       'Invitaciones a aperturas privadas',
     ],
     includes: ids('discount_missions', 'early_access', 'gm_extended', 'priority_support'),
