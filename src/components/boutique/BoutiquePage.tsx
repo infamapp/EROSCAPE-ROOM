@@ -6,11 +6,12 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react'
 
 import { CategoryTabs } from '@/components/boutique/CategoryTabs'
 import { ProductCard, type BoutiqueProductRarity } from '@/components/boutique/ProductCard'
+import { BOUTIQUE_PACKS } from '@/lib/boutique-packs'
 import { cn } from '@/lib/utils'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
-const CATEGORIES = ['TODO', 'KITS', 'JUEGOS', 'LENCERÍA', 'ACCESORIOS', 'MASAJES'] as const
+const CATEGORIES = ['TODO', 'KITS'] as const
 type BoutiqueCategoryLabel = (typeof CATEGORIES)[number]
 
 interface BoutiqueProduct {
@@ -82,27 +83,6 @@ function parseBoutiqueCopy(raw: unknown): BoutiqueCopy | null {
   return { title, intro, products, offers, reviews, newsletter }
 }
 
-function inferCategory(name: string): BoutiqueProduct['category'] {
-  const n = name.toLowerCase()
-  if (n.includes('kit') || n.includes('box')) return 'KITS'
-  if (n.includes('carta')) return 'JUEGOS'
-  if (n.includes('lencer')) return 'LENCERÍA'
-  if (n.includes('máscara') || n.includes('mascara')) return 'ACCESORIOS'
-  if (n.includes('masaje') || n.includes('vela')) return 'MASAJES'
-  return 'ACCESORIOS'
-}
-
-function imageForProductName(name: string): string {
-  const n = name.toLowerCase()
-  if (n.includes('vela') || n.includes('masaje')) return '/velas.png'
-  if (n.includes('máscara') || n.includes('mascara')) return '/mask.png'
-  if (n.includes('lencer')) return '/lenc.png'
-  if (n.includes('carta')) return '/cartas.png'
-  if (n.includes('box')) return '/box.png'
-  if (n.includes('kit')) return '/kit.png'
-  return '/placeholder.png'
-}
-
 const headerReveal = {
   hidden: { opacity: 0, y: 16 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: SENSUAL_EASE } },
@@ -111,15 +91,7 @@ const headerReveal = {
 const FALLBACK_COPY: BoutiqueCopy = {
   title: 'El Tocador',
   intro: 'Objetos curados para extender la experiencia con discreción, elegancia y cuidado.',
-  products: [
-    { name: 'Kit Sensorial de Lujo', desc: 'Aceites aromáticos, plumas y elementos táctiles premium inspirados en nuestras salas.' },
-    { name: 'Cartas del Deseo', desc: 'Baraja exclusiva con preguntas íntimas y desafíos sensuales para parejas aventureras.' },
-    { name: 'Lencería Veneciana', desc: 'Diseños exclusivos inspirados en Venecia, disponibles en todas las tallas.' },
-    { name: 'Máscaras Artesanales', desc: 'Máscaras venecianas auténticas hechas a mano para tus propios juegos de seducción.' },
-    { name: 'Velas de Masaje Gourmet', desc: 'Set de velas con aromas que se convierten en aceites de masaje.' },
-    { name: 'Box Experiencia Privada', desc: 'Kit completo para recrear una noche Eroscape en casa con guía paso a paso.' },
-    { name: 'El Susurro', desc: 'Una dedicatoria especial y personalizada para la persona indicada. Un detalle íntimo que llega antes de que empiece la noche.' },
-  ],
+  products: BOUTIQUE_PACKS.map((pack) => ({ name: pack.name, desc: pack.description })),
   offers: [
     {
       name: 'Para Parejas Nuevas',
@@ -164,26 +136,43 @@ export function BoutiquePage() {
   }, [])
 
   const products: readonly BoutiqueProduct[] = useMemo(() => {
-    return copy.products.map((p, idx) => {
-      const id = `${idx}-${p.name}`.toLowerCase().replaceAll(' ', '-')
-      const rarity: BoutiqueProductRarity = idx % 3 === 0 ? 'exclusivo' : idx % 3 === 1 ? 'premium' : 'esencial'
-      const base = 18900 + idx * 4500
-      return {
-        id,
-        name: p.name,
-        description: p.desc,
-        category: inferCategory(p.name),
-        price: base,
-        rarity,
-        imageSrc: imageForProductName(p.name),
-      }
-    })
-  }, [copy.products])
+    return BOUTIQUE_PACKS.map((pack) => ({
+      id: pack.id,
+      name: pack.name,
+      description: pack.description,
+      category: 'KITS' as BoutiqueCategoryLabel,
+      price: pack.price,
+      rarity: pack.rarity,
+      imageSrc: pack.imageSrc,
+    }))
+  }, [])
 
   const filtered: readonly BoutiqueProduct[] = useMemo(() => {
     if (activeCategory === 'TODO') return products
     return products.filter((p) => p.category === activeCategory)
   }, [activeCategory, products])
+
+  const isPyramidLayout = filtered.length === 5
+  const topRowProducts = isPyramidLayout ? filtered.slice(0, 3) : filtered
+  const bottomRowProducts = isPyramidLayout ? filtered.slice(3) : []
+
+  function renderProductCard(product: BoutiqueProduct, index: number) {
+    return (
+      <ProductCard
+        key={product.id}
+        id={product.id}
+        name={product.name}
+        description={product.description}
+        category={product.category}
+        price={product.price}
+        rarity={product.rarity}
+        isInCart={cart.includes(product.id)}
+        onToggle={() => handleToggleCart(product.id)}
+        imageSrc={product.imageSrc}
+        index={index}
+      />
+    )
+  }
 
   function handleToggleCart(id: string) {
     setCart((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]))
@@ -254,30 +243,34 @@ export function BoutiquePage() {
             <CategoryTabs categories={CATEGORIES} activeCategory={activeCategory} onChange={setActiveCategory} />
 
             <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={activeCategory}
-                initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
-                transition={{ duration: reduceMotion ? 0 : 0.3, ease: SENSUAL_EASE }}
-                className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
-              >
-                {filtered.map((product, index) => (
-                  <ProductCard
-                    key={product.id}
-                    id={product.id}
-                    name={product.name}
-                    description={product.description}
-                    category={product.category}
-                    price={product.price}
-                    rarity={product.rarity}
-                    isInCart={cart.includes(product.id)}
-                    onToggle={() => handleToggleCart(product.id)}
-                    imageSrc={product.imageSrc}
-                    index={index}
-                  />
-                ))}
-              </motion.div>
+              {isPyramidLayout ? (
+                <motion.div
+                  key={activeCategory}
+                  initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
+                  transition={{ duration: reduceMotion ? 0 : 0.3, ease: SENSUAL_EASE }}
+                  className="mt-10 flex flex-col items-center gap-5 sm:mt-12 sm:gap-6"
+                >
+                  <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+                    {topRowProducts.map((product, index) => renderProductCard(product, index))}
+                  </div>
+                  <div className="grid w-full grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:w-2/3">
+                    {bottomRowProducts.map((product, index) => renderProductCard(product, index + 3))}
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key={activeCategory}
+                  initial={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={reduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
+                  transition={{ duration: reduceMotion ? 0 : 0.3, ease: SENSUAL_EASE }}
+                  className="mt-10 grid grid-cols-1 gap-5 sm:mt-12 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3"
+                >
+                  {filtered.map((product, index) => renderProductCard(product, index))}
+                </motion.div>
+              )}
             </AnimatePresence>
 
             {filtered.length === 0 ? (

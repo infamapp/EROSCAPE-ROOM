@@ -149,32 +149,24 @@
         "intro": "Objetos curados para extender la experiencia con discreción, elegancia y cuidado.",
         "products": [
             {
-                "name": "Kit Sensorial de Lujo",
-                "desc": "Aceites aromáticos, plumas y elementos táctiles premium inspirados en nuestras salas."
+                "name": "Desire Box",
+                "desc": "Experiencia inmersiva para parejas: pistas, aromas activables, cartas narrativas y una prueba final que desbloquea la sorpresa."
             },
             {
-                "name": "Cartas del Deseo",
-                "desc": "Baraja exclusiva con preguntas íntimas y desafíos sensuales para parejas aventureras."
+                "name": "Sweet Connection",
+                "desc": "Diseñado para regalar conexión y complicidad: vela aromática, aceite corporal, cartas románticas y bombones gourmet."
             },
             {
-                "name": "Lencería Veneciana",
-                "desc": "Diseños exclusivos inspirados en Venecia, disponibles en todas las tallas."
+                "name": "Mini Love Box",
+                "desc": "Un pequeño detalle que lo cambia todo: osito floral, vela aromática, tarjeta romántica y aceite corporal en caja premium."
             },
             {
-                "name": "Máscaras Artesanales",
-                "desc": "Máscaras venecianas auténticas hechas a mano para tus propios juegos de seducción."
+                "name": "Intimate Experience",
+                "desc": "Explora nuevas sensaciones con elegancia: kit spa, sales aromáticas, cartas de fantasías y accesorios sensoriales premium."
             },
             {
-                "name": "Velas de Masaje Gourmet",
-                "desc": "Set de velas con aromas que se convierten en aceites de masaje."
-            },
-            {
-                "name": "Box Experiencia Privada",
-                "desc": "Kit completo para recrear una noche Eroscape en casa con guía paso a paso."
-            },
-            {
-                "name": "El Susurro",
-                "desc": "Una dedicatoria especial y personalizada para la persona indicada. Un detalle íntimo que llega antes de que empiece la noche."
+                "name": "After Dark",
+                "desc": "Activa todos los sentidos: juego de cartas extremo, accesorios premium, luces LED, altavoz Bluetooth y playlist privada."
             }
         ],
         "offers": [

@@ -17,9 +17,10 @@ import { Package, ShoppingBag, Star } from 'lucide-react'
    rarity: BoutiqueProductRarity
    isInCart: boolean
    onToggle: () => void
-   imageSrc?: string
-   index?: number
- }
+  imageSrc?: string
+  index?: number
+  className?: string
+}
  
  const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
  
@@ -70,9 +71,10 @@ import { Package, ShoppingBag, Star } from 'lucide-react'
    rarity,
    isInCart,
    onToggle,
-   imageSrc,
-   index = 0,
- }: ProductCardProps) {
+  imageSrc,
+  index = 0,
+  className,
+}: ProductCardProps) {
    const reduceMotion = useReducedMotion()
    const rarityVar = rarityColorVar(rarity)
  
@@ -83,23 +85,24 @@ import { Package, ShoppingBag, Star } from 'lucide-react'
        initial={reduceMotion ? false : 'hidden'}
        whileInView={reduceMotion ? undefined : 'visible'}
        viewport={{ once: true, margin: '-30%' }}
-       className={cn(
-         'group relative overflow-hidden rounded-2xl border-(--border-subtle) bg-(--color-bg-elevated) [box-shadow:var(--glow-card)]',
-         'transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1',
-       )}
+      className={cn(
+        'group relative flex h-full w-full min-w-0 flex-col overflow-hidden rounded-2xl border-(--border-subtle) bg-(--color-bg-elevated) [box-shadow:var(--glow-card)]',
+        'transition-[border-color,transform,box-shadow] duration-300 hover:-translate-y-1',
+        className,
+      )}
        style={{
          borderColor: 'color-mix(in srgb, var(--border-subtle) 60%, transparent)',
        }}
      >
-       <div className="relative h-[180px] overflow-hidden" aria-hidden="true">
-         <Image
-           src={imageSrc ?? '/placeholder.png'}
-           alt=""
-           fill
-           sizes="(max-width: 768px) 100vw, 33vw"
-           className="object-cover opacity-90 transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.06]"
-         />
-         <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-(--color-bg-elevated) via-transparent to-transparent" />
+       <div className="relative aspect-[3/2] w-full overflow-hidden" aria-hidden="true">
+        <Image
+          src={imageSrc ?? '/placeholder.png'}
+          alt={name}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          className="object-cover object-center transition-transform duration-700 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] group-hover:scale-[1.02]"
+        />
+         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-linear-to-t from-(--color-bg-elevated) to-transparent" />
  
          <div className="pointer-events-none absolute right-3 top-3">
            <span className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-2 py-0.5 text-[8px] uppercase tracking-[0.18em] text-white backdrop-blur-sm [font-family:var(--font-jetbrains)]">
@@ -109,7 +112,7 @@ import { Package, ShoppingBag, Star } from 'lucide-react'
          </div>
        </div>
  
-       <div className="flex h-full flex-col p-5">
+       <div className="flex flex-1 flex-col p-5">
          <p className="text-[10px] uppercase tracking-[0.18em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]">
            {category}
          </p>
@@ -134,14 +137,14 @@ import { Package, ShoppingBag, Star } from 'lucide-react'
            </span>
          </div>
  
-         <div className="mt-5 flex items-center justify-between gap-3">
-           <p className="text-sm font-semibold text-(--color-gold-light) [font-family:var(--font-playfair)]">
+         <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+           <p className="shrink-0 text-sm font-semibold text-(--color-gold-light) [font-family:var(--font-playfair)]">
              {formatCurrency(price)}
            </p>
  
            <div className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.18em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]">
-             <Star className="h-3 w-3 text-(--color-gold-light)" aria-hidden="true" />
-             Curaduría sensorial
+             <Star className="h-3 w-3 shrink-0 text-(--color-gold-light)" aria-hidden="true" />
+             <span className="whitespace-nowrap">Curaduría sensorial</span>
            </div>
          </div>
  
