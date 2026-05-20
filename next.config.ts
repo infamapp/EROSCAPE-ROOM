@@ -11,7 +11,6 @@ const config: NextConfig = {
   experimental: {
     // typedRoutes: true, // enable when all routes are defined
   },
-  // Bundle analyzer: import('@next/bundle-analyzer')({ enabled: process.env.ANALYZE === 'true' })
 }
 
 export default config
