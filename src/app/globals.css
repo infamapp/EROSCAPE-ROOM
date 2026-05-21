@@ -76,6 +76,23 @@
   /* Ficha de experiencia (referencia dark luxury) */
   --surface-experience: #141316;
   --neon-cta-bloom: 0 0 20px rgba(225, 78, 246, 0.35), 0 0 44px rgba(225, 78, 246, 0.12);
+
+  /* --- NEÓN PREMIUM --- */
+  --neon-magenta: #E14EF6;
+  --neon-gold: #F4D03F;
+  --neon-cyan: #00F0FF;
+  --glow-neon-magenta: 0 0 30px rgba(225, 78, 246, 0.6), 0 0 60px rgba(225, 78, 246, 0.3);
+  --glow-neon-gold: 0 0 25px rgba(244, 208, 63, 0.5), 0 0 50px rgba(244, 208, 63, 0.2);
+
+  /* --- MARCOS Y BORDES PREMIUM --- */
+  --border-premium: 1px solid rgba(244, 208, 63, 0.3);
+  --border-premium-glow: 1px solid rgba(244, 208, 63, 0.6);
+  --inset-frame: inset 0 0 20px rgba(244, 208, 63, 0.1);
+
+  /* --- FONDOS ATMÓSFÉRICOS --- */
+  --gradient-atmosphere-1: radial-gradient(circle at 50% 0%, rgba(185, 48, 158, 0.25) 0%, transparent 60%);
+  --gradient-atmosphere-2: radial-gradient(circle at 30% 40%, rgba(107, 32, 128, 0.2) 0%, transparent 55%);
+  --gradient-atmosphere-3: radial-gradient(circle at 80% 60%, rgba(201, 123, 27, 0.15) 0%, transparent 70%);
 }
 
 .glass-card-detail {

@@ -197,7 +197,16 @@ export function HeroSection({ isReturningUser }: HeroSectionProps) {
         aria-hidden="true"
         style={{
           background:
-            'radial-gradient(ellipse 120% 85% at 50% -20%, color-mix(in srgb, var(--color-magenta) 26%, transparent) 0%, transparent 65%), radial-gradient(ellipse 90% 70% at 20% 30%, color-mix(in srgb, var(--color-purple-mid) 24%, transparent) 0%, transparent 60%), linear-gradient(180deg, rgba(8,0,8,0.20) 0%, rgba(8,0,8,0.05) 55%, rgba(8,0,8,1) 100%)',
+            'radial-gradient(ellipse 140% 100% at 50% -30%, color-mix(in srgb, var(--color-magenta) 32%, transparent) 0%, transparent 65%), radial-gradient(ellipse 100% 80% at 20% 30%, color-mix(in srgb, var(--color-purple-mid) 28%, transparent) 0%, transparent 60%), radial-gradient(circle at 85% 50%, color-mix(in srgb, var(--color-gold) 12%, transparent) 0%, transparent 50%), linear-gradient(180deg, rgba(8,0,8,0.30) 0%, rgba(8,0,8,0.08) 50%, rgba(8,0,8,1) 100%)',
+        }}
+      />
+
+      <div
+        className="absolute inset-0 z-0 opacity-30"
+        aria-hidden="true"
+        style={{
+          background: 'radial-gradient(circle at 50% 50%, rgba(185, 48, 158, 0.08) 0%, transparent 70%)',
+          mixBlendMode: 'screen',
         }}
       />
 
@@ -233,17 +242,34 @@ export function HeroSection({ isReturningUser }: HeroSectionProps) {
             animate={shouldReduceMotion ? undefined : 'visible'}
             className="flex flex-col items-center"
           >
-            <motion.div variants={shouldReduceMotion ? undefined : itemVariants} className="mb-4 flex flex-col items-center">
-              <Image
-                src="/eros-logo-ico.png"
-                alt="Eroscape"
-                width={100}
-                height={100}
-                priority
-                className="h-28 w-28 select-none"
-              />
-              <span className=" [font-family:var(--font-playfair)] uppercase leading-none tracking-[0.12em] mt-3 text-xl sm:text-5xl">
-                Eroscape  
+            <motion.div variants={shouldReduceMotion ? undefined : itemVariants} className="mb-6 flex flex-col items-center">
+              <div className="relative mb-4">
+                <div
+                  className="absolute inset-0 rounded-full blur-2xl opacity-60"
+                  style={{
+                    background: 'radial-gradient(circle, var(--color-magenta-glow), var(--color-gold))',
+                    filter: 'blur(40px)',
+                  }}
+                />
+                <Image
+                  src="/eros-logo-ico.png"
+                  alt="Eroscape"
+                  width={120}
+                  height={120}
+                  priority
+                  className="relative h-32 w-32 select-none drop-shadow-[0_0_20px_rgba(185,48,158,0.6)]"
+                />
+              </div>
+              <span
+                className="[font-family:var(--font-playfair)] uppercase leading-none tracking-[0.15em] text-2xl sm:text-6xl font-bold drop-shadow-[0_0_30px_rgba(185,48,158,0.4)]"
+                style={{
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #C8B8D0 50%, #CB7B1B 100%)',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                Eroscape
               </span>
             </motion.div>
 
@@ -271,50 +297,67 @@ export function HeroSection({ isReturningUser }: HeroSectionProps) {
           </motion.h1>
 
           <motion.div variants={shouldReduceMotion ? undefined : itemVariants} className="mt-6 w-full max-w-xl flex justify-center">
-            <div className="rounded-2xl w-fit border border-white/10 bg-white/4 px-5 py-4 text-left [box-shadow:var(--glow-card)]">
-              <p className="font-(--font-jetbrains) text-[11px] uppercase tracking-[0.18em] text-(--color-purple-muted)">
-                {terminalLineCount >= 1 ? '> Acceso nivel +18. Verificando...' : '\u00A0'}
+            <div
+              className="rounded-xl w-fit border px-6 py-5 text-left backdrop-blur-xl"
+              style={{
+                borderColor: 'rgba(244, 208, 63, 0.4)',
+                background: 'rgba(20, 19, 22, 0.7)',
+                boxShadow: '0 0 30px rgba(185, 48, 158, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
+              }}
+            >
+              <p className="font-(--font-jetbrains) text-[11px] uppercase tracking-[0.2em] text-(--color-gold-light)">
+                {terminalLineCount >= 1 ? '✓ Acceso nivel +18. Verificando...' : '\u00A0'}
               </p>
-              <p className="mt-1 font-(--font-jetbrains) text-[11px] uppercase tracking-[0.18em] text-(--color-purple-muted)">
-                {terminalLineCount >= 2 ? '> Consentimiento: REQUERIDO' : '\u00A0'}
+              <p className="mt-2 font-(--font-jetbrains) text-[11px] uppercase tracking-[0.2em] text-(--color-magenta-glow)">
+                {terminalLineCount >= 2 ? '✓ Consentimiento: REQUERIDO' : '\u00A0'}
               </p>
-              <p className="mt-1 font-(--font-jetbrains) text-[11px] uppercase tracking-[0.18em] text-(--color-purple-muted)">
-                {terminalLineCount >= 3 ? '> Iniciando protocolo de inmersión...' : '\u00A0'}
+              <p className="mt-2 font-(--font-jetbrains) text-[11px] uppercase tracking-[0.2em] text-(--color-text-secondary)">
+                {terminalLineCount >= 3 ? '⟳ Iniciando protocolo de inmersión...' : '\u00A0'}
               </p>
             </div>
           </motion.div>
 
           <motion.div
             variants={shouldReduceMotion ? undefined : itemVariants}
-            className="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:flex-row sm:justify-center"
+            className="mt-8 flex w-full flex-col gap-4 sm:mt-10 sm:flex-row sm:justify-center"
             style={{ transitionDelay: shouldReduceMotion ? undefined : '2.5s' }}
           >
             <Link
               href="/reservar"
               className={cn(
-                'w-full rounded-full px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.18em] text-white sm:w-auto',
-                'transition-[filter,transform] duration-200 hover:brightness-110 active:translate-y-px',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+                'w-full rounded-full px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.2em] text-white sm:w-auto',
+                'transition-all duration-300 hover:scale-105 active:scale-95',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30',
+                'relative overflow-hidden group',
               )}
-              style={{ background: 'var(--gradient-cta)' }}
+              style={{
+                background: 'linear-gradient(135deg, var(--color-magenta) 0%, var(--color-magenta-glow) 100%)',
+                boxShadow: 'var(--glow-neon-magenta), 0 8px 32px rgba(185, 48, 158, 0.3)',
+              }}
             >
-              <span className="font-(--font-jetbrains)">RENDIRSE AL DESEO</span>
+              <span className="relative z-10 font-(--font-jetbrains)">RENDIRSE AL DESEO</span>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-20 transform translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
             </Link>
 
             <button
               type="button"
               className={cn(
-                'w-full rounded-full border px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.18em] sm:w-auto',
-                'border-[color-mix(in_srgb,var(--color-magenta-dim)_70%,transparent)] text-(--color-text-secondary)',
-                'transition-[border-color,color,background-color,transform] duration-200 hover:border-(--color-magenta) hover:text-white active:translate-y-px',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+                'w-full rounded-full border-2 px-8 py-4 text-center text-xs font-bold uppercase tracking-[0.2em] sm:w-auto',
+                'transition-all duration-300 hover:scale-105 active:scale-95',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30',
               )}
+              style={{
+                borderColor: 'var(--color-gold-light)',
+                color: 'var(--color-gold-light)',
+                background: 'rgba(203, 123, 27, 0.08)',
+                boxShadow: 'inset 0 0 20px rgba(244, 208, 63, 0.1), 0 0 20px rgba(244, 208, 63, 0.15)',
+              }}
               onClick={() => {
                 const el = document.getElementById('experiencias-destacadas')
                 el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
               }}
             >
-              <span className="font-(--font-jetbrains)">ELEGÍ TU NOCHE</span>
+              <span className="font-(--font-jetbrains)">EXPLORAR</span>
             </button>
           </motion.div>
 

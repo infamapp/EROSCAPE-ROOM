@@ -59,16 +59,33 @@ function Logo({ href, src, alt, size, isVisible }: LogoProps) {
     <Link
       href={href}
       className={cn(
-        'group inline-flex items-center gap-3 rounded-full px-2 py-1 transition-[opacity,transform,background-color] duration-300',
+        'group inline-flex items-center gap-3 rounded-full px-3 py-1.5 transition-all duration-300',
         isVisible ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-1 pointer-events-none',
         'lg:opacity-100 lg:translate-y-0 lg:pointer-events-auto',
-        'hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+        'hover:bg-white/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
       )}
+      style={{
+        backgroundColor: isVisible ? 'rgba(185, 48, 158, 0.1)' : 'transparent',
+      }}
       aria-label="Ir al inicio"
     >
-      <Image src={src} alt={alt} width={imageSize} height={imageSize} quality={100} priority className={cn(className, 'select-none')} />
+      <div className="relative">
+        <div
+          className="absolute inset-0 rounded-full blur-md opacity-0 group-hover:opacity-40 transition-opacity duration-300"
+          style={{ background: 'var(--color-magenta)' }}
+        />
+        <Image src={src} alt={alt} width={imageSize} height={imageSize} quality={100} priority className={cn(className, 'select-none relative')} />
+      </div>
       {size === 'desktop' ? (
-        <span className="[font-family:var(--font-playfair)] uppercase leading-none tracking-[0.12em] text-xl sm:text-2xl">
+        <span
+          className="[font-family:var(--font-playfair)] uppercase leading-none tracking-[0.12em] text-lg sm:text-xl font-bold"
+          style={{
+            background: 'linear-gradient(135deg, #FFFFFF 0%, #CB7B1B 100%)',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}
+        >
           Eroscape
         </span>
       ) : (
@@ -218,25 +235,30 @@ export function Navbar() {
               <Link
                 href="/reservar"
                 className={cn(
-                  'rounded-full px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-white whitespace-nowrap',
-                  'transition-[filter,transform] duration-200 hover:brightness-110 active:translate-y-px',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+                  'rounded-full px-6 py-2.5 text-[11px] font-bold uppercase tracking-[0.18em] text-white whitespace-nowrap',
+                  'transition-all duration-300 hover:scale-105 active:scale-95',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30',
+                  'relative group overflow-hidden',
                 )}
-                style={{ background: 'var(--gradient-cta)' }}
+                style={{
+                  background: 'linear-gradient(135deg, var(--color-magenta) 0%, var(--color-magenta-glow) 100%)',
+                  boxShadow: 'var(--glow-neon-magenta)',
+                }}
               >
-                Rendirse al deseo
+                <span className="relative z-10">Reservar</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-15 transform translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
               </Link>
               <Link
                 href="/inversores"
                 className={cn(
-                  'rounded-full px-5 py-2.5 text-[11px] font-semibold uppercase tracking-[0.16em] whitespace-nowrap',
-                  'transition-[filter,transform] duration-200 hover:brightness-110 active:translate-y-px',
-                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
+                  'rounded-full px-6 py-2.5 text-[11px] font-bold uppercase tracking-[0.18em] whitespace-nowrap',
+                  'transition-all duration-300 hover:scale-105 active:scale-95',
+                  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30',
                   'text-(--color-bg-base)',
                 )}
                 style={{
-                  background: 'var(--color-gold)',
-                  boxShadow: 'var(--glow-gold)',
+                  background: 'var(--color-gold-light)',
+                  boxShadow: 'var(--glow-neon-gold)',
                 }}
               >
                 Franquicia

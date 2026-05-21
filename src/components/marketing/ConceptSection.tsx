@@ -47,28 +47,44 @@ function DossierCard({ archiveNumber, icon: Icon, title, description, initialRot
       initial={shouldAnimate ? { opacity: 0, rotate: initialRotation, y: 40 } : false}
       whileInView={shouldAnimate ? 'visible' : undefined}
       viewport={{ once: true, margin: '-20%' }}
-      className="group relative h-full rounded-2xl border p-6 [box-shadow:var(--glow-card)]"
-      style={{ background: 'var(--color-bg-elevated)', borderColor: 'rgba(185,48,158,0.10)' }}
+      className="group relative h-full rounded-2xl border p-6 overflow-hidden [box-shadow:0_0_30px_rgba(185,48,158,0.2),inset_0_1px_0_rgba(255,255,255,0.08)]"
+      style={{
+        background: 'linear-gradient(135deg, rgba(107, 32, 128, 0.3) 0%, rgba(20, 19, 22, 0.8) 100%)',
+        borderColor: 'rgba(244, 208, 63, 0.3)',
+        backdropFilter: 'blur(10px)',
+      }}
       aria-label={`${archiveNumber} ${title}`}
     >
-      <p className="font-(--font-jetbrains) text-[9px] uppercase tracking-[0.2em] text-(--color-text-muted)">
-        {archiveNumber}
-      </p>
+      <div
+        className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-500"
+        style={{
+          background: 'radial-gradient(circle at 50% 50%, rgba(185, 48, 158, 0.4), transparent 70%)',
+          pointerEvents: 'none',
+        }}
+      />
 
-      <Icon className="mt-4 size-6 text-(--color-magenta)" strokeWidth={1.5} aria-hidden="true" />
+      <div className="relative z-10">
+        <p className="font-(--font-jetbrains) text-[9px] uppercase tracking-[0.2em] text-(--color-gold-light)">
+          {archiveNumber}
+        </p>
 
-      <h3 className="mt-3 [font-family:var(--font-playfair)] text-lg font-bold text-(--color-text-primary)">
-        {title}
-      </h3>
+        <div className="mt-4 w-fit p-2 rounded-lg" style={{ background: 'rgba(244, 208, 63, 0.08)' }}>
+          <Icon className="size-6 text-(--color-gold-light)" strokeWidth={1.2} aria-hidden="true" />
+        </div>
 
-      <p className="mt-3 font-(--font-inter) text-sm leading-relaxed text-(--color-text-secondary)">
-        {description}
-      </p>
+        <h3 className="mt-4 [font-family:var(--font-playfair)] text-lg font-bold text-(--color-text-primary)">
+          {title}
+        </h3>
+
+        <p className="mt-3 font-(--font-inter) text-sm leading-relaxed text-(--color-text-secondary)">
+          {description}
+        </p>
+      </div>
 
       <div
-        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         aria-hidden="true"
-        style={{ border: '1px solid rgba(185,48,158,0.40)' }}
+        style={{ border: '1px solid rgba(244, 208, 63, 0.5)' }}
       />
     </motion.article>
   )
@@ -117,8 +133,20 @@ export function ConceptSection() {
   const shouldAnimate = !shouldReduceMotion
 
   return (
-    <section id="concepto" className="relative w-full py-16 sm:py-24 lg:py-28" style={{ background: 'var(--color-bg-base)' }}>
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+    <section id="concepto" className="relative w-full py-16 sm:py-24 lg:py-28 overflow-hidden" style={{ background: 'var(--color-bg-base)' }}>
+      <div
+        className="absolute inset-0 z-0"
+        aria-hidden="true"
+        style={{
+          background: `
+            radial-gradient(circle at 50% 20%, rgba(107, 32, 128, 0.25) 0%, transparent 50%),
+            radial-gradient(circle at 20% 80%, rgba(201, 123, 27, 0.12) 0%, transparent 60%),
+            radial-gradient(circle at 80% 60%, rgba(185, 48, 158, 0.15) 0%, transparent 65%)
+          `,
+        }}
+      />
+
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 relative z-1">
         <motion.header
           variants={shouldAnimate ? headerVariants : undefined}
           initial={shouldAnimate ? 'hidden' : false}
@@ -201,13 +229,19 @@ export function ConceptSection() {
         <div className="mt-10 flex justify-center sm:mt-14">
           <button
             type="button"
-            className="inline-flex items-center justify-center rounded-full border border-[color-mix(in_srgb,var(--color-magenta-dim)_70%,transparent)] px-6 py-2.5 font-(--font-jetbrains) text-[10px] uppercase tracking-[0.18em] text-(--color-text-secondary) transition-[border-color,color,background-color,transform] duration-200 hover:border-(--color-magenta) hover:text-white active:translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 sm:text-[11px]"
+            className="inline-flex items-center justify-center rounded-full border-2 px-7 py-3 font-(--font-jetbrains) text-[10px] uppercase tracking-[0.2em] transition-all duration-300 hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 sm:text-[11px] group"
+            style={{
+              borderColor: 'var(--color-gold-light)',
+              color: 'var(--color-gold-light)',
+              background: 'rgba(244, 208, 63, 0.08)',
+              boxShadow: 'inset 0 0 15px rgba(244, 208, 63, 0.1), 0 0 15px rgba(244, 208, 63, 0.15)',
+            }}
             onClick={() => {
               const el = document.getElementById('experiencias-destacadas')
               el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
             }}
           >
-            → Ver las experiencias
+            <span className="group-hover:translate-x-1 transition-transform duration-300">→ VER LAS EXPERIENCIAS</span>
           </button>
         </div>
       </div>
