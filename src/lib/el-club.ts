@@ -6,6 +6,7 @@ export type ClubTierId = 'basico' | 'premium' | 'black'
 
 export type ClubFeatureId =
   | 'discount_missions'
+  | 'tocador_discount'
   | 'early_access'
   | 'gm_extended'
   | 'private_events'
@@ -19,8 +20,9 @@ export interface ClubFeatureRow {
 
 export const CLUB_FEATURE_ROWS: readonly ClubFeatureRow[] = [
   { id: 'discount_missions', label: 'Descuento en noches' },
+  { id: 'tocador_discount', label: 'Descuento en El Tocador' },
   { id: 'early_access', label: 'Acceso anticipado a nuevas salas' },
-  { id: 'gm_extended', label: 'El Game Master, más cerca' },
+  { id: 'gm_extended', label: 'Game Master IA, más cerca' },
   { id: 'private_events', label: 'Encuentros y eventos solo socios' },
   { id: 'priority_support', label: 'Soporte prioritario' },
   { id: 'anniversary_upgrade', label: 'Detalle sorpresa en aniversario' },
@@ -51,10 +53,11 @@ export const CLUB_TIERS: readonly ClubTierDefinition[] = [
     accentVar: 'var(--color-purple-muted)',
     benefits: [
       '5% de descuento en noches',
+      '5% en kits de El Tocador',
       'Una carta mensual (de puertas adentro)',
       'Acceso a novedades de La Sociedad',
     ],
-    includes: ids('discount_missions'),
+    includes: ids('discount_missions', 'tocador_discount'),
   },
   {
     id: 'premium',
@@ -65,11 +68,12 @@ export const CLUB_TIERS: readonly ClubTierDefinition[] = [
     featured: true,
     benefits: [
       '10% de descuento en noches',
+      '10% en El Tocador',
       'Prioridad al elegir fechas',
-      'Tus deseos con lectura del Game Master',
+      'Tus deseos con lectura de la Game Master IA',
       'Invitaciones a aperturas privadas',
     ],
-    includes: ids('discount_missions', 'early_access', 'gm_extended', 'priority_support'),
+    includes: ids('discount_missions', 'tocador_discount', 'early_access', 'gm_extended', 'priority_support'),
   },
   {
     id: 'black',
@@ -79,6 +83,7 @@ export const CLUB_TIERS: readonly ClubTierDefinition[] = [
     accentVar: 'var(--color-gold)',
     benefits: [
       '15% de descuento en noches',
+      '15% en El Tocador y envío prioritario',
       'Concierge para diseñar tu experiencia',
       'Eventos exclusivos presenciales',
       'Detalle aniversario incluido',
@@ -86,6 +91,7 @@ export const CLUB_TIERS: readonly ClubTierDefinition[] = [
     ],
     includes: ids(
       'discount_missions',
+      'tocador_discount',
       'early_access',
       'gm_extended',
       'private_events',
@@ -113,7 +119,7 @@ export const CLUB_TESTIMONIALS: readonly ClubTestimonial[] = [
   },
   {
     id: 't2',
-    quote: 'El GM IA nota matices que ni comentamos en voz alta. Se siente hecho a medida.',
+    quote: 'La IA nota matices que ni escribimos. Se siente hecho a medida — sin nadie mirando.',
     archetypeName: arch[3]?.name ?? 'Estratega',
     avatarVariant: 2,
   },

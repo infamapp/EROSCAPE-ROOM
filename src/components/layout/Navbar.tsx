@@ -12,7 +12,7 @@ import { useScrollTrigger } from '@/hooks/useScrollTrigger'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 
-const NAV_MAX_WIDTH_CLASS = 'max-w-7xl'
+const NAV_MAX_WIDTH_CLASS = 'max-w-[90rem]'
 
 const navVariants = {
   hidden: { opacity: 0, y: -20 },
@@ -40,6 +40,7 @@ type NavItem = { label: string; href: string }
 function isNavActive(pathname: string, href: string): boolean {
   if (href === '/') return pathname === '/'
   if (href === '/la-sociedad') return pathname === '/la-sociedad'
+  if (href === '/membresia') return pathname === '/membresia' || pathname.startsWith('/membresia/')
   return pathname === href || pathname.startsWith(`${href}/`)
 }
 
@@ -105,9 +106,7 @@ interface NavLinksProps {
 function NavLinks({ items, pathname, onNavigate, variant }: NavLinksProps) {
   const baseLink = variant === 'desktop' ? 'text-sm whitespace-nowrap' : 'text-base'
 
-  return (
-    <>
-      {items.map((item) => {
+  const links = items.map((item) => {
         const active = isNavActive(pathname, item.href)
         const label = item.label
 
@@ -153,9 +152,13 @@ function NavLinks({ items, pathname, onNavigate, variant }: NavLinksProps) {
             {label}
           </Link>
         )
-      })}
-    </>
-  )
+      })
+
+  if (variant === 'desktop') {
+    return <div className="flex items-center gap-7 xl:gap-9">{links}</div>
+  }
+
+  return <>{links}</>
 }
 
 export function Navbar() {
@@ -163,15 +166,20 @@ export function Navbar() {
   const { isScrolled } = useScrollTrigger({ threshold: 80 })
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const shouldReduceMotion = useReducedMotion()
-  const isInversores = pathname === '/inversores' || pathname.startsWith('/inversores/')
+  const isFranquicia =
+    pathname === '/franquicia' ||
+    pathname.startsWith('/franquicia/') ||
+    pathname === '/inversores' ||
+    pathname.startsWith('/inversores/')
 
-  const desktopLogoSrc = isInversores ? '/erosGold.png' : '/eros-logo-ico.png'
-  const mobileLogoSrc = isInversores ? '/erosGold.png' : '/erosLogo.png'
+  const desktopLogoSrc = isFranquicia ? '/erosGold.png' : '/eros-logo-ico.png'
+  const mobileLogoSrc = isFranquicia ? '/erosGold.png' : '/erosLogo.png'
 
   const navItems = useMemo<NavItem[]>(
     () => [
       { label: 'Experiencias', href: '/experiencias' },
       { label: 'La Sociedad', href: '/la-sociedad' },
+      { label: 'Membresía', href: '/membresia' },
       { label: 'El Tocador', href: '/boutique' },
       { label: 'Consentimiento', href: '/la-sociedad/seguridad' },
       { label: 'FAQ', href: '/faq' },
@@ -187,6 +195,7 @@ export function Navbar() {
       <motion.header
         className={cn(
           'fixed top-0 left-0 right-0 z-50',
+          'pt-[env(safe-area-inset-top,0px)]',
           'transition-[background-color,backdrop-filter,border-color] duration-300',
           isScrolled ? 'backdrop-blur-md border-b' : 'border-b border-transparent',
         )}
@@ -198,20 +207,27 @@ export function Navbar() {
         initial={shouldReduceMotion ? false : 'hidden'}
         animate={shouldReduceMotion ? undefined : 'visible'}
       >
-        <div className={cn('mx-auto flex h-[4.25rem] items-center px-4 sm:px-6', NAV_MAX_WIDTH_CLASS)}>
+        <div
+          className={cn(
+            'mx-auto flex min-h-[var(--layout-nav-height)] w-full items-center px-4 py-3 sm:px-6 sm:py-3.5 lg:px-8 xl:px-10',
+            NAV_MAX_WIDTH_CLASS,
+          )}
+        >
           <div className="shrink-0">
             <Logo href="/" src={desktopLogoSrc} alt="Eroscape" size="desktop" isVisible={isScrolled} />
           </div>
 
-          <div className="ml-auto hidden min-w-0 items-center gap-5 lg:flex lg:gap-6">
-            <nav className="flex items-center gap-4 lg:gap-5 xl:gap-6" aria-label="Navegación principal">
-              <NavLinks items={navItems} pathname={pathname} variant="desktop" />
-            </nav>
+          <nav
+            className="hidden shrink-0 lg:ml-10 lg:flex xl:ml-14"
+            aria-label="Navegación principal"
+          >
+            <NavLinks items={navItems} pathname={pathname} variant="desktop" />
+          </nav>
 
-            <div
-              className="flex shrink-0 items-center gap-2.5 border-l pl-5 lg:gap-3 lg:pl-6"
-              style={{ borderColor: 'color-mix(in srgb, var(--color-magenta) 22%, transparent)' }}
-            >
+          <div className="hidden min-w-10 flex-1 lg:block" aria-hidden="true" />
+
+          <div className="hidden shrink-0 items-center gap-3 lg:flex xl:gap-3.5">
+            <div className="flex items-center gap-2.5 xl:gap-3">
               <Link
                 href={appNavItem.href}
                 className={cn(
@@ -249,7 +265,7 @@ export function Navbar() {
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-0 group-hover:opacity-15 transform translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
               </Link>
               <Link
-                href="/inversores"
+                href="/franquicia"
                 className={cn(
                   'rounded-full px-6 py-2.5 text-[11px] font-bold uppercase tracking-[0.18em] whitespace-nowrap',
                   'transition-all duration-300 hover:scale-105 active:scale-95',
@@ -269,7 +285,7 @@ export function Navbar() {
           <button
             type="button"
             className={cn(
-              'lg:hidden inline-flex h-10 w-10 items-center justify-center rounded-full',
+              'ml-auto inline-flex h-10 w-10 items-center justify-center rounded-full lg:hidden',
               'transition-colors hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20',
             )}
             aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
@@ -352,7 +368,7 @@ export function Navbar() {
                   Rendirse al deseo
                 </Link>
                 <Link
-                  href="/inversores"
+                  href="/franquicia"
                   className={cn(
                     'rounded-full px-6 py-3 text-center text-xs font-semibold uppercase tracking-[0.18em] text-white',
                     'transition-[filter,transform] duration-200 hover:brightness-110 active:translate-y-px',

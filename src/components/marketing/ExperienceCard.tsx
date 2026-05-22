@@ -47,16 +47,12 @@ function getCityAccent(slug: string): string {
   switch (slug) {
     case 'granada':
       return 'var(--color-gold)'
+    case 'malaga':
+      return 'var(--color-gold-light)'
     case 'madrid':
       return 'var(--color-magenta)'
-    case 'barcelona':
+    case 'alicante':
       return 'var(--color-purple)'
-    case 'valencia':
-      return 'var(--color-gold)'
-    case 'sevilla':
-      return 'var(--color-magenta-dim)'
-    case 'bilbao':
-      return 'var(--color-purple-mid)'
     default:
       return 'var(--color-magenta)'
   }

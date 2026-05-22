@@ -8,7 +8,7 @@ import { AppMovilStoresStrip } from '@/components/app-movil/AppMovilStoresStrip'
 
 export function AppMovilPageContent() {
   return (
-    <main className="app-movil-page-root pb-8 pt-16 sm:pt-20">
+    <main className="app-movil-page-root pb-8 pt-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+1rem)] sm:pt-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+1.5rem)]">
       <AppMovilLandingHero />
       <AppMovilArchitectureSection />
       <AppMovilErosenseSection />

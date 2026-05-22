@@ -7,6 +7,6 @@ export const AGENT_QUESTIONS = [
   '¿Qué nivel de interacción con el equipo en sala esperas?',
   '¿Alguna alergia o sensibilidad que debamos conocer?',
   '¿Prefieres instrucciones verbales breves o un briefing más detallado?',
-  '¿Hay un detalle personal que te gustaría que el Game Master tuviera en cuenta?',
+  '¿Hay un detalle personal que te gustaría que la Game Master IA tuviera en cuenta?',
   '¿Confirmas que la información facilitada es veraz y está actualizada?',
 ] as const

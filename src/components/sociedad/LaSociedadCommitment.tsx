@@ -73,10 +73,10 @@ export function LaSociedadCommitment() {
             <span className="text-[10px] uppercase tracking-[0.2em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]">
               ¿Planes de membresía?{' '}
               <Link
-                href="/el-club"
+                href="/membresia"
                 className="text-(--color-magenta) transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
               >
-                VER NIVELES EN EL CLUB
+                VER MEMBRESÍA
               </Link>
             </span>
           </div>

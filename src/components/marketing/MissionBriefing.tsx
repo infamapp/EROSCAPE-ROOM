@@ -57,16 +57,12 @@ function getCityAccent(slug: string): string {
   switch (slug) {
     case 'granada':
       return 'var(--color-gold)'
+    case 'malaga':
+      return 'var(--color-gold-light)'
     case 'madrid':
       return 'var(--color-magenta)'
-    case 'barcelona':
+    case 'alicante':
       return 'var(--color-purple)'
-    case 'valencia':
-      return 'var(--color-gold)'
-    case 'sevilla':
-      return 'var(--color-magenta-dim)'
-    case 'bilbao':
-      return 'var(--color-purple-mid)'
     default:
       return 'var(--color-magenta)'
   }
@@ -195,7 +191,7 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
     } catch {
       // ignore
     }
-    router.push('/reservar?step=1')
+    router.push(`/reservar?step=1&ciudad=${citySlug}&sala=${experience.slug}`)
   }
 
   const handleAcceptMission = () => {
@@ -207,7 +203,7 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
     } catch {
       // ignore
     }
-    router.push('/reservar?step=1')
+    router.push(`/reservar?step=1&ciudad=${citySlug}&sala=${experience.slug}`)
   }
 
   const handleShare = async () => {
@@ -326,7 +322,7 @@ export function MissionBriefing({ experience, citySlug }: MissionBriefingProps) 
                     [
                       { k: 'DURACIÓN', v: `${experience.duration} min` },
                       { k: 'PARA CUÁNTOS', v: String(experience.maxParticipants) },
-                      { k: 'EL GAME MASTER', v: experience.specs.aiLevel },
+                      { k: 'GAME MASTER IA', v: experience.specs.aiLevel },
                       { k: 'INTENSIDAD', intensity: true as const },
                       { k: 'PRECIO', v: priceText },
                     ] as const

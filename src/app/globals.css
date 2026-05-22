@@ -37,6 +37,9 @@
   --color-rarity-raro: #B9309E;
   --color-rarity-epico: #CB7B1B;
 
+  /* --- LAYOUT --- */
+  --layout-nav-height: 5.25rem;
+
   /* --- TEXTO --- */
   --color-text-primary: #FFFFFF;
   --color-text-secondary: #C8B8D0;
@@ -104,6 +107,35 @@
 
 .neon-bloom-cta {
   box-shadow: var(--neon-cta-bloom);
+}
+
+/* Flujo de reserva */
+.booking-flow {
+  background-color: var(--color-bg-base);
+}
+
+/* Paso 1: caber en viewport sin scroll de página */
+.booking-step1-shell {
+  --booking-step1-offset: calc(
+    var(--layout-nav-height) + env(safe-area-inset-top, 0px) + 3.25rem + 4.25rem
+  );
+  height: calc(100dvh - var(--booking-step1-offset));
+  min-height: 28rem;
+  max-height: calc(100dvh - var(--booking-step1-offset));
+}
+
+.booking-step1-stage {
+  flex: 1 1 auto;
+}
+
+/* Pasos II+ comparten shell del paso I */
+.booking-step2-shell {
+  --booking-step1-offset: calc(
+    var(--layout-nav-height) + env(safe-area-inset-top, 0px) + 3.25rem + 4.25rem
+  );
+  height: calc(100dvh - var(--booking-step1-offset));
+  min-height: 28rem;
+  max-height: calc(100dvh - var(--booking-step1-offset));
 }
 
 /* Página El Tocador (membresía / boutique) */

@@ -56,3 +56,22 @@ export const BOUTIQUE_PACKS = [
     price: 39900,
   },
 ] as const satisfies readonly BoutiquePack[]
+
+const PACK_ID_SET = new Set<string>(BOUTIQUE_PACKS.map((p) => p.id))
+
+/** Precios en céntimos (ej. 42900 → 429,00 €). */
+export function getBoutiquePackPriceEuros(priceInCents: number): number {
+  return priceInCents / 100
+}
+
+export function getBoutiquePackById(id: string): BoutiquePack | undefined {
+  return BOUTIQUE_PACKS.find((p) => p.id === id)
+}
+
+export function isBoutiquePackId(id: string): boolean {
+  return PACK_ID_SET.has(id)
+}
+
+export function sanitizeBoutiquePackIds(ids: string[]): string[] {
+  return ids.filter(isBoutiquePackId)
+}

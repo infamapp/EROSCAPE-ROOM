@@ -30,7 +30,7 @@ export function getPlayerArchetype(state: BookingState): Archetype {
   if (companyType === 'pareja' && intensityLevel === 'bajo') {
     return getArchetypeById('explorador')
   }
-  if (companyType === 'pareja' && intensityLevel === 'medio' && selectedUpsells.includes('pack-sensorial')) {
+  if (companyType === 'pareja' && intensityLevel === 'medio' && selectedUpsells.includes('desire-box')) {
     return getArchetypeById('romantico')
   }
   return getArchetypeById('explorador')

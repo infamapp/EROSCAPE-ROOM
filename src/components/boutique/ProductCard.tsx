@@ -4,6 +4,8 @@
  import { motion, useReducedMotion } from 'framer-motion'
 import { Package, ShoppingBag, Star } from 'lucide-react'
  
+ import { getBoutiquePackPriceEuros } from '@/lib/boutique-packs'
+ import { boutiqueRarityColorVar, boutiqueRarityLabel } from '@/lib/boutique-rarity'
  import { cn, formatCurrency } from '@/lib/utils'
  
  export type BoutiqueProductRarity = 'esencial' | 'premium' | 'exclusivo'
@@ -33,36 +35,6 @@ import { Package, ShoppingBag, Star } from 'lucide-react'
    }),
  }
  
- function rarityLabel(rarity: BoutiqueProductRarity): string {
-   switch (rarity) {
-     case 'esencial':
-       return 'ESENCIAL'
-     case 'premium':
-       return 'PREMIUM'
-     case 'exclusivo':
-       return 'EXCLUSIVO'
-     default: {
-       const _exhaustive: never = rarity
-       return _exhaustive
-     }
-   }
- }
- 
- function rarityColorVar(rarity: BoutiqueProductRarity): string {
-   switch (rarity) {
-     case 'esencial':
-       return 'var(--color-gm-terminal)'
-     case 'premium':
-       return 'var(--color-magenta)'
-     case 'exclusivo':
-       return 'var(--color-gold)'
-     default: {
-       const _exhaustive: never = rarity
-       return _exhaustive
-     }
-   }
- }
- 
  export function ProductCard({
    name,
    description,
@@ -76,7 +48,8 @@ import { Package, ShoppingBag, Star } from 'lucide-react'
   className,
 }: ProductCardProps) {
    const reduceMotion = useReducedMotion()
-   const rarityVar = rarityColorVar(rarity)
+   const rarityVar = boutiqueRarityColorVar(rarity)
+   const priceEuros = getBoutiquePackPriceEuros(price)
  
    return (
      <motion.article
@@ -133,13 +106,13 @@ import { Package, ShoppingBag, Star } from 'lucide-react'
                background: `color-mix(in srgb, ${rarityVar} 12%, transparent)`,
              }}
            >
-             {rarityLabel(rarity)}
+             {boutiqueRarityLabel(rarity)}
            </span>
          </div>
  
          <div className="mt-5 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
            <p className="shrink-0 text-sm font-semibold text-(--color-gold-light) [font-family:var(--font-playfair)]">
-             {formatCurrency(price)}
+             {formatCurrency(priceEuros)}
            </p>
  
            <div className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.18em] text-(--color-text-muted) [font-family:var(--font-jetbrains)]">
@@ -161,7 +134,7 @@ import { Package, ShoppingBag, Star } from 'lucide-react'
            style={isInCart ? undefined : { background: 'var(--gradient-cta)' }}
            aria-pressed={isInCart}
          >
-           {isInCart ? 'EN TU BAÚL ✓' : 'AÑADIR'}
+           {isInCart ? 'EN EL TOCADOR ✓' : 'AÑADIR'}
            <ShoppingBag className="ml-2 h-4 w-4" aria-hidden="true" />
          </motion.button>
        </div>

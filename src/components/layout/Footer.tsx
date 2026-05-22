@@ -1,6 +1,10 @@
+'use client'
+
 import Link from 'next/link'
+import { useIsReservarRoute } from '@/hooks/useIsReservarRoute'
 import { Lock, Music, Send, Sparkles } from 'lucide-react'
 
+import { buildWhatsAppAdvisorUrl } from '@/lib/contact'
 import { CITIES } from '@/lib/constants'
 import { cn } from '@/lib/utils'
 
@@ -11,6 +15,9 @@ const SOCIAL_LINKS = [
 ] as const
 
 export function Footer() {
+  const isReservar = useIsReservarRoute()
+  if (isReservar) return null
+
   return (
     <footer
       className={cn('mt-24')}
@@ -91,7 +98,7 @@ export function Footer() {
             <ul className="mt-4 space-y-2">
               <li>
                 <a
-                  href="https://wa.me/34640758672"
+                  href={buildWhatsAppAdvisorUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-sm hover:text-white transition-colors"
@@ -99,6 +106,15 @@ export function Footer() {
                 >
                   Contacto
                 </a>
+              </li>
+              <li>
+                <Link
+                  href="/membresia"
+                  className="text-sm hover:text-white transition-colors"
+                  style={{ color: 'var(--color-text-secondary)' }}
+                >
+                  Membresía
+                </Link>
               </li>
               <li>
                 <Link
@@ -130,13 +146,13 @@ export function Footer() {
         </div>
 
         <p className="mt-6 text-center [font-family:var(--font-jetbrains)] text-[9px] tracking-[0.18em] uppercase">
-          <span style={{ color: 'var(--color-text-muted)' }}>¿Sos inversor? </span>
+          <span style={{ color: 'var(--color-text-muted)' }}>¿Quieres tu propio Eroscape? </span>
           <Link
-            href="/inversores"
+            href="/franquicia"
             className="transition-colors hover:underline underline-offset-4"
             style={{ color: 'var(--color-text-muted)' }}
           >
-            → Abre tu franquicia
+            → Monta tu franquicia
           </Link>
         </p>
 

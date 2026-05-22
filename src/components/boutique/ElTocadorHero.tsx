@@ -27,7 +27,7 @@ const PERKS: readonly { id: string; text: string; Icon: LucideIcon }[] = [
   { id: 'prioridad', text: 'Reserva anticipada antes que nadie', Icon: CalendarClock },
   { id: 'descuento', text: 'Descuentos permanentes en experiencias', Icon: BadgePercent },
   { id: 'noches', text: 'Acceso a noches solo para miembros', Icon: Moon },
-  { id: 'memoria', text: 'El Game Master recuerda tus preferencias', Icon: Sparkles },
+  { id: 'memoria', text: 'La Game Master IA recuerda tus preferencias', Icon: Sparkles },
 ]
 
 export function ElTocadorHero() {

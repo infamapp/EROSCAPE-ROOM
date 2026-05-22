@@ -6,6 +6,10 @@ export type MissionLevel = 'ALPHA' | 'BETA' | 'OMEGA'
 
 export type ItemRarity = 'comun' | 'descomun' | 'raro' | 'epico'
 
+export type IdentityDocumentType = 'dni' | 'nie' | 'pasaporte'
+
+export type PaymentStatus = 'pending' | 'paid'
+
 export function getTemperatureLabel(rarity: ItemRarity): string {
   switch (rarity) {
     case 'comun':
@@ -60,12 +64,25 @@ export interface BookingStep4 {
   consent: LegalConsent | null
 }
 
+/** Titular del pago y documento (sin datos sensibles de tarjeta completos). */
+export interface BookingStep5 {
+  cardholderName: string
+  email: string
+  documentType: IdentityDocumentType | null
+  documentNumber: string
+  paymentStatus: PaymentStatus
+  paidAt: string | null
+  confirmationCode: string | null
+  cardLast4: string | null
+}
+
 export interface BookingState {
   currentStep: 1 | 2 | 3 | 4 | 5
   step1: Partial<BookingStep1>
   step2: Partial<BookingStep2>
   step3: BookingStep3
   step4: BookingStep4
+  step5: BookingStep5
   bookingId: string
   totalPrice: number
 }

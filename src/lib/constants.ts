@@ -2,16 +2,32 @@ export type CityAvailability = 'available' | 'coming_soon'
 
 export const DEFAULT_CITY_SLUG = 'granada' as const
 
+/** Copy compartido para mapa / selector de ciudad. */
+export const CITY_AVAILABILITY_COPY = {
+  tagline: 'Granada disponible · Próximamente Málaga, Madrid y Alicante',
+  detail: 'Reserva hoy en Granada. Málaga, Madrid y Alicante, próximamente.',
+} as const
+
 export const CITIES = [
   {
     slug: 'granada',
     displayName: 'Granada',
     barrio: 'Centro histórico',
-    lat: 37.5,
-    lon: -3.59904,
+    lat: 37.1773,
+    lon: -3.5986,
     svgX: '44%',
     svgY: '78%',
     availability: 'available',
+  },
+  {
+    slug: 'malaga',
+    displayName: 'Málaga',
+    barrio: 'Centro / Soho',
+    lat: 37,
+    lon: -4.2,
+    svgX: '38%',
+    svgY: '84%',
+    availability: 'coming_soon',
   },
   {
     slug: 'madrid',
@@ -19,48 +35,18 @@ export const CITIES = [
     barrio: 'Centro / Malasaña',
     lat: 40.4167,
     lon: -3.7033,
-    svgX: '10%',
-    svgY: '56%',
+    svgX: '48%',
+    svgY: '52%',
     availability: 'coming_soon',
   },
   {
-    slug: 'barcelona',
-    displayName: 'Barcelona',
-    barrio: 'Eixample / Gràcia',
-    lat: 41.5851,
-    lon: 1.1734,
-    svgX: '40%',
-    svgY: '40%',
-    availability: 'coming_soon',
-  },
-  {
-    slug: 'valencia',
-    displayName: 'Valencia',
-    barrio: 'Ruzafa / Centro',
-    lat: 39.4699,
-    lon: -0.3763,
-    svgX: '73%',
-    svgY: '63%',
-    availability: 'coming_soon',
-  },
-  {
-    slug: 'sevilla',
-    displayName: 'Sevilla',
-    barrio: 'Triana / Centro',
-    lat: 37.3891,
-    lon: -5.5845,
-    svgX: '36%',
-    svgY: '80%',
-    availability: 'coming_soon',
-  },
-  {
-    slug: 'bilbao',
-    displayName: 'Bilbao',
-    barrio: 'Casco Viejo',
-    lat: 43.263,
-    lon: -2.935,
-    svgX: '42%',
-    svgY: '26%',
+    slug: 'alicante',
+    displayName: 'Alicante',
+    barrio: 'Centro / Playa',
+    lat: 38.7,
+    lon: -0.9,
+    svgX: '72%',
+    svgY: '72%',
     availability: 'coming_soon',
   },
 ] as const
@@ -82,13 +68,6 @@ export const EXPERIENCES_TEMPLATE = [
   { n: 6, slug: 'la-mascarada', title: 'La Mascarada', intensity: 'medio', missionLevel: 'BETA', duration: 120, maxParticipants: 2, basePrice: 160 },
 ] as const
 
-export const UPSELL_ITEMS = [
-  { id: 'pack-sensorial', name: 'Caja de Placeres', rarity: 'raro', price: 39, description: 'Juguetes y accesorios sensuales esperándote en la sala al llegar.', popular: false, icon: 'Package' },
-  { id: 'tiempo-15', name: '+30 min de abandono', rarity: 'descomun', price: 25, description: 'Amplía tu experiencia media hora más. Porque el placer no debería apurarse.', popular: false, icon: 'Clock' },
-  { id: 'tiempo-30', name: '+60 min sin apuro', rarity: 'raro', price: 45, description: 'Una hora más para perderte del todo en la experiencia.', popular: true, icon: 'Clock3' },
-  { id: 'sorpresa', name: 'El Susurro', rarity: 'descomun', price: 15, description: 'Un mensaje secreto y personalizado que solo tu acompañante recibirá. Una dedicatoria íntima antes de que todo empiece.', popular: false, icon: 'Gift' },
-] as const
-
 export const ARCHETYPES = [
   {
     id: 'explorador',
@@ -103,7 +82,7 @@ export const ARCHETYPES = [
     name: 'El Amante Verdadero',
     icon: '🌹',
     description:
-      'Lo tuyo es la conexión profunda. Cada gesto, cada mirada, cada pausa. El Game Master lo ha entendido.',
+      'Lo tuyo es la conexión profunda. Cada gesto, cada mirada, cada pausa. La Game Master IA ya lo ha calibrado.',
     gradient: 'var(--gradient-cta)',
   },
   {
@@ -119,7 +98,7 @@ export const ARCHETYPES = [
     name: 'El Arquitecto del Placer',
     icon: '🪞',
     description:
-      'Sabes exactamente lo que quieres y confías en que el Game Master puede dártelo. Alianza perfecta.',
+      'Sabes exactamente lo que quieres y confías en que la Game Master IA puede dártelo. Alianza perfecta.',
     gradient: 'var(--gradient-hero)',
   },
   {
@@ -141,8 +120,4 @@ export const COMPANY_TYPES = [
 
 export const SAFE_WORD_SUGGESTIONS = ['Lluvia', 'Mariposa', 'Pausa', 'Aurora', 'Eclipse', 'Bruma'] as const
 
-export const GAME_MASTER_INTRO_MESSAGES = [
-  'Ya te esperábamos.',
-  'He analizado tus preferencias. La noche se adapta a vos.',
-  'Tengo una pregunta antes de preparar tu experiencia.',
-] as const
+export { GAME_MASTER_INTRO_MESSAGES } from '@/lib/game-master-copy'

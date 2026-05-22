@@ -1,7 +1,7 @@
 'use client'
 
 import { CityMap } from '@/components/ui/CityMap'
-import { CITIES } from '@/lib/constants'
+import { CITIES, CITY_AVAILABILITY_COPY } from '@/lib/constants'
 
 type CitySlug = (typeof CITIES)[number]['slug']
 
@@ -26,10 +26,10 @@ export function SpainMapSection({ activeCitySlug, onSelectCity }: SpainMapSectio
             ¿DÓNDE QUIERES QUE OCURRA?
           </h2>
           <p className="mt-3 font-(--font-jetbrains) text-[11px] text-(--color-text-muted) sm:mt-5 sm:text-sm">
-            Granada disponible · 6 experiencias · Resto de ciudades próximamente
+            {CITY_AVAILABILITY_COPY.tagline}
           </p>
           <p className="mt-2 font-(--font-inter) text-xs leading-relaxed text-(--color-text-muted)">
-            Ciudad de reserva actualmente: Granada. El resto de ciudades, próximamente.
+            {CITY_AVAILABILITY_COPY.detail}
           </p>
         </div>
 

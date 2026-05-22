@@ -30,7 +30,7 @@
     "technology": {
         "game_master": {
             "title": "Game Master IA",
-            "description": "Todas las experiencias son guiadas por una Game Master de Inteligencia Artificial automatizada. No hay presencia física humana durante tu experiencia. La IA te guía, adapta la narrativa y respeta tus límites en tiempo real. Si surge cualquier problema, contacto humano inmediato disponible desde la app."
+            "description": "Todas las experiencias son guiadas por una Game Master IA autómata — no hay Game Master humano en sala. La IA opera en un ámbito privado: adapta narrativa, luz y ritmo en tiempo real. No hay escucha humana continua ni sistemas de vídeo o cámara. Un asistente humano por voz solo se activa si lo solicitas o ante emergencia con la palabra segura."
         },
         "erosense": {
             "title": "EROSENSE",
@@ -125,16 +125,16 @@
         "quote": "\"El consentimiento manda: sin él, no hay juego.\"",
         "guarantees": [
             "Consentimiento guiado: Formulario previo de límites y preferencias. La palabra segura frena la actividad de inmediato y activa conexión con un asistente humano.",
-            "Seguridad Total: Protocolo de seguridad con personal presente en todo momento, sin intrusión en tu experiencia.",
-            "Privacidad Garantizada: Cámaras solo para seguridad, nunca para grabación. Tu intimidad está protegida.",
+            "Seguridad Total: Sin presencia humana en sala. Asistente por voz solo a petición o con la palabra segura.",
+            "Privacidad Garantizada: Sin cámaras, micrófonos de vigilancia ni grabaciones durante la experiencia.",
             "Higiene Premium: Protocolos de limpieza hospitalaria entre sesiones. Todo esterilizado y renovado.",
             "Game Master IA Automatizada: Experiencia guiada 100% por Inteligencia Artificial. Sin presencia física humana durante la experiencia.",
             "Documentación Clara: Contratos transparentes, políticas claras y derecho de veto en cualquier momento."
         ],
         "process_steps": [
             "Consulta Previa: Completás el formulario de límites y preferencias",
-            "Briefing Personal: Conversación privada sobre códigos y palabras seguras",
-            "Durante la experiencia: Guiada por Game Master IA. Palabra segura o app activan asistente humano de inmediato.",
+            "Briefing digital: Límites y palabra segura en formulario — sin intervención humana en sala salvo que la pidas",
+            "Durante la experiencia: Game Master IA autómata en ámbito privado. Palabra segura o app activan asistente humano por voz, solo entonces.",
             "Aftercare: Debriefing opcional y espacio para procesar la experiencia"
         ],
         "our_guarantees": [
@@ -428,7 +428,7 @@
     },
     "closing": {
         "title": "¿Listos para el juego?",
-        "text": "Tu próxima aventura te está esperando. Una experiencia que recordaréis para siempre, en un entorno seguro, elegante y completamente personalizado según vuestros deseos. Guiada por una Game Master de Inteligencia Artificial automatizada consciente del consentimiento, cada experiencia es única, irrepetible y creada solo para vosotros. Sin presencia humana durante la experiencia, pero con soporte inmediato disponible desde la app ante cualquier necesidad.",
+        "text": "Tu próxima aventura te está esperando. Guiada por una Game Master IA autómata en un ámbito privado: sin humano en sala, sin cámaras ni escucha continua. Cada experiencia es única y creada para vosotros. Si lo necesitáis, la palabra segura o la app activan un asistente humano por voz — solo a petición o en emergencia.",
         "tags": [
             "Solo Adultos: Experiencia exclusiva para mayores de edad",
             "100% Consensuado: Tu palabra segura siempre será respetada",
@@ -443,12 +443,12 @@
     "faq": {
         "metadata": {
             "title": "FAQ — Eroscape",
-            "description": "Respuestas discretas sobre la experiencia, reservas, seguridad, privacidad y el Game Master."
+            "description": "Respuestas discretas sobre la experiencia, reservas, seguridad, privacidad y la Game Master IA autómata."
         },
         "hero_intro": {
             "eyebrow": "Lo que todos preguntan (pero pocos se atreven a decir)",
             "headline": "Tus dudas, resueltas.",
-            "lead": "Si no encontrás lo que buscás, el Game Master puede guiarte con calma — sin exponer nada que no quieras revelar."
+            "lead": "Si no encontrás lo que buscás, la Game Master IA te orienta en la app — sin exponer nada que no quieras revelar."
         },
         "categories": {
             "todas": "Todas",
@@ -462,7 +462,7 @@
             {
                 "category": "experiencia",
                 "question": "¿Qué pasa exactamente dentro de la sala?",
-                "answer": "El Game Master orquesta un viaje sensorial personalizado. Estímulos táctiles, auditivos y visuales se alinean con una narrativa que se ajusta a tus límites. No es solo un escape room: es una coreografía íntima y elegante."
+                "answer": "La Game Master IA autómata orquesta un viaje sensorial personalizado en un ámbito privado. Estímulos táctiles, auditivos y visuales se alinean con una narrativa que respeta tus límites. No hay Game Master humano en sala."
             },
             {
                 "category": "experiencia",
@@ -471,13 +471,13 @@
             },
             {
                 "category": "privacidad",
-                "question": "¿Hay personas presentes durante la experiencia?",
-                "answer": "La privacidad es un pilar. La sala se guía desde la sombra y sin supervisión humana directa en el espacio, salvo que una narrativa específica indique lo contrario (siempre se comunica de antemano)."
+                "question": "¿Hay personas presentes o alguien escuchando durante la experiencia?",
+                "answer": "No hay presencia humana en sala ni supervisión continua. La Game Master IA guía en un ámbito privado. No existen sistemas de vídeo ni cámaras que graben o escuchen. Nadie observa tu intimidad."
             },
             {
                 "category": "seguridad",
                 "question": "¿Qué es la palabra segura y cómo funciona?",
-                "answer": "Con la palabra segura se frena la actividad de inmediato y se conecta con un asistente humano para corroborar que no existe ningún problema."
+                "answer": "La palabra segura frena la actividad al instante. Solo entonces — o si tú lo solicitas — se activa un asistente humano por voz. No hay intervención humana continua."
             },
             {
                 "category": "reservas",
@@ -492,7 +492,22 @@
             {
                 "category": "maestro_ia",
                 "question": "¿Qué es el Game Master IA y qué puede hacer?",
-                "answer": "El Game Master es un sistema de guía narrativa y ambientación. Ajusta música, luz y ritmo en función de tus elecciones, manteniendo el tono y la seguridad. No juzga: acompaña."
+                "answer": "Es una IA autómata: guía narrativa y ambientación en tiempo real. No es un humano en sala. No juzga: acompaña. Si necesitas una persona, la activas tú — palabra segura o app — y un asistente responde por voz."
+            },
+            {
+                "category": "privacidad",
+                "question": "¿Hay cámaras, micrófonos o grabaciones?",
+                "answer": "No. No hay sistemas de vídeo ni cámara activos durante la experiencia, ni grabación de audio o imagen de lo que vivís en sala."
+            },
+            {
+                "category": "maestro_ia",
+                "question": "¿Existe un Game Master humano en la sala?",
+                "answer": "No. Quien guía la experiencia es siempre la Game Master IA. El contacto humano existe solo como respaldo por voz, y solo cuando lo solicitas o ante emergencia con la palabra segura."
+            },
+            {
+                "category": "seguridad",
+                "question": "¿Cuándo interviene una persona humana?",
+                "answer": "Únicamente si lo pides o si usas la palabra segura. En ese caso un asistente atiende por voz. El resto del tiempo la sala permanece en ámbito privado guiada solo por la IA autómata."
             }
         ],
         "cta_panel": {

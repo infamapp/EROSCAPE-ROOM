@@ -1,461 +1,210 @@
 'use client'
 
-import type { LucideIcon } from 'lucide-react'
-import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion'
-import { CheckCircle2, Clock, Clock3, Crown, Gift, Package, PlusCircle, Swords } from 'lucide-react'
-import { createPortal } from 'react-dom'
-import type { RefObject } from 'react'
-import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react'
+import Image from 'next/image'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { Minus } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-import { StepHeader } from '@/components/booking/StepHeader'
-import { RarityBadge } from '@/components/ui/RarityBadge'
-import { useBookingFlow } from '@/hooks/useBookingFlow'
-import { UPSELL_ITEMS } from '@/lib/constants'
-import { cn, formatCurrency } from '@/lib/utils'
-import type { ItemRarity } from '@/types/booking'
 import { BookingBottomBar } from '@/components/booking/BookingBottomBar'
+import { BookingFlowHeader } from '@/components/booking/BookingFlowHeader'
+import { BookingSelectionDetail } from '@/components/booking/BookingSelectionDetail'
+import { BookingTocadorRow } from '@/components/booking/BookingTocadorRow'
+import { useBookingFlow } from '@/hooks/useBookingFlow'
+import { STEP3_TOCADOR_COPY } from '@/lib/booking-tocador-copy'
+import {
+  BOUTIQUE_PACKS,
+  getBoutiquePackById,
+  getBoutiquePackPriceEuros,
+  type BoutiquePack,
+} from '@/lib/boutique-packs'
+import { boutiqueRarityLabel } from '@/lib/boutique-rarity'
+import { formatCurrency } from '@/lib/utils'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
-const LOOT_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
-const arsenalRowVariants = {
-  hidden: { opacity: 0, y: -20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { type: 'spring', stiffness: 420, damping: 18, mass: 0.6 },
-  },
-  exit: { opacity: 0, y: -12, transition: { duration: 0.2, ease: SENSUAL_EASE } },
-} as const
+type TocadorPackId = (typeof BOUTIQUE_PACKS)[number]['id']
 
-type UpsellId = (typeof UPSELL_ITEMS)[number]['id']
-
-const ICON_BY_NAME: Record<(typeof UPSELL_ITEMS)[number]['icon'], LucideIcon> = {
-  Package,
-  Clock,
-  Clock3,
-  Gift,
+interface TocadorSelectionPanelProps {
+  rows: BoutiquePack[]
+  total: number
+  onRemove: (id: TocadorPackId) => void
 }
 
-function getRarityCssVar(rarity: ItemRarity): string {
-  switch (rarity) {
-    case 'comun':
-      return 'var(--color-rarity-comun)'
-    case 'descomun':
-      return 'var(--color-rarity-descomun)'
-    case 'raro':
-      return 'var(--color-rarity-raro)'
-    case 'epico':
-      return 'var(--color-rarity-epico)'
-  }
-}
-
-interface HexFrameProps {
-  iconName: string
-  rarity: ItemRarity
-  isSelected: boolean
-  selectionPulse: boolean
-  size?: 40 | 60
-}
-
-function HexFrame({ iconName, rarity, isSelected, selectionPulse, size = 60 }: HexFrameProps) {
+function TocadorSelectionPanel({ rows, total, onRemove }: TocadorSelectionPanelProps) {
   const shouldReduceMotion = useReducedMotion()
-  const rawClipId = useId()
-  const clipId = `hex-${rawClipId.replace(/:/g, '')}`
-  const color = getRarityCssVar(rarity)
-  const Icon = ICON_BY_NAME[iconName as keyof typeof ICON_BY_NAME] ?? Package
-  const dim = size
-  const iconClass = size === 60 ? 'h-7 w-7' : 'h-5 w-5'
-  const poly = '30,4 56,17 56,43 30,56 4,43 4,17'
-
-  return (
-    <motion.div
-      className="relative shrink-0"
-      style={{
-        width: dim,
-        height: dim,
-        filter: isSelected ? 'brightness(1.3)' : undefined,
-        boxShadow: isSelected ? `0 0 20px ${color}` : undefined,
-      }}
-      animate={
-        shouldReduceMotion || !selectionPulse
-          ? undefined
-          : { rotate: [30, 0], scale: [1, 1.15, 1] }
-      }
-      transition={
-        shouldReduceMotion || !selectionPulse
-          ? undefined
-          : { rotate: { type: 'spring', stiffness: 260, damping: 18 }, scale: { duration: 0.45, ease: SENSUAL_EASE } }
-      }
-    >
-      <svg width={dim} height={dim} viewBox="0 0 60 60" className="absolute inset-0 h-full w-full" aria-hidden="true">
-        <defs>
-          <clipPath id={clipId}>
-            <polygon points={poly} />
-          </clipPath>
-        </defs>
-        <polygon
-          points={poly}
-          fill="var(--color-bg-elevated)"
-          fillOpacity="0.75"
-          stroke={color}
-          strokeWidth="2"
-        />
-      </svg>
-      <div
-        className="absolute inset-0 flex items-center justify-center"
-        style={{ clipPath: `url(#${clipId})` }}
-      >
-        <Icon className={iconClass} style={{ color }} aria-hidden="true" />
-      </div>
-    </motion.div>
-  )
-}
-
-interface LootFlightPayload {
-  id: UpsellId
-  fromX: number
-  fromY: number
-  toX: number
-  toY: number
-  rarity: ItemRarity
-  iconName: string
-}
-
-interface UpsellItemCardProps {
-  item: (typeof UPSELL_ITEMS)[number]
-  isSelected: boolean
-  selectionPulse: boolean
-  onToggle: (id: UpsellId, rect: DOMRect | null) => void
-  hexRef: (el: HTMLDivElement | null) => void
-}
-
-function UpsellItemCard({ item, isSelected, selectionPulse, onToggle, hexRef }: UpsellItemCardProps) {
-  const rarityColor = getRarityCssVar(item.rarity)
-  const innerRef = useRef<HTMLDivElement | null>(null)
-
-  const handleToggle = () => {
-    const rect = innerRef.current?.getBoundingClientRect() ?? null
-    onToggle(item.id, rect)
-  }
-
-  return (
-    <motion.article
-      layout
-      className={cn(
-        'relative rounded-2xl border-2 p-3.5 transition-shadow sm:p-4 md:p-5',
-        'focus-within:ring-2 focus-within:ring-(--color-magenta) focus-within:ring-offset-2 focus-within:ring-offset-(--color-bg-base)'
-      )}
-      style={{
-        borderColor: isSelected ? rarityColor : 'rgba(185,48,158,0.2)',
-        background: isSelected ? 'rgba(185,48,158,0.10)' : 'var(--color-bg-elevated)',
-        boxShadow: 'var(--glow-card)',
-      }}
-      animate={isSelected ? { y: -4 } : { y: 0 }}
-      transition={{ type: 'spring', stiffness: 380, damping: 26 }}
-    >
-      {item.popular ? (
-        <div
-          className="absolute right-3 top-1 flex items-center gap-1 rounded-full px-2 py-0.5 font-(--font-jetbrains) text-[9px] tracking-wide"
-          style={{ border: 'var(--border-gold)', color: 'var(--color-gold)', background: 'rgba(203,123,27,0.12)' }}
-        >
-          <Crown className="h-3 w-3" style={{ color: 'var(--color-gold)' }} aria-hidden="true" />
-          MÁS POPULAR
-        </div>
-      ) : null}
-
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-        <div ref={(el) => hexRef(el)} className="flex shrink-0 justify-center sm:justify-start">
-          <div ref={innerRef}>
-            <HexFrame iconName={item.icon} rarity={item.rarity} isSelected={isSelected} selectionPulse={selectionPulse} />
-          </div>
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <h3 className="font-(--font-playfair) text-base text-white sm:text-lg">{item.name}</h3>
-          <div className="mt-1.5 sm:mt-2">
-            <RarityBadge rarity={item.rarity} />
-          </div>
-          <p className="mt-2 font-(--font-inter) text-[13px] leading-6 sm:text-sm sm:leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-            {item.description}
-          </p>
-        </div>
-
-        <div className="flex shrink-0 flex-col items-stretch gap-3 sm:items-end sm:text-right">
-          <p className="font-(--font-playfair) text-lg text-white sm:text-xl">{formatCurrency(item.price)}</p>
-          <button
-            type="button"
-            onClick={handleToggle}
-            className="inline-flex items-center justify-center gap-2 rounded-full px-3.5 py-2 font-(--font-jetbrains) text-[11px] tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:px-4 sm:text-xs"
-            style={
-              isSelected
-                ? { background: 'transparent', border: `2px solid ${rarityColor}`, color: rarityColor }
-                : { background: 'var(--color-bg-subtle)', border: '2px solid rgba(185,48,158,0.25)', color: 'var(--color-text-primary)' }
-            }
-          >
-            {isSelected ? (
-              <>
-                <CheckCircle2 className="h-4 w-4" style={{ color: rarityColor }} aria-hidden="true" />
-                EQUIPADO
-              </>
-            ) : (
-              <>
-                <PlusCircle className="h-4 w-4" style={{ color: rarityColor }} aria-hidden="true" />
-                EQUIPAR
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-    </motion.article>
-  )
-}
-
-function LootFlightClone({ payload, onDone }: { payload: LootFlightPayload; onDone: () => void }) {
-  const shouldReduceMotion = useReducedMotion()
-  const color = getRarityCssVar(payload.rarity)
-  const Icon = ICON_BY_NAME[payload.iconName as keyof typeof ICON_BY_NAME] ?? Package
-
-  useEffect(() => {
-    if (!shouldReduceMotion) return undefined
-    const t = window.setTimeout(() => onDone(), 0)
-    return () => window.clearTimeout(t)
-  }, [shouldReduceMotion, onDone])
-
-  if (shouldReduceMotion) return null
-
-  return (
-    <motion.div
-      className="pointer-events-none fixed z-220 flex h-14 w-14 items-center justify-center rounded-lg border-2"
-      style={{
-        borderColor: color,
-        background: 'var(--color-bg-elevated)',
-        boxShadow: `0 0 18px ${color}`,
-        left: 0,
-        top: 0,
-        x: payload.fromX - 28,
-        y: payload.fromY - 28,
-      }}
-      initial={{ scale: 1, opacity: 1 }}
-      animate={{
-        x: payload.toX - 28,
-        y: payload.toY - 28,
-        scale: 0.75,
-        opacity: 0.15,
-      }}
-      transition={{ duration: 0.4, ease: LOOT_EASE }}
-      onAnimationComplete={onDone}
-    >
-      <Icon className="h-7 w-7" style={{ color }} aria-hidden="true" />
-    </motion.div>
-  )
-}
-
-interface ArsenalPanelProps {
-  selectedIds: UpsellId[]
-  panelDropRef: RefObject<HTMLDivElement | null>
-  className?: string
-}
-
-function ArsenalPanel({ selectedIds, panelDropRef, className }: ArsenalPanelProps) {
-  const shouldReduceMotion = useReducedMotion()
-  const rows = useMemo(
-    () => selectedIds.map((id) => UPSELL_ITEMS.find((u) => u.id === id)).filter((u): u is (typeof UPSELL_ITEMS)[number] => Boolean(u)),
-    [selectedIds],
-  )
-  const total = useMemo(() => rows.reduce((s, u) => s + u.price, 0), [rows])
 
   return (
     <aside
-      className={cn('flex flex-col rounded-2xl border p-5', className)}
-      style={{ borderColor: 'rgba(185,48,158,0.25)', background: 'var(--color-bg-elevated)', boxShadow: 'var(--glow-card)' }}
+      className="hidden flex-col rounded-2xl border border-white/12 bg-(--color-bg-subtle) p-4 lg:flex lg:sticky lg:top-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+5rem)]"
+      aria-label={STEP3_TOCADOR_COPY.selectionHeading}
     >
-      <div ref={panelDropRef} className="flex items-center gap-2 border-b border-[rgba(185,48,158,0.15)] pb-4">
-        <Swords className="h-5 w-5 shrink-0" style={{ color: 'var(--color-text-muted)' }} aria-hidden="true" />
-        <h2 className="font-(--font-jetbrains) text-xs tracking-[0.2em] uppercase" style={{ color: 'var(--color-gm-alert)' }}>
-          TU BAÚL
-        </h2>
-      </div>
+      <h3 className="font-(--font-jetbrains) text-[10px] uppercase tracking-[0.2em] text-(--color-text-secondary)">
+        {STEP3_TOCADOR_COPY.selectionHeading}
+      </h3>
 
-      <div className="min-h-[120px] flex-1 py-4">
+      <div className="mt-3 min-h-0 flex-1">
         {rows.length === 0 ? (
-          <p className="font-(--font-inter) text-sm italic" style={{ color: 'var(--color-text-muted)' }}>
-            Baúl vacío. Sutil también es válido.
+          <p className="font-(--font-inter) text-sm leading-relaxed text-(--color-text-muted)">
+            {STEP3_TOCADOR_COPY.selectionEmpty}
           </p>
         ) : (
-          <LayoutGroup>
-            <ul className="space-y-3">
-              <AnimatePresence mode="popLayout">
-                {rows.map((u) => (
-                  <motion.li
-                    key={u.id}
-                    layout
-                    variants={arsenalRowVariants}
-                    initial={shouldReduceMotion ? false : 'hidden'}
-                    animate={shouldReduceMotion ? undefined : 'visible'}
-                    exit={shouldReduceMotion ? undefined : 'exit'}
-                    className="flex items-center gap-3 rounded-xl border border-[rgba(185,48,158,0.12)] px-2 py-2"
-                    style={{ background: 'rgba(8,0,8,0.35)' }}
-                  >
-                    <HexFrame iconName={u.icon} rarity={u.rarity} isSelected={false} selectionPulse={false} size={40} />
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-(--font-inter) text-sm text-white">{u.name}</p>
-                    </div>
-                    <p className="shrink-0 font-(--font-jetbrains) text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                      {formatCurrency(u.price)}
+          <ul className="space-y-1.5">
+            <AnimatePresence initial={false}>
+              {rows.map((pack) => (
+                <motion.li
+                  key={pack.id}
+                  layout={!shouldReduceMotion}
+                  initial={shouldReduceMotion ? false : { opacity: 0, y: 4 }}
+                  animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
+                  exit={shouldReduceMotion ? undefined : { opacity: 0, y: -4 }}
+                  transition={{ duration: 0.2, ease: SENSUAL_EASE }}
+                  className="flex items-center gap-2 rounded-lg border border-white/10 bg-(--color-bg-elevated) px-2 py-1.5"
+                >
+                  <div className="relative h-9 w-9 shrink-0 overflow-hidden rounded border border-white/10">
+                    <Image src={pack.imageSrc} alt="" fill sizes="36px" className="object-cover object-center" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-(--font-inter) text-xs text-white">{pack.name}</p>
+                    <p className="font-(--font-jetbrains) text-[9px] text-(--color-text-muted)">
+                      {formatCurrency(getBoutiquePackPriceEuros(pack.price))}
                     </p>
-                  </motion.li>
-                ))}
-              </AnimatePresence>
-            </ul>
-          </LayoutGroup>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onRemove(pack.id as TocadorPackId)}
+                    className="inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-white/15 text-(--color-text-secondary) transition-colors hover:border-(--color-magenta)/45 hover:text-(--color-magenta-glow) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta)"
+                    aria-label={`${STEP3_TOCADOR_COPY.removeLabel} ${pack.name}`}
+                  >
+                    <Minus className="h-3.5 w-3.5" aria-hidden="true" />
+                  </button>
+                </motion.li>
+              ))}
+            </AnimatePresence>
+          </ul>
         )}
       </div>
 
-      <footer className="mt-auto border-t border-[rgba(185,48,158,0.15)] pt-4">
-        <p className="font-(--font-jetbrains) text-[10px] tracking-[0.18em]" style={{ color: 'var(--color-text-muted)' }}>
-          EL VALOR DE TU NOCHE:
+      <div className="mt-3 border-t border-white/10 pt-3">
+        <p className="font-(--font-jetbrains) text-[10px] uppercase tracking-[0.16em] text-(--color-text-muted)">
+          {STEP3_TOCADOR_COPY.selectionTotalLabel}
         </p>
-        <p className="mt-1 font-(--font-playfair) text-3xl" style={{ color: 'var(--color-gold)' }}>
-          {formatCurrency(total)}
-        </p>
-      </footer>
+        <p className="mt-0.5 font-(--font-playfair) text-xl text-(--color-gold)">{formatCurrency(total)}</p>
+      </div>
     </aside>
   )
 }
 
 export function Step3Upselling() {
-  const shouldReduceMotion = useReducedMotion()
   const router = useRouter()
   const { state, updateStep3, getTotalPrice } = useBookingFlow()
 
-  const selected = state.step3.selectedUpsells as UpsellId[]
-  const [itemAdded, setItemAdded] = useState<UpsellId | null>(null)
-  const [lootFlight, setLootFlight] = useState<LootFlightPayload | null>(null)
+  const selected = state.step3.selectedUpsells as TocadorPackId[]
+  const [focusId, setFocusId] = useState<TocadorPackId | null>(BOUTIQUE_PACKS[0]?.id ?? null)
 
-  const panelDropRef = useRef<HTMLDivElement | null>(null)
-  const mobileLootTargetRef = useRef<HTMLDivElement | null>(null)
-  const hexRefs = useRef<Record<string, HTMLDivElement | null>>({})
-
-  const setHexRef = useCallback((id: string) => {
-    return (el: HTMLDivElement | null) => {
-      hexRefs.current[id] = el
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!itemAdded) return undefined
-    const t = window.setTimeout(() => setItemAdded(null), 600)
-    return () => window.clearTimeout(t)
-  }, [itemAdded])
-
-  const total = getTotalPrice()
-  const handlePrev = () => router.push('/reservar?step=2')
-  const handleNext = () => router.push('/reservar?step=4')
-
-  const clearLootFlight = useCallback(() => setLootFlight(null), [])
-
-  const handleToggle = useCallback(
-    (id: UpsellId, hexRect: DOMRect | null) => {
-      const isSelected = selected.includes(id)
-      const next = isSelected ? selected.filter((x) => x !== id) : [...selected, id]
-      updateStep3({ selectedUpsells: next })
-
-      if (!isSelected) {
-        setItemAdded(id)
-        if (!shouldReduceMotion && hexRect && typeof window !== 'undefined') {
-          const desktop = window.matchMedia('(min-width: 1024px)').matches
-          const targetEl = desktop ? panelDropRef.current : mobileLootTargetRef.current
-          const panelRect = targetEl?.getBoundingClientRect()
-          const item = UPSELL_ITEMS.find((u) => u.id === id)
-          if (item && panelRect && panelRect.width > 0 && panelRect.height > 0) {
-            setLootFlight({
-              id,
-              fromX: hexRect.left + hexRect.width / 2,
-              fromY: hexRect.top + hexRect.height / 2,
-              toX: panelRect.left + panelRect.width / 2,
-              toY: panelRect.top + panelRect.height / 2,
-              rarity: item.rarity,
-              iconName: item.icon,
-            })
-          }
-        }
-      }
-    },
-    [selected, updateStep3, shouldReduceMotion],
+  const selectedRows = useMemo(
+    () =>
+      selected
+        .map((id) => getBoutiquePackById(id))
+        .filter((p): p is BoutiquePack => Boolean(p)),
+    [selected],
   )
 
-  const lootPortal =
-    typeof document !== 'undefined' && lootFlight ? (
-      createPortal(
-        <LootFlightClone payload={lootFlight} onDone={clearLootFlight} />,
-        document.body,
-      )
-    ) : null
+  const focusPack = useMemo(() => {
+    const id = focusId ?? selected[selected.length - 1] ?? BOUTIQUE_PACKS[0]?.id
+    return id ? getBoutiquePackById(id) : undefined
+  }, [focusId, selected])
+
+  const total = getTotalPrice()
+
+  const handleAdd = (id: TocadorPackId) => {
+    if (selected.includes(id)) return
+    updateStep3({ selectedUpsells: [...selected, id] })
+    setFocusId(id)
+  }
+
+  const handleRemove = (id: TocadorPackId) => {
+    const next = selected.filter((x) => x !== id)
+    updateStep3({ selectedUpsells: next })
+    if (focusId === id) setFocusId((next[next.length - 1] as TocadorPackId | undefined) ?? BOUTIQUE_PACKS[0]?.id ?? null)
+  }
 
   return (
-    <div className="relative min-h-screen pb-32 md:pb-28">
-      {lootPortal}
+    <div className="mx-auto w-full max-w-[94rem] px-4 pt-1 sm:px-8 lg:px-10">
+      <BookingFlowHeader
+        actLabel="III"
+        title={STEP3_TOCADOR_COPY.title}
+        subtitle={STEP3_TOCADOR_COPY.subtitle}
+      />
 
-      <div className="relative mx-auto max-w-6xl px-4 pt-8 sm:px-6 sm:pt-10 lg:max-w-[1200px]">
-        <StepHeader actLabel="III" title="ABRE EL BAÚL" />
-        <p className="-mt-4 mb-7 font-(--font-jetbrains) text-[11px] tracking-wide sm:mb-10 sm:text-xs" style={{ color: 'var(--color-text-muted)' }}>
-          Equipá tu noche
+      {selectedRows.length > 0 ? (
+        <p className="mt-2 font-(--font-jetbrains) text-[10px] uppercase tracking-[0.14em] text-(--color-text-muted) lg:hidden">
+          {selectedRows.length} {selectedRows.length === 1 ? 'kit' : 'kits'} · {formatCurrency(total)}
         </p>
+      ) : null}
 
-        <div className="grid gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(280px,35%)] lg:items-start">
-          <div className="space-y-4">
-            {UPSELL_ITEMS.map((item) => (
-              <UpsellItemCard
-                key={item.id}
-                item={item}
-                isSelected={selected.includes(item.id)}
-                selectionPulse={itemAdded === item.id}
-                hexRef={setHexRef(item.id)}
-                onToggle={(id, rect) => {
-                  const r = rect ?? hexRefs.current[item.id]?.getBoundingClientRect() ?? null
-                  handleToggle(id, r)
-                }}
-              />
-            ))}
-          </div>
+      <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_240px] lg:items-start lg:gap-5">
+        <div className="min-w-0 space-y-3">
+          <section
+            className="rounded-2xl border border-white/12 bg-(--color-bg-subtle) p-3 sm:p-4"
+            aria-labelledby="tocador-catalog-heading"
+          >
+            <h3
+              id="tocador-catalog-heading"
+              className="font-(--font-jetbrains) text-[10px] uppercase tracking-[0.2em] text-(--color-text-secondary)"
+            >
+              {STEP3_TOCADOR_COPY.catalogHeading}
+            </h3>
 
-          <ArsenalPanel
-            selectedIds={selected}
-            panelDropRef={panelDropRef}
-            className="hidden lg:flex lg:min-h-[420px] lg:sticky lg:top-24"
-          />
+            <ul className="mt-2.5 space-y-1.5" role="list">
+              {BOUTIQUE_PACKS.map((pack) => (
+                <li key={pack.id}>
+                  <BookingTocadorRow
+                    pack={pack}
+                    isSelected={selected.includes(pack.id)}
+                    isFocused={focusId === pack.id}
+                    onFocus={() => setFocusId(pack.id)}
+                    onAdd={() => handleAdd(pack.id)}
+                    onRemove={() => handleRemove(pack.id)}
+                  />
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          {focusPack ? (
+            <BookingSelectionDetail
+              dense
+              label="Detalle"
+              title={focusPack.name}
+              summary={focusPack.description}
+              meta={
+                <p className="font-(--font-inter) text-xs text-(--color-text-secondary)">
+                  {formatCurrency(getBoutiquePackPriceEuros(focusPack.price))} ·{' '}
+                  {boutiqueRarityLabel(focusPack.rarity)}
+                </p>
+              }
+            />
+          ) : null}
         </div>
 
-        {/* Mobile bottom sheet: TU BAÚL */}
-        <AnimatePresence>
-          {selected.length > 0 ? (
-            <motion.div
-              key="mobile-arsenal"
-              initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-              animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0 }}
-              exit={shouldReduceMotion ? undefined : { opacity: 0, y: 20 }}
-              transition={shouldReduceMotion ? undefined : { duration: 0.3, ease: SENSUAL_EASE }}
-              className="fixed inset-x-0 bottom-24 z-110 px-3 sm:hidden"
-            >
-              <ArsenalPanel
-                selectedIds={selected}
-                panelDropRef={mobileLootTargetRef}
-                className="mx-auto max-w-md"
-              />
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
-
-        <BookingBottomBar
-          currentStep={3}
-          isValid
-          onBack={handlePrev}
-          onNext={handleNext}
-          subtotal={total}
-        />
+        <TocadorSelectionPanel rows={selectedRows} total={total} onRemove={handleRemove} />
       </div>
+
+      <p className="mt-2 font-(--font-inter) text-[11px] text-(--color-text-muted) lg:hidden">
+        {STEP3_TOCADOR_COPY.hint}
+      </p>
+
+      <BookingBottomBar
+        currentStep={3}
+        isValid
+        showBack
+        nextLabel="CONTINUAR →"
+        maxWidthClass="max-w-[94rem]"
+        onBack={() => router.push('/reservar?step=2&phase=intensidad')}
+        onNext={() => router.push('/reservar?step=4')}
+        subtotal={total > 0 ? total : undefined}
+      />
     </div>
   )
 }

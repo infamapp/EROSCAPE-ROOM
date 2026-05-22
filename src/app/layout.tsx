@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Cormorant_Garamond, Inter, JetBrains_Mono, Playfair_Display } from 'next/font/google'
 
+import { AdvisorFloatingButton } from '@/components/advisor/AdvisorFloatingButton'
 import { Footer } from '@/components/layout/Footer'
 import { Navbar } from '@/components/layout/Navbar'
 import { PanicModeProvider } from '@/components/panic/PanicMode'
@@ -61,6 +62,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <Navbar />
             <RouteTransitionLoader excludePathPrefixes={['/reservar']} />
             {children}
+            <AdvisorFloatingButton />
             <Footer />
           </BookingProvider>
         </PanicModeProvider>

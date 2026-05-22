@@ -3,12 +3,36 @@
 import type { ReactNode } from 'react'
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
-import { UPSELL_ITEMS } from '@/lib/constants'
+import { getBoutiquePackById, getBoutiquePackPriceEuros, sanitizeBoutiquePackIds } from '@/lib/boutique-packs'
 import { generateBookingId } from '@/lib/utils'
 import { areParticipantNamesValid } from '@/lib/booking-participants'
-import type { BookingState, BookingStep1, BookingStep2, BookingStep3, BookingStep4, LegalConsent } from '@/types/booking'
+import { saveCompletedBookingSnapshot } from '@/lib/completed-booking-storage'
+import type { CompletedBookingSnapshot } from '@/types/completed-booking'
+import type {
+  BookingState,
+  BookingStep1,
+  BookingStep2,
+  BookingStep3,
+  BookingStep4,
+  BookingStep5,
+  LegalConsent,
+} from '@/types/booking'
 
+/** @deprecated Usar snapshot en `eroscape_completed_booking_snapshot` */
 export const COMPLETED_BOOKING_STORAGE_KEY = 'eroscape_completed_booking'
+
+function createInitialStep5(): BookingStep5 {
+  return {
+    cardholderName: '',
+    email: '',
+    documentType: null,
+    documentNumber: '',
+    paymentStatus: 'pending',
+    paidAt: null,
+    confirmationCode: null,
+    cardLast4: null,
+  }
+}
 
 export interface BookingContextValue {
   state: BookingState
@@ -21,9 +45,10 @@ export interface BookingContextValue {
   updateStep2: (data: Partial<BookingStep2>) => void
   updateStep3: (data: BookingStep3) => void
   updateStep4: (data: BookingStep4) => void
+  updateStep5: (data: Partial<BookingStep5>) => void
   sealPactAndAdvance: (consent: LegalConsent) => void
   resetFlow: () => void
-  finalizeCheckout: (completedBookingId: string) => void
+  finalizeCheckout: (snapshot: CompletedBookingSnapshot) => void
   isStepValid: (step: number) => boolean
   getTotalPrice: () => number
 }
@@ -36,8 +61,8 @@ const STORAGE_KEY = 'eroscape_booking'
 
 function computeTotalPrice(step3: BookingStep3): number {
   const upsellTotal = step3.selectedUpsells.reduce((sum, id) => {
-    const item = UPSELL_ITEMS.find((u) => u.id === id)
-    return sum + (item?.price ?? 0)
+    const item = getBoutiquePackById(id)
+    return sum + (item ? getBoutiquePackPriceEuros(item.price) : 0)
   }, 0)
   return upsellTotal
 }
@@ -45,6 +70,7 @@ function computeTotalPrice(step3: BookingStep3): number {
 function createInitialState(): BookingState {
   const step3: BookingStep3 = { selectedUpsells: [] }
   const step4: BookingStep4 = { consent: null }
+  const step5 = createInitialStep5()
 
   return {
     currentStep: 1,
@@ -52,6 +78,7 @@ function createInitialState(): BookingState {
     step2: { language: 'es' },
     step3,
     step4,
+    step5,
     bookingId: generateBookingId(),
     totalPrice: 0,
   }
@@ -68,11 +95,28 @@ function restoreState(): BookingState {
     if (typeof parsed.bookingId !== 'string' || parsed.bookingId.length === 0) return createInitialState()
 
     const step3: BookingStep3 = {
-      selectedUpsells: Array.isArray(parsed.step3?.selectedUpsells) ? parsed.step3?.selectedUpsells : [],
+      selectedUpsells: Array.isArray(parsed.step3?.selectedUpsells)
+        ? sanitizeBoutiquePackIds(parsed.step3.selectedUpsells)
+        : [],
     }
 
     const step4: BookingStep4 = {
       consent: parsed.step4?.consent ?? null,
+    }
+
+    const step5Raw = parsed.step5
+    const step5: BookingStep5 = {
+      cardholderName: typeof step5Raw?.cardholderName === 'string' ? step5Raw.cardholderName : '',
+      email: typeof step5Raw?.email === 'string' ? step5Raw.email : '',
+      documentType:
+        step5Raw?.documentType === 'dni' || step5Raw?.documentType === 'nie' || step5Raw?.documentType === 'pasaporte'
+          ? step5Raw.documentType
+          : null,
+      documentNumber: typeof step5Raw?.documentNumber === 'string' ? step5Raw.documentNumber : '',
+      paymentStatus: step5Raw?.paymentStatus === 'paid' ? 'paid' : 'pending',
+      paidAt: typeof step5Raw?.paidAt === 'string' ? step5Raw.paidAt : null,
+      confirmationCode: typeof step5Raw?.confirmationCode === 'string' ? step5Raw.confirmationCode : null,
+      cardLast4: typeof step5Raw?.cardLast4 === 'string' ? step5Raw.cardLast4 : null,
     }
 
     const restored: BookingState = {
@@ -84,6 +128,7 @@ function restoreState(): BookingState {
       step2: parsed.step2 ?? { language: 'es' },
       step3,
       step4,
+      step5,
       bookingId: parsed.bookingId,
       totalPrice: typeof parsed.totalPrice === 'number' ? parsed.totalPrice : computeTotalPrice(step3),
     }
@@ -182,6 +227,10 @@ export function BookingProvider({ children }: BookingProviderProps) {
     setState((prev) => ({ ...prev, step4: data }))
   }, [])
 
+  const updateStep5 = useCallback((data: Partial<BookingStep5>) => {
+    setState((prev) => ({ ...prev, step5: { ...prev.step5, ...data } }))
+  }, [])
+
   const sealPactAndAdvance = useCallback((consent: LegalConsent) => {
     setState((prev) => ({
       ...prev,
@@ -194,12 +243,13 @@ export function BookingProvider({ children }: BookingProviderProps) {
     setState(createInitialState())
   }, [])
 
-  const finalizeCheckout = useCallback((completedBookingId: string) => {
+  const finalizeCheckout = useCallback((snapshot: CompletedBookingSnapshot) => {
     setState(() => {
       if (typeof window !== 'undefined') {
         try {
           window.sessionStorage.removeItem(STORAGE_KEY)
-          window.sessionStorage.setItem(COMPLETED_BOOKING_STORAGE_KEY, completedBookingId)
+          window.sessionStorage.setItem(COMPLETED_BOOKING_STORAGE_KEY, snapshot.bookingId)
+          saveCompletedBookingSnapshot(snapshot)
         } catch {
           // ignore
         }
@@ -238,6 +288,7 @@ export function BookingProvider({ children }: BookingProviderProps) {
       updateStep2,
       updateStep3,
       updateStep4,
+      updateStep5,
       sealPactAndAdvance,
       resetFlow,
       finalizeCheckout,
@@ -259,6 +310,7 @@ export function BookingProvider({ children }: BookingProviderProps) {
       updateStep2,
       updateStep3,
       updateStep4,
+      updateStep5,
       sealPactAndAdvance,
     ],
   )

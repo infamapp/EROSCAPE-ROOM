@@ -1,3 +1,5 @@
+import { buildBookingRecordFromSnapshot } from '@/lib/booking-record-builder'
+import { loadCompletedBookingSnapshot } from '@/lib/completed-booking-storage'
 import { ARCHETYPES, EXPERIENCES_TEMPLATE } from '@/lib/constants'
 import type { BookingRecord, PastBookingRecord } from '@/types/booking-record'
 
@@ -7,18 +9,33 @@ function pickArchetype(seed: string) {
 }
 
 export function getMockBookingRecord(bookingId: string): BookingRecord {
+  const snapshot = loadCompletedBookingSnapshot(bookingId)
+  if (snapshot) {
+    return buildBookingRecordFromSnapshot(snapshot)
+  }
+
   const exp = EXPERIENCES_TEMPLATE[bookingId.length % EXPERIENCES_TEMPLATE.length] ?? EXPERIENCES_TEMPLATE[0]
   const arch = pickArchetype(bookingId)
 
   return {
     bookingId,
+    confirmationCode: 'DEMO8X2K',
     experienceTitle: exp.title,
-    cityDisplayName: 'Madrid',
-    citySlug: 'madrid',
+    cityDisplayName: 'Granada',
+    citySlug: 'granada',
     dateIso: '2026-06-15',
     timeSlot: '21:00',
     missionNumber: exp.n,
     safeWord: 'Aurora',
+    participantNames: ['Alex', 'Sam'],
+    payerName: 'Titular demo',
+    payerEmail: 'demo@eroscape.com',
+    documentType: 'dni',
+    documentLabel: 'DNI',
+    documentMasked: 'DNI ••••123Z',
+    cardLast4: '4242',
+    totalPaid: exp.basePrice,
+    paidAt: new Date().toISOString(),
     archetypeId: arch.id,
     archetypeName: arch.name,
     archetypeIcon: arch.icon,

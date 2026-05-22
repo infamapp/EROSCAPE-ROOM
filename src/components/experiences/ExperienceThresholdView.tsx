@@ -210,7 +210,7 @@ export function ExperienceThresholdView({
     } catch {
       // ignorar
     }
-    router.push('/reservar?step=1')
+    router.push(`/reservar?step=1&ciudad=${citySlug}&sala=${slug}`)
   }
 
   useEffect(() => {
@@ -227,7 +227,7 @@ export function ExperienceThresholdView({
 
   return (
     <div className="min-h-screen pb-12" style={{ background: 'var(--color-bg-base)', color: 'var(--color-text-primary)' }}>
-      <section className="relative min-h-[50vh] w-full overflow-hidden pt-16">
+      <section className="relative min-h-[50vh] w-full overflow-hidden pt-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+1rem)] sm:pt-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+1.5rem)]">
         <div className="absolute inset-0 z-0">
           <Image
             src={media.heroImageSrc}
@@ -243,7 +243,7 @@ export function ExperienceThresholdView({
 
         <nav
           aria-label="Migas de pan"
-          className="absolute left-4 top-20 z-20 font-(--font-jetbrains) text-[10px] uppercase tracking-[0.2em] text-white/55 sm:left-8 sm:top-24 sm:text-[11px]"
+          className="absolute left-4 top-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+1.25rem)] z-20 font-(--font-jetbrains) text-[10px] uppercase tracking-[0.2em] text-white/55 sm:left-8 sm:top-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+1.75rem)] sm:text-[11px]"
         >
           <ol className="flex flex-wrap items-center gap-2">
             <li>
@@ -350,7 +350,7 @@ export function ExperienceThresholdView({
                   Desde {priceText}
                 </p>
                 <p className="mt-2 font-(--font-inter) text-xs text-(--color-text-muted)">
-                  + extras opcionales en Tu Baúl
+                  + kits opcionales en El Tocador
                 </p>
 
                 <button

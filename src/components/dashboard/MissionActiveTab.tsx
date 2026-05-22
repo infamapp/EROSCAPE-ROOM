@@ -79,6 +79,44 @@ export function MissionActiveTab({ booking }: MissionActiveTabProps) {
         >
           {formatMissionDateLine(booking)}
         </p>
+
+        {booking.confirmationCode ? (
+          <div className="mt-4 rounded-xl border border-(--color-gold)/30 bg-(--color-bg-subtle) px-3 py-2.5">
+            <p className="[font-family:var(--font-jetbrains)] text-[9px] uppercase tracking-[0.18em] text-(--color-text-muted)">
+              Código de confirmación
+            </p>
+            <p className="mt-1 [font-family:var(--font-playfair)] text-lg tracking-[0.12em] text-(--color-gold)">
+              {booking.confirmationCode}
+            </p>
+          </div>
+        ) : null}
+
+        <dl className="mt-4 grid gap-2 text-sm">
+          <div className="flex justify-between gap-3">
+            <dt className="[font-family:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.12em] text-(--color-text-muted)">
+              Titular (nombre real)
+            </dt>
+            <dd className="text-right text-white [font-family:var(--font-inter)]">{booking.payerName}</dd>
+          </div>
+          <div className="flex justify-between gap-3">
+            <dt className="[font-family:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.12em] text-(--color-text-muted)">
+              Documento
+            </dt>
+            <dd className="text-right text-(--color-text-secondary) [font-family:var(--font-inter)]">
+              {booking.documentMasked}
+            </dd>
+          </div>
+          {booking.cardLast4 ? (
+            <div className="flex justify-between gap-3">
+              <dt className="[font-family:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.12em] text-(--color-text-muted)">
+                Tarjeta
+              </dt>
+              <dd className="text-right text-(--color-text-secondary) [font-family:var(--font-jetbrains)]">
+                •••• {booking.cardLast4}
+              </dd>
+            </div>
+          ) : null}
+        </dl>
       </section>
 
       <section>

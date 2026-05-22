@@ -9,9 +9,11 @@ import { Step2Configurator } from '@/components/booking/Step2Configurator'
 import { Step3Upselling } from '@/components/booking/Step3Upselling'
 import { Step4Legal } from '@/components/booking/Step4Legal'
 import { Step5Checkout } from '@/components/booking/Step5Checkout'
+import { BOOKING_FLOW_BOTTOM_PAD_CLASS } from '@/components/booking/BookingBottomBar'
 import { MissionProgress } from '@/components/booking/MissionProgress'
 import { StepIndicator } from '@/components/booking/StepIndicator'
 import { useBookingFlow } from '@/hooks/useBookingFlow'
+import { cn } from '@/lib/utils'
 
 type Step = 1 | 2 | 3 | 4 | 5
 
@@ -70,7 +72,12 @@ export function ReservarClient() {
     }
     // If URL is ahead of what we allow, correct it.
     if (safeStep !== urlStep) {
-      router.replace(`/reservar?step=${safeStep}`)
+      const phase = safeStep === 2 ? '&phase=deseos' : ''
+      router.replace(`/reservar?step=${safeStep}${phase}`)
+      return
+    }
+    if (safeStep === 2 && !sp.get('phase')) {
+      router.replace('/reservar?step=2&phase=deseos')
       return
     }
     const prev = lastRenderedStepRef.current
@@ -78,10 +85,9 @@ export function ReservarClient() {
     setDirection(safeStep >= prev ? 1 : -1)
   }, [raw, router, safeStep, urlStep])
 
-  // When changing steps, ensure the new section is visible.
   useEffect(() => {
     if (typeof window === 'undefined') return
-    // Use standards-compliant behavior to avoid runtime errors in some browsers.
+    if (safeStep === 1) return
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' })
   }, [safeStep])
 
@@ -107,10 +113,16 @@ export function ReservarClient() {
   return (
     <>
       <MissionProgress tension={tension} />
-      <div className="pt-18">
-        <StepIndicator currentStep={safeStep} />
+      <div className="pt-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+0.5rem)]">
+        <StepIndicator currentStep={safeStep} compact={safeStep === 1} />
       </div>
-      <div className="min-h-screen pb-24">
+      <div
+        className={cn(
+          'booking-flow bg-(--color-bg-base)',
+          safeStep === 1 ? 'overflow-hidden' : 'min-h-0',
+          safeStep < 5 && BOOKING_FLOW_BOTTOM_PAD_CLASS,
+        )}
+      >
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
           key={safeStep}

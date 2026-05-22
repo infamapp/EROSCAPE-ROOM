@@ -4,7 +4,13 @@ import Link from 'next/link'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-import { CITIES, DEFAULT_CITY_SLUG, EXPERIENCES_TEMPLATE, isCityBookable } from '@/lib/constants'
+import {
+  CITIES,
+  CITY_AVAILABILITY_COPY,
+  DEFAULT_CITY_SLUG,
+  EXPERIENCES_TEMPLATE,
+  isCityBookable,
+} from '@/lib/constants'
 import { cn } from '@/lib/utils'
 import { ExperienceCard } from '@/components/marketing/ExperienceCard'
 import { CityMap } from '@/components/ui/CityMap'
@@ -41,10 +47,10 @@ export function CitySelector() {
             ¿DÓNDE QUIERES QUE OCURRA?
           </h2>
           <p className="mt-3 sm:mt-5 font-(--font-jetbrains) text-[11px] sm:text-sm" style={{ color: 'var(--color-text-muted)' }}>
-            Granada disponible · 6 experiencias · Resto de ciudades próximamente
+            {CITY_AVAILABILITY_COPY.tagline}
           </p>
           <p className="mt-2 font-(--font-inter) text-xs leading-relaxed" style={{ color: 'var(--color-text-muted)' }}>
-            Ciudad de reserva actualmente: Granada. El resto de ciudades, próximamente.
+            {CITY_AVAILABILITY_COPY.detail}
           </p>
         </div>
 

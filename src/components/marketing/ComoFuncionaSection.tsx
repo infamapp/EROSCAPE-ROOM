@@ -44,7 +44,7 @@ interface RitualStep {
 const STEPS: readonly RitualStep[] = [
   { act: 'I', label: 'EL ENCUENTRO', icon: Compass, desc: 'Elegís la experiencia y la ciudad. El universo se prepara para vosotros.' },
   { act: 'II', label: 'TUS DESEOS', icon: SlidersHorizontal, desc: 'Nos contás con quién venís y hasta dónde queréis llegar. Sin presión.' },
-  { act: 'III', label: 'TU BAÚL', icon: Package, desc: 'Personalizás la noche con extras que elevan cada detalle.' },
+  { act: 'III', label: 'EL TOCADOR', icon: Package, desc: 'Elegís los mismos kits de la boutique para elevar cada detalle de la noche.' },
   { act: 'IV', label: 'EL JURAMENTO', icon: PenLine, desc: 'Confirmás tus límites y elegís tu palabra mágica. El control es tuyo.' },
   { act: 'V', label: 'LAS PUERTAS SE ABREN', icon: Unlock, desc: 'La noche es vuestra. El resto es historia.' },
 ] as const

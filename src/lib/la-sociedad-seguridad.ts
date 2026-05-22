@@ -7,12 +7,12 @@ export const SEGURIDAD_PROCESS_STEPS = [
   {
     id: 'briefing',
     title: 'Briefing personal',
-    body: 'Conversación reservada sobre códigos y palabra segura con quienes cuidan el espacio.',
+    body: 'Revisión digital de códigos y palabra segura. Sin briefing humano en sala salvo que lo solicites.',
   },
   {
     id: 'durante',
     title: 'Durante la experiencia',
-    body: 'Voz y guía digital en sala; el equipo humano permanece a un toque en la app si lo necesitas.',
+    body: 'La Game Master IA guía en un ámbito privado. Un asistente humano por voz solo si lo pides o usas la palabra segura.',
   },
   {
     id: 'aftercare',
@@ -30,7 +30,7 @@ export const SEGURIDAD_GUARANTEES = [
   {
     id: 'seguridad',
     title: 'Seguridad cuidada',
-    body: 'Equipo disponible sin invadir tu intimidad: presencia discreta y canales claros.',
+    body: 'Sin presencia humana en sala. Contacto por voz solo a petición o con la palabra segura.',
   },
   {
     id: 'privacidad',

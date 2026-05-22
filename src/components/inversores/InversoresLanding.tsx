@@ -5,6 +5,7 @@
 import { BarChart2, Building2, CheckCircle2, Crown, LockKeyhole, TrendingUp } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
  
+ import { FRANCHISE_METRICS } from '@/lib/franchise'
  import { cn } from '@/lib/utils'
  
  const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
@@ -35,13 +36,6 @@ interface FranquiciaFormState {
   mensaje: string
 }
  
- type Metric = { value: string; label: string }
- 
- const METRICS: ReadonlyArray<Metric> = [
-   { value: '5 ciudades', label: 'PRESENCIA' },
-   { value: '25 experiencias', label: 'IPS ÚNICAS' },
-   { value: '€180 ticket medio', label: 'MARGEN ALTO' },
- ] as const
  
  const MODEL_CARDS = [
    {
@@ -162,7 +156,7 @@ interface FranquiciaFormState {
              initial={shouldReduceMotion ? false : 'hidden'}
              animate={shouldReduceMotion ? undefined : 'visible'}
            >
-             {METRICS.map((m, idx) => (
+             {FRANCHISE_METRICS.map((m, idx) => (
                <div key={m.label} className="flex items-center gap-7">
                  <div className="text-center">
                    <div className="text-4xl font-bold text-(--color-gold-light) [font-family:var(--font-playfair)]">
@@ -172,7 +166,7 @@ interface FranquiciaFormState {
                      {m.label}
                    </div>
                  </div>
-                 {idx < METRICS.length - 1 ? (
+                 {idx < FRANCHISE_METRICS.length - 1 ? (
                    <span className="text-(--color-text-muted) [font-family:var(--font-jetbrains)]" aria-hidden="true">
                      |
                    </span>

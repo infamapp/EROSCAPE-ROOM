@@ -11,7 +11,7 @@ const BLOCKS = [
     n: '02',
     title: 'Curaduría de los sentidos',
     body:
-      'El Game Master y el equipo preparan cada detalle a partir de lo que ya sabemos de ti: fragancia del espacio, ritmo de la noche e intensidad. La experiencia empieza antes de cruzar la puerta.',
+      'La Game Master IA prepara cada detalle a partir de lo que ya sabemos de ti: fragancia del espacio, ritmo de la noche e intensidad. Sin presencia humana en sala — la experiencia empieza antes de cruzar la puerta.',
   },
   {
     n: '03',

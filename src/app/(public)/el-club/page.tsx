@@ -1,22 +1,6 @@
-import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
 
-import { ElClubPageContent } from '@/components/marketing/ElClubPageContent'
-
-export const metadata: Metadata = {
-  title: 'El Club — Eroscape',
-  description: 'Membresías exclusivas y comparativa de niveles para quienes vuelven una y otra vez.',
-  openGraph: {
-    title: 'El Club — Eroscape',
-    description: 'Membresías exclusivas y comparativa de niveles para quienes vuelven una y otra vez.',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary',
-    title: 'El Club — Eroscape',
-    description: 'Membresías exclusivas y comparativa de niveles para quienes vuelven una y otra vez.',
-  },
-}
-
+/** Ruta legada: redirige a la pantalla de membresía. */
 export default function ElClubPage() {
-  return <ElClubPageContent />
+  redirect('/membresia')
 }

@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { useId, useMemo, useState } from 'react'
 
+import { AdvisorContactSection } from '@/components/advisor/AdvisorContactSection'
 import { cn } from '@/lib/utils'
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
@@ -32,7 +33,7 @@ const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
     category: 'experiencia',
     question: '¿Qué pasa exactamente dentro de la sala?',
     answer:
-      'El Game Master orquesta un viaje sensorial personalizado. Estímulos táctiles, auditivos y visuales se alinean con una narrativa que se ajusta a tus límites. No es solo un escape room: es una coreografía íntima y elegante.',
+      'La Game Master IA — un sistema autómata, no una persona — orquesta un viaje sensorial personalizado. Estímulos táctiles, auditivos y visuales se alinean con una narrativa que respeta tus límites. Todo ocurre en un ámbito privado: sin Game Master humano en sala.',
   },
   {
     id: 'sugerente-o-profundo',
@@ -44,16 +45,30 @@ const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
   {
     id: 'presencia-humana',
     category: 'privacidad',
-    question: '¿Hay personas presentes durante la experiencia?',
+    question: '¿Hay personas presentes o alguien escuchando durante la experiencia?',
     answer:
-      'La privacidad es un pilar. La sala se guía desde la sombra y sin supervisión humana directa en el espacio, salvo que una narrativa específica indique lo contrario (siempre se comunica de antemano).',
+      'No hay presencia humana en sala ni supervisión continua. La experiencia la guía la Game Master IA en un ámbito privado. No existen sistemas de vídeo ni cámaras que graben o escuchen lo que ocurre. Nadie observa tu intimidad.',
+  },
+  {
+    id: 'cameras-grabacion',
+    category: 'privacidad',
+    question: '¿Hay cámaras, micrófonos o grabaciones?',
+    answer:
+      'No. No hay sistemas de vídeo ni cámara activos durante la experiencia, ni grabación de audio o imagen de lo que vivís en sala. La privacidad es absoluta salvo que tú actives un canal de contacto humano.',
   },
   {
     id: 'palabra-segura',
     category: 'seguridad',
     question: '¿Qué es la palabra segura y cómo funciona?',
     answer:
-      'Con la palabra segura se frena la actividad de inmediato y se conecta con un asistente humano para corroborar que no existe ningún problema.',
+      'La palabra segura frena la actividad al instante. Solo entonces — o si tú lo solicitas expresamente — se activa un asistente humano por voz para corroborar que todo está bien. No hay intervención humana continua: solo a petición o en emergencia.',
+  },
+  {
+    id: 'contacto-humano-voz',
+    category: 'seguridad',
+    question: '¿Cuándo interviene una persona humana?',
+    answer:
+      'Únicamente si lo pides (desde la app o el protocolo acordado) o si usas la palabra segura. En ese caso un asistente atiende por voz. El resto del tiempo la sala permanece en ámbito privado guiada solo por la IA autómata.',
   },
   {
     id: 'con-quien-ir',
@@ -74,7 +89,14 @@ const FAQ_ITEMS: ReadonlyArray<FaqItem> = [
     category: 'maestro-ia',
     question: '¿Qué es el Game Master IA y qué puede hacer?',
     answer:
-      'El Game Master es un sistema de guía narrativa y ambientación. Ajusta música, luz y ritmo en función de tus elecciones, manteniendo el tono y la seguridad. No juzga: acompaña.',
+      'Es una inteligencia artificial autómata: guía narrativa y ambientación en tiempo real (música, luz, ritmo) según tus elecciones y límites. No es un Game Master humano. No juzga: acompaña en la sombra digital. Si necesitas una persona, la activas tú — palabra segura o app — y un asistente responde por voz.',
+  },
+  {
+    id: 'maestro-ia-humano',
+    category: 'maestro-ia',
+    question: '¿Existe un Game Master humano en la sala?',
+    answer:
+      'No. Quien guía la experiencia es siempre la Game Master IA. No hay nadie escuchando ni observando de forma continua. El contacto humano existe solo como respaldo por voz, y solo cuando lo solicitas o ante emergencia con la palabra segura.',
   },
 ] as const
 
@@ -104,7 +126,12 @@ export function FaqPage({ className }: FaqPageProps) {
   }, [activeCategory])
 
   return (
-    <main className={cn('min-h-screen pb-20 pt-16 sm:pt-20', className)}>
+    <main
+      className={cn(
+        'min-h-screen pb-20 pt-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+1rem)] sm:pt-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+1.5rem)]',
+        className,
+      )}
+    >
       <section className="mx-auto max-w-4xl px-4 pt-12 text-center sm:px-6">
         <motion.p
           className="text-xs font-semibold uppercase tracking-[0.22em] text-(--color-magenta)"
@@ -128,7 +155,7 @@ export function FaqPage({ className }: FaqPageProps) {
           initial={shouldReduceMotion ? false : 'hidden'}
           animate={shouldReduceMotion ? undefined : 'visible'}
         >
-          Si no encontrás lo que buscás, el Game Master puede guiarte con calma — sin exponer nada que no quieras revelar.
+          La Game Master IA te guía en un ámbito privado. Si necesitas una persona, la activas tú — nunca al revés.
         </motion.p>
       </section>
 
@@ -221,34 +248,15 @@ export function FaqPage({ className }: FaqPageProps) {
         })}
       </section>
 
-      <section className="mx-auto mt-16 max-w-5xl px-4 sm:px-6">
-        <div className="tocador-glass mx-auto max-w-2xl rounded-2xl p-8 text-center">
-          <h3 className="font-(--font-cormorant) text-2xl italic text-white">
-            ¿Aún te queda una duda en la garganta?
-          </h3>
-          <p className="mx-auto mt-3 max-w-xl text-pretty font-(--font-inter) text-sm leading-relaxed text-(--color-text-secondary)">
-            Escribinos con calma. Tu privacidad es parte del ritual: no pedimos más de lo necesario.
-          </p>
-          <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-            <a
-              href="/la-sociedad/seguridad"
-              className="rounded-full border-(--border-subtle) px-8 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:bg-white/5"
-            >
-              VER CONSENTIMIENTO
-            </a>
-            <a
-              href="https://wa.me/34640758672"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full px-8 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white"
-              style={{ background: 'var(--gradient-cta)' }}
-            >
-              CONTACTAR
-            </a>
-          </div>
-        </div>
-      </section>
+      <AdvisorContactSection
+        className="mt-16"
+        eyebrow="TU GUÍA"
+        title="¿Aún te queda una duda en la garganta?"
+        body="Escribinos con calma. Tu privacidad es parte del ritual: no pedimos más de lo necesario."
+        ctaLabel="Habla con un asesor"
+        secondaryHref="/la-sociedad/seguridad"
+        secondaryLabel="Ver consentimiento"
+      />
     </main>
   )
 }
-

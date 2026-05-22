@@ -2,9 +2,11 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { PackageCheck } from 'lucide-react'
+import Link from 'next/link'
 import { useEffect, useMemo, useState, type FormEvent } from 'react'
 
 import { CategoryTabs } from '@/components/boutique/CategoryTabs'
+import { FranchiseCtaSection } from '@/components/marketing/FranchiseCtaSection'
 import { ProductCard, type BoutiqueProductRarity } from '@/components/boutique/ProductCard'
 import { BOUTIQUE_PACKS } from '@/lib/boutique-packs'
 import { cn } from '@/lib/utils'
@@ -230,6 +232,15 @@ export function BoutiquePage() {
               <p className="mt-5 font-(--font-inter) text-sm leading-relaxed text-(--color-text-secondary) sm:text-base">
                 {copy.intro}
               </p>
+              <p className="mt-4 font-(--font-inter) text-xs text-(--color-text-muted) sm:text-sm">
+                ¿Miembro?{' '}
+                <Link
+                  href="/membresia"
+                  className="text-(--color-magenta-glow) underline-offset-4 transition-colors hover:text-white hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta)"
+                >
+                  Descuentos permanentes en El Tocador
+                </Link>
+              </p>
               <div className="mt-8 inline-flex items-center gap-2 rounded-full border-(--border-subtle) bg-(--color-bg-elevated) px-4 py-1.5 text-xs text-(--color-text-secondary)">
                 <PackageCheck className="h-4 w-4 text-(--color-magenta-glow)" aria-hidden="true" />
                 Packaging elegante, envío discreto
@@ -377,6 +388,8 @@ export function BoutiquePage() {
             ) : null}
           </div>
         </section>
+
+        <FranchiseCtaSection className="border-t border-white/6" />
       </main>
     </div>
   )

@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils'
 
 export interface StepIndicatorProps {
   currentStep: number
+  compact?: boolean
 }
 
 const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
@@ -14,19 +15,24 @@ const SENSUAL_EASE: [number, number, number, number] = [0.25, 0.46, 0.45, 0.94]
 const STEPS = [
   { name: 'EL ENCUENTRO', icon: Compass },
   { name: 'TUS DESEOS', icon: SlidersHorizontal },
-  { name: 'EL BAÚL', icon: Package },
+  { name: 'EL TOCADOR', icon: Package },
   { name: 'EL JURAMENTO', icon: PenLine },
   { name: 'ACCESO', icon: Unlock },
 ] as const
 
 const ACTS = ['I', 'II', 'III', 'IV', 'V'] as const
 
-export function StepIndicator({ currentStep }: StepIndicatorProps) {
+export function StepIndicator({ currentStep, compact = false }: StepIndicatorProps) {
   const shouldReduceMotion = useReducedMotion()
 
   return (
     <div className="w-full">
-      <div className="mx-auto hidden max-w-6xl items-center justify-center gap-3 px-4 py-8 sm:px-6 md:flex">
+      <div
+        className={cn(
+          'mx-auto hidden max-w-[94rem] items-center justify-center gap-3 px-4 sm:px-8 md:flex',
+          compact ? 'py-3' : 'py-8',
+        )}
+      >
         {STEPS.map((step, idx) => {
           const stepNumber = idx + 1
           const isCompleted = stepNumber < currentStep
@@ -46,7 +52,7 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
                       ? { background: 'var(--color-magenta)' }
                       : isActive
                         ? { background: 'var(--gradient-cta)', boxShadow: 'var(--glow-magenta)' }
-                        : { background: 'transparent', border: 'var(--border-subtle)' }
+                        : { background: 'var(--color-bg-subtle)', border: '1px solid rgba(255,255,255,0.14)' }
                   }
                 >
                   {isCompleted ? (
@@ -54,7 +60,7 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
                   ) : (
                     <Icon
                       className={cn(isActive ? 'h-5 w-5' : 'h-4 w-4')}
-                      style={{ color: isActive ? 'white' : 'var(--color-text-muted)' }}
+                      style={{ color: isActive ? 'white' : 'var(--color-text-secondary)' }}
                       aria-hidden="true"
                     />
                   )}
@@ -86,7 +92,7 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
               </div>
 
               {idx < STEPS.length - 1 ? (
-                <div className="mx-3 h-px w-14 bg-[rgba(185,48,158,0.2)]">
+                <div className="mx-3 h-px w-14 bg-white/12">
                   <div
                     className="h-px"
                     style={{ background: isCompleted ? 'var(--color-magenta)' : 'transparent' }}
@@ -99,7 +105,12 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
         })}
       </div>
 
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-6 sm:px-6 md:hidden">
+      <div
+        className={cn(
+          'mx-auto flex max-w-[94rem] items-center justify-between px-4 sm:px-8 md:hidden',
+          compact ? 'py-3' : 'py-6',
+        )}
+      >
         <div className="w-full text-center">
           <p className="font-(--font-jetbrains) text-[10px] uppercase tracking-[0.18em] text-(--color-text-muted)">
             ACTO {ACTS[Math.max(0, Math.min(4, currentStep - 1))]} de V · {STEPS[Math.max(0, Math.min(4, currentStep - 1))]?.name}

@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 
 export default function LaSociedadSeguridadPage() {
   return (
-    <main className="sociedad-page-root min-h-screen pb-20 pt-16 sm:pt-20">
+    <main className="sociedad-page-root min-h-screen pb-20 pt-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+1rem)] sm:pt-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+1.5rem)]">
       <SeguridadHero />
       <SeguridadProcess />
       <SeguridadGuaranteesGrid />

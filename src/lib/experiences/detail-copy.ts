@@ -59,7 +59,7 @@ export const EXPERIENCE_FAQ_ITEMS: readonly ExperienceFaqItem[] = [
     id: 'discrecion',
     question: '¿Cuál es el protocolo de discreción?',
     answer:
-      'La privacidad es el pilar. Entradas discretas, coordinación sin filas innecesarias y un equipo formado en confidencialidad. No se permiten cámaras en el recorrido; tu nombre y tus elecciones se tratan con el máximo cuidado.',
+      'La privacidad es el pilar. La Game Master IA guía en un ámbito privado: sin presencia humana en sala, sin sistemas de vídeo ni cámaras de vigilancia. Tu nombre y tus elecciones se tratan con el máximo cuidado.',
   },
 ] as const
 

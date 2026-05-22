@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 
+import { FranchiseCtaSection } from '@/components/marketing/FranchiseCtaSection'
 import { LaSociedadCommitment } from '@/components/sociedad/LaSociedadCommitment'
 import { LaSociedadCorporate } from '@/components/sociedad/LaSociedadCorporate'
 import { LaSociedadHero } from '@/components/sociedad/LaSociedadHero'
@@ -22,11 +23,12 @@ export const metadata: Metadata = {
 
 export default function LaSociedadPage() {
   return (
-    <main className="sociedad-page-root min-h-screen pb-20 pt-16 sm:pt-20">
+    <main className="sociedad-page-root min-h-screen pb-20 pt-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+1rem)] sm:pt-[calc(var(--layout-nav-height)+env(safe-area-inset-top,0px)+1.5rem)]">
       <LaSociedadHero />
       <LaSociedadUpcomingNights />
       <LaSociedadCorporate />
       <LaSociedadCommitment />
+      <FranchiseCtaSection className="border-t border-white/6" />
     </main>
   )
 }

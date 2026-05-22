@@ -139,7 +139,7 @@ export function GameMasterChat({ onStartQuestionnaire }: GameMasterChatProps) {
           className="[font-family:var(--font-jetbrains)] text-[10px] tracking-wide"
           style={{ color: 'var(--color-text-muted)' }}
         >
-          · ONLINE
+          · IA AUTÓMATA
         </span>
       </div>
 
@@ -158,7 +158,7 @@ export function GameMasterChat({ onStartQuestionnaire }: GameMasterChatProps) {
               className="flex items-center gap-2 [font-family:var(--font-jetbrains)] text-[10px]"
               style={{ color: 'var(--color-text-muted)' }}
             >
-              <span>GM está escribiendo</span>
+              <span>La IA está respondiendo</span>
               <span className="flex gap-1" aria-hidden="true">
                 {[0, 1, 2].map((i) => (
                   <motion.span
@@ -191,7 +191,7 @@ export function GameMasterChat({ onStartQuestionnaire }: GameMasterChatProps) {
                   background: 'color-mix(in srgb, var(--color-gm-terminal) 8%, transparent)',
                 }}
               >
-                Responder al Game Master →
+                Compartir tus deseos con la IA →
               </button>
             </motion.div>
           ) : null}

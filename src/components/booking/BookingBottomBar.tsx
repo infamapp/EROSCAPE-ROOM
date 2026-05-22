@@ -1,6 +1,14 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
+
+import { BookingAdvisorLink } from '@/components/booking/BookingAdvisorLink'
 import { cn, formatCurrency } from '@/lib/utils'
+
+/** Reserva espacio bajo el contenido cuando la barra está fija (pasos I–IV). */
+export const BOOKING_FLOW_BOTTOM_PAD_CLASS =
+  'pb-[calc(5.25rem+env(safe-area-inset-bottom,0px))]'
 
 export interface BookingBottomBarProps {
   currentStep: 1 | 2 | 3 | 4 | 5
@@ -9,6 +17,9 @@ export interface BookingBottomBarProps {
   onBack: () => void
   subtotal?: number
   className?: string
+  showBack?: boolean
+  nextLabel?: string
+  maxWidthClass?: string
 }
 
 function primaryLabelForStep(step: 1 | 2 | 3 | 4 | 5): string {
@@ -25,34 +36,58 @@ function primaryLabelForStep(step: 1 | 2 | 3 | 4 | 5): string {
   }
 }
 
-export function BookingBottomBar({ currentStep, isValid, onNext, onBack, subtotal, className }: BookingBottomBarProps) {
-  // Prompt: no renderizar en step 5 (checkout tiene su CTA propio)
+export function BookingBottomBar({
+  currentStep,
+  isValid,
+  onNext,
+  onBack,
+  subtotal,
+  className,
+  showBack: showBackProp,
+  nextLabel,
+  maxWidthClass = 'max-w-[94rem]',
+}: BookingBottomBarProps) {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   if (currentStep === 5) return null
 
-  const showBack = currentStep > 1
-  const primaryLabel = primaryLabelForStep(currentStep)
+  const showBack = showBackProp ?? currentStep > 1
+  const primaryLabel = nextLabel ?? primaryLabelForStep(currentStep)
 
-  return (
+  const bar = (
     <div
+      role="region"
+      aria-label="Acciones del paso"
       className={cn(
-        'fixed inset-x-0 bottom-0 z-40 border-t border-(--border-subtle) bg-(--color-bg-elevated)/95 px-4 py-3 backdrop-blur-md',
+        'booking-bottom-bar fixed inset-x-0 bottom-0 z-50 border-t border-(--border-subtle) bg-(--color-bg-elevated)/98 backdrop-blur-md',
+        'pb-[max(0.75rem,env(safe-area-inset-bottom,0px))] pt-3',
+        'shadow-[0_-12px_40px_rgba(0,0,0,0.5)]',
         className,
       )}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-3">
-        <div className="min-w-[120px]">
+      <div
+        className={cn(
+          'mx-auto flex w-full items-center justify-between gap-3 px-4 sm:gap-4 sm:px-8 lg:px-10',
+          maxWidthClass,
+        )}
+      >
+        <div className="min-w-[72px] shrink-0 sm:min-w-[100px]">
           {showBack ? (
             <button
               type="button"
               onClick={onBack}
-              className="inline-flex items-center rounded-full px-2 py-2 font-(--font-inter) text-sm text-(--color-text-muted) transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)"
+              className="inline-flex items-center rounded-full px-1 py-2 font-(--font-inter) text-sm text-(--color-text-muted) transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:px-2"
             >
               ← Volver
             </button>
           ) : null}
         </div>
 
-        <div className="hidden min-w-0 flex-1 text-center sm:block">
+        <div className="hidden min-w-0 flex-1 text-center md:block">
           {typeof subtotal === 'number' ? (
             <span className="truncate text-sm font-semibold text-(--color-gold) [font-family:var(--font-playfair)]">
               {formatCurrency(subtotal)}
@@ -60,13 +95,19 @@ export function BookingBottomBar({ currentStep, isValid, onNext, onBack, subtota
           ) : null}
         </div>
 
-        <div className="min-w-[180px] text-right">
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-2 sm:gap-3 md:flex-none">
+          {typeof subtotal === 'number' ? (
+            <span className="truncate text-sm font-semibold text-(--color-gold) [font-family:var(--font-playfair)] md:hidden">
+              {formatCurrency(subtotal)}
+            </span>
+          ) : null}
+          <BookingAdvisorLink />
           <button
             type="button"
             onClick={onNext}
             disabled={!isValid}
             className={cn(
-              'inline-flex w-full items-center justify-center rounded-full px-6 py-2.5 font-(--font-jetbrains) text-[11px] uppercase tracking-[0.18em] text-white transition-[filter,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base)',
+              'inline-flex min-w-0 flex-1 items-center justify-center rounded-full px-4 py-2.5 font-(--font-jetbrains) text-[10px] uppercase tracking-[0.16em] text-white transition-[filter,transform] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--color-magenta) focus-visible:ring-offset-2 focus-visible:ring-offset-(--color-bg-base) sm:flex-none sm:px-6 sm:text-[11px] sm:tracking-[0.18em]',
               !isValid && 'cursor-not-allowed opacity-60',
             )}
             style={{ background: isValid ? 'var(--gradient-cta)' : 'var(--color-cta-disabled)' }}
@@ -77,5 +118,7 @@ export function BookingBottomBar({ currentStep, isValid, onNext, onBack, subtota
       </div>
     </div>
   )
-}
 
+  if (!mounted) return null
+  return createPortal(bar, document.body)
+}

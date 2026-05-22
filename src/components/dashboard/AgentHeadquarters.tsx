@@ -52,6 +52,15 @@ export function AgentHeadquarters({ bookingId, booking, showClubBadge }: AgentHe
             >
               Tu reserva:{' '}
               <span className="[font-family:var(--font-jetbrains)] text-xs text-white/90">{bookingId}</span>
+              {booking.confirmationCode ? (
+                <>
+                  {' '}
+                  · Código{' '}
+                  <span className="[font-family:var(--font-jetbrains)] text-xs text-(--color-gold)">
+                    {booking.confirmationCode}
+                  </span>
+                </>
+              ) : null}
             </p>
           </div>
           {showClubBadge ? (

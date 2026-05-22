@@ -31,7 +31,7 @@ function AppMovilChatFrame() {
       <div className="flex min-h-0 flex-1 flex-col gap-3 px-4 py-4">
         <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden">
           <div className="max-w-[88%] rounded-2xl rounded-tl-none border border-white/10 bg-[color-mix(in_srgb,var(--color-gm-terminal)_10%,transparent)] p-3 font-(--font-inter) text-[11px] leading-relaxed text-white">
-            Te leo. ¿Qué necesitas para que esta noche empiece suave?
+            Recibido en la app. ¿Qué necesitas para que esta noche empiece suave?
           </div>
           <div className="ml-auto max-w-[88%] rounded-2xl rounded-tr-none border border-[color-mix(in_srgb,var(--color-magenta)_35%,transparent)] bg-[color-mix(in_srgb,var(--color-magenta)_16%,transparent)] p-3 text-right font-(--font-inter) text-[11px] leading-relaxed text-white">
             Quiero claridad: límites simples y sin sorpresas.

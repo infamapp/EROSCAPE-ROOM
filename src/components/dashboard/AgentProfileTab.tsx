@@ -131,7 +131,7 @@ export function AgentProfileTab({ bookingId }: AgentProfileTabProps) {
         </p>
         <h2 className="mt-2 [font-family:var(--font-playfair)] text-2xl text-white">TUS DESEOS DEFINIDOS</h2>
         <p className="mt-2 [font-family:var(--font-inter)] text-sm" style={{ color: 'var(--color-text-muted)' }}>
-          Completa estas confesiones para que el Game Master ajuste cada detalle a ti.
+          Completa estas confesiones para que la Game Master IA ajuste cada detalle a ti.
         </p>
       </header>
 
@@ -283,7 +283,7 @@ export function AgentProfileTab({ bookingId }: AgentProfileTabProps) {
               >
                 {submitted ? (
                   <p className="[font-family:var(--font-inter)] text-sm" style={{ color: 'var(--color-gm-terminal)' }}>
-                    Tus deseos ya están con el Game Master.
+                    Tus deseos ya están con la Game Master IA.
                   </p>
                 ) : (
                   <>
@@ -295,7 +295,7 @@ export function AgentProfileTab({ bookingId }: AgentProfileTabProps) {
                       className="w-full rounded-full py-3 [font-family:var(--font-jetbrains)] text-xs tracking-wide text-white disabled:opacity-50"
                       style={{ background: 'var(--gradient-hero)' }}
                     >
-                      {submitting ? 'ENVIANDO…' : 'ENVIAR MIS DESEOS AL GAME MASTER'}
+                      {submitting ? 'ENVIANDO…' : 'ENVIAR MIS DESEOS A LA IA'}
                     </button>
                   </>
                 )}
