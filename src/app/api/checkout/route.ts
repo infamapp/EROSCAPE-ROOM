@@ -1,40 +1,31 @@
 import { NextResponse } from 'next/server'
 import Stripe from 'stripe'
 
+import { parseBookingStateJson } from '@/lib/api-booking-validation'
+import { getBookingTotalPrice } from '@/lib/booking-pricing'
+
 export const runtime = 'nodejs'
 
-export interface CheckoutRequestBody {
-  bookingId: string
-  totalAmount: number
-  currency: 'eur'
-}
-
-function isCheckoutBody(v: unknown): v is CheckoutRequestBody {
-  if (typeof v !== 'object' || v === null) return false
-  const o = v as Record<string, unknown>
-  return (
-    typeof o.bookingId === 'string' &&
-    o.bookingId.trim().length > 0 &&
-    typeof o.totalAmount === 'number' &&
-    Number.isFinite(o.totalAmount) &&
-    o.totalAmount > 0 &&
-    o.currency === 'eur'
-  )
+function isRecord(v: unknown): v is Record<string, unknown> {
+  return typeof v === 'object' && v !== null && !Array.isArray(v)
 }
 
 /**
  * POST /api/checkout — crea PaymentIntent de Stripe (metadata bookingId, descriptor neutro).
+ * El importe se recalcula en servidor a partir del estado de la reserva: nunca se confía
+ * en un monto enviado por el cliente.
  */
 export async function POST(request: Request) {
-  let body: unknown
+  let raw: unknown
   try {
-    body = await request.json()
+    raw = await request.json()
   } catch {
     return NextResponse.json({ error: 'No se pudo iniciar el pago' }, { status: 500 })
   }
 
-  if (!isCheckoutBody(body)) {
-    return NextResponse.json({ error: 'Datos de pago inválidos' }, { status: 400 })
+  const parsed = parseBookingStateJson(isRecord(raw) ? raw.state ?? raw : raw)
+  if (!parsed.ok) {
+    return NextResponse.json({ error: 'Datos de reserva inválidos' }, { status: 400 })
   }
 
   const secret = process.env.STRIPE_SECRET_KEY
@@ -42,7 +33,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'No se pudo iniciar el pago' }, { status: 500 })
   }
 
-  const amountCents = Math.max(50, Math.round(body.totalAmount * 100))
+  const { state } = parsed
+  const totalEur = getBookingTotalPrice(state)
+  const amountCents = Math.max(50, Math.round(totalEur * 100))
 
   try {
     const stripe = new Stripe(secret)
@@ -50,7 +43,7 @@ export async function POST(request: Request) {
       amount: amountCents,
       currency: 'eur',
       automatic_payment_methods: { enabled: true },
-      metadata: { bookingId: body.bookingId },
+      metadata: { bookingId: state.bookingId },
       description: 'Ocio y Eventos SL',
       statement_descriptor: 'OCIO EVENTOS',
     })
