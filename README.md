@@ -5,7 +5,7 @@ Eroscape es una plataforma premium de reserva de escape rooms para adultos (sens
 ## Requisitos
 
 - Node.js 20+
-- pnpm
+- npm
 
 ## Variables de entorno
 
@@ -25,13 +25,13 @@ cp .env.local.example .env.local
 ## Instalar dependencias
 
 ```bash
-pnpm install
+npm install
 ```
 
 ## Desarrollo
 
 ```bash
-pnpm dev
+npm run dev
 ```
 
 La app corre en `http://localhost:3000`.
@@ -52,7 +52,7 @@ La app corre en `http://localhost:3000`.
 ## Deploy (Vercel recomendado)
 
 - **Framework**: Next.js (App Router)
-- **Build command**: `pnpm build`
+- **Build command**: `npm run build`
 - **Output**: (Next.js default)
 - **Env vars**: configura en Vercel las mismas claves de `.env.local.example` (especialmente Stripe).
 - **Stripe webhooks**:

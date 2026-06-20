@@ -1,5 +1,6 @@
 import { EXPERIENCES_TEMPLATE } from '@/lib/constants'
-import type { IntensityLevel } from '@/types/booking'
+import { getBoutiquePackById, getBoutiquePackPriceEuros } from '@/lib/boutique-packs'
+import type { BookingState, IntensityLevel } from '@/types/booking'
 
 /** Recargo por intensidad sobre el precio base de la sala (relación de precios). */
 export const INTENSITY_PRICE_SURCHARGE: Record<IntensityLevel, number> = {
@@ -23,4 +24,17 @@ export function getBookingExperiencePrice(
   intensityLevel: IntensityLevel | null | undefined,
 ): number {
   return getExperienceBasePrice(experienceSlug) + getIntensitySurcharge(intensityLevel)
+}
+
+export function getBookingUpsellsTotal(selectedUpsells: readonly string[]): number {
+  return selectedUpsells.reduce((sum, id) => {
+    const pack = getBoutiquePackById(id)
+    return sum + (pack ? getBoutiquePackPriceEuros(pack.price) : 0)
+  }, 0)
+}
+
+/** Recalcula el total de la reserva en servidor: nunca confiar en un monto enviado por el cliente. */
+export function getBookingTotalPrice(state: Pick<BookingState, 'step1' | 'step2' | 'step3'>): number {
+  const experiencePrice = getBookingExperiencePrice(state.step1.experienceSlug, state.step2.intensityLevel)
+  return experiencePrice + getBookingUpsellsTotal(state.step3.selectedUpsells)
 }
